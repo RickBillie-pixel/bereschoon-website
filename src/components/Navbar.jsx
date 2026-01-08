@@ -9,6 +9,9 @@ const Navbar = () => {
     const location = useLocation();
     const isHome = location.pathname === '/';
     const isOverOns = location.pathname === '/over-ons';
+    
+    // Pages that should have white text when navbar is transparent (pages with hero sections)
+    const hasHeroSection = isHome || isOverOns;
 
     useEffect(() => {
         const handleScroll = () => {
@@ -47,7 +50,7 @@ const Navbar = () => {
         <nav
             className={`fixed left-0 right-0 z-50 transition-all duration-300 ${
                 hasBanner ? 'top-[44px]' : 'top-0'
-            } ${isScrolled || (!isHome && !isOverOns)
+            } ${isScrolled
                 ? 'bg-white/80 backdrop-blur-md shadow-sm py-4'
                 : 'bg-transparent py-6'
                 }`}
@@ -74,7 +77,7 @@ const Navbar = () => {
                                 <a
                                     key={item.label}
                                     href={item.path}
-                                    className={`text-sm font-medium transition-colors relative group ${isScrolled || (!isHome && !isOverOns) ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white'}`}
+                                    className={`text-sm font-medium transition-colors relative group ${isScrolled ? 'text-muted-foreground hover:text-foreground' : hasHeroSection ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'}`}
                                 >
                                     {item.label}
                                     <span className="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
@@ -83,7 +86,7 @@ const Navbar = () => {
                                 <Link
                                     key={item.label}
                                     to={item.path}
-                                    className={`text-sm font-medium transition-colors relative group ${isScrolled || (!isHome && !isOverOns) ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white'}`}
+                                    className={`text-sm font-medium transition-colors relative group ${isScrolled ? 'text-muted-foreground hover:text-foreground' : hasHeroSection ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'}`}
                                 >
                                     {item.label}
                                     <span className="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
@@ -94,7 +97,7 @@ const Navbar = () => {
                                 <Link
                                     key={item.label}
                                     to={item.path}
-                                    className={`text-sm font-medium transition-colors relative group ${isScrolled || (!isHome && !isOverOns) ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white'}`}
+                                    className={`text-sm font-medium transition-colors relative group ${isScrolled ? 'text-muted-foreground hover:text-foreground' : hasHeroSection ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'}`}
                                 >
                                     {item.label}
                                     <span className="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
@@ -105,7 +108,7 @@ const Navbar = () => {
 
                     <Link
                         to="/configurator"
-                        className={`text-sm font-medium transition-colors relative group ${isScrolled || (!isHome && !isOverOns) ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white'}`}
+                        className={`text-sm font-medium transition-colors relative group ${isScrolled ? 'text-muted-foreground hover:text-foreground' : hasHeroSection ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'}`}
                     >
                         AI Oprit Scan
                         <span className="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>

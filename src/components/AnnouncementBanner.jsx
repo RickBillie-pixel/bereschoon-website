@@ -6,15 +6,10 @@ import { motion } from 'framer-motion';
 const AnnouncementBanner = () => {
     const [isVisible, setIsVisible] = useState(true);
     const location = useLocation();
-    
-    // Only show on homepage
-    if (location.pathname !== '/') {
-        return null;
-    }
 
     useEffect(() => {
         // Update body class when banner visibility changes
-        if (isVisible) {
+        if (isVisible && location.pathname === '/') {
             document.body.classList.add('has-banner');
         } else {
             document.body.classList.remove('has-banner');
@@ -22,11 +17,14 @@ const AnnouncementBanner = () => {
         return () => {
             document.body.classList.remove('has-banner');
         };
-    }, [isVisible]);
+    }, [isVisible, location.pathname]);
 
     const bannerText = "NIEUW: Ons eigen assortiment bereschoon reinigingsproducten!";
 
-    if (!isVisible) return null;
+    // Only show on homepage
+    if (location.pathname !== '/' || !isVisible) {
+        return null;
+    }
 
     return (
         <motion.div
