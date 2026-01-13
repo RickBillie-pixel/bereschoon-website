@@ -9,6 +9,7 @@ import {
 import PageTransition from '../../components/PageTransition';
 import { useAuth } from '../../context/AuthContext';
 import { supabase, uploadFile, deleteFile } from '../../lib/supabase';
+import OrdersManagementTable from '../../components/shop/OrdersManagementTable';
 
 // ==================== ADMIN LAYOUT ====================
 const AdminLayout = ({ children }) => {
@@ -984,7 +985,7 @@ const ShopAdmin = () => {
         <Route index element={<ProductsList />} />
         <Route path="product/nieuw" element={<ProductForm />} />
         <Route path="product/:id" element={<ProductForm />} />
-        <Route path="bestellingen" element={<OrdersList />} />
+        <Route path="bestellingen" element={<OrdersManagementTable />} />
         <Route path="instellingen" element={<AdminSettings />} />
       </Routes>
     </AdminLayout>

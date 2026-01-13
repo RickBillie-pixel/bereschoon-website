@@ -107,6 +107,34 @@ serve(async (req) => {
 
     console.log(`Order ${orderId} updated to status: ${orderStatus}`);
 
+    // Add tracking history entry for status change
+    try {
+      let description = '';
+      switch (orderStatus) {
+        case 'paid':
+          description = 'Betaling succesvol ontvangen. Je bestelling wordt verwerkt.';
+          break;
+        case 'cancelled':
+          description = 'Bestelling geannuleerd';
+          break;
+        case 'pending':
+          description = 'Wachten op betaling';
+          break;
+        default:
+          description = `Status gewijzigd naar: ${orderStatus}`;
+      }
+
+      await supabase.rpc('add_tracking_history', {
+        p_order_id: orderId,
+        p_status: orderStatus,
+        p_description: description,
+        p_is_automated: true
+      });
+    } catch (trackingError) {
+      console.error('Failed to add tracking history:', trackingError);
+      // Don't fail the webhook if tracking fails
+    }
+
     // If payment is successful, update product stock
     if (orderStatus === 'paid') {
       // Fetch order items

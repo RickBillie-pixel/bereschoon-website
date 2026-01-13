@@ -29,6 +29,7 @@ import AccountNotifications from './pages/shop/AccountNotifications';
 import ShopAdmin from './pages/shop/Admin';
 import CartSidebar from './components/shop/CartSidebar';
 import NotificationToast from './components/shop/NotificationToast';
+import TrackOrder from './pages/TrackOrder';
 
 // Prefetch producten in de achtergrond zodra de app laadt
 // Dit zorgt ervoor dat producten al gecached zijn in de browser voordat de gebruiker naar de shop gaat
@@ -119,6 +120,10 @@ function App() {
                 <Route path="/winkel/account/instellingen" element={<AccountSettings />} />
                 <Route path="/winkel/account/meldingen" element={<AccountNotifications />} />
                 <Route path="/winkel/admin/*" element={<ShopAdmin />} />
+                
+                {/* Order tracking - public */}
+                <Route path="/track" element={<TrackOrder />} />
+                <Route path="/track/:trackingCode" element={<TrackOrder />} />
               </Routes>
             </main>
 

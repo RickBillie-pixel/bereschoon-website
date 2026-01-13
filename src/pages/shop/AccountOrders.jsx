@@ -246,22 +246,34 @@ const AccountOrders = () => {
 
                             {/* Tracking */}
                             {order.tracking_code && (
-                              <div className="bg-green-50 rounded-xl p-4 flex items-center justify-between">
-                                <div>
-                                  <p className="text-sm font-medium text-green-700 mb-1">Track & Trace</p>
-                                  <p className="font-mono">{order.tracking_code}</p>
+                              <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-4">
+                                <div className="flex items-center justify-between mb-3">
+                                  <div>
+                                    <p className="text-sm font-medium text-green-700 mb-1">📦 Track & Trace</p>
+                                    <p className="font-mono font-bold text-lg">{order.tracking_code}</p>
+                                  </div>
                                 </div>
-                                {order.tracking_url && (
-                                  <a
-                                    href={order.tracking_url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-1 text-green-700 hover:underline"
+                                <div className="flex flex-wrap gap-2">
+                                  <Link
+                                    to={`/track/${order.tracking_code}`}
+                                    className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
                                   >
-                                    Volg pakket
-                                    <ExternalLink className="w-4 h-4" />
-                                  </a>
-                                )}
+                                    <Package className="w-4 h-4" />
+                                    Volg je bestelling
+                                  </Link>
+                                  {order.carrier_tracking_url && (
+                                    <a
+                                      href={order.carrier_tracking_url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg hover:border-primary hover:text-primary transition-colors text-sm font-medium"
+                                    >
+                                      <Truck className="w-4 h-4" />
+                                      {order.carrier_name || 'Vervoerder'}
+                                      <ExternalLink className="w-3 h-3" />
+                                    </a>
+                                  )}
+                                </div>
                               </div>
                             )}
 

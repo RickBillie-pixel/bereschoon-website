@@ -184,13 +184,28 @@ serve(async (req) => {
       .update({ payment_id: payment.id })
       .eq('id', order.id);
 
-    // Return checkout URL
+    // Add initial tracking history entry
+    try {
+      await supabase.rpc('add_tracking_history', {
+        p_order_id: order.id,
+        p_status: 'pending',
+        p_description: 'Bestelling geplaatst en wacht op betaling',
+        p_is_automated: true
+      });
+    } catch (trackingError) {
+      console.error('Failed to add tracking history:', trackingError);
+      // Don't fail the order creation if tracking fails
+    }
+
+    // Return checkout URL with tracking code
     return new Response(
       JSON.stringify({
         success: true,
         checkoutUrl: payment._links.checkout.href,
         orderId: order.id,
-        orderNumber: order.order_number
+        orderNumber: order.order_number,
+        trackingCode: order.tracking_code,
+        trackingLink: order.tracking_link
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
