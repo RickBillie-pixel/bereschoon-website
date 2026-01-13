@@ -21,10 +21,10 @@ const Account = () => {
 
   // If user is already logged in and there's a redirect, navigate immediately
   useEffect(() => {
-    if (user && redirectUrl && !authLoading) {
-      navigate(redirectUrl);
+    if (user && redirectUrl) {
+      navigate(redirectUrl, { replace: true });
     }
-  }, [user, redirectUrl, authLoading, navigate]);
+  }, [user, redirectUrl, navigate]);
   const [mode, setMode] = useState('login'); // login, register, forgot
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -88,10 +88,10 @@ const Account = () => {
     }
   };
 
-  // Remove loading state - render immediately for speed
-  // Profile data will load in background and update reactively
+  // Instant render - no blocking on auth check
+  // Auth loads in < 100ms, profile loads in background
 
-  // Show loading only during initial auth check (very fast)
+  // Logged in view - render instantly, show loading state if still checking auth
   if (authLoading) {
     return (
       <PageTransition className="pt-24">
@@ -102,7 +102,6 @@ const Account = () => {
     );
   }
 
-  // Logged in view
   if (user) {
     return (
       <PageTransition className="pt-24">
@@ -112,6 +111,7 @@ const Account = () => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
                 className="bg-white rounded-2xl p-8 shadow-sm mb-8"
               >
                 <div className="flex items-center gap-4 mb-6">
@@ -119,7 +119,7 @@ const Account = () => {
                     <User className="w-8 h-8 text-primary" />
                   </div>
                   <div>
-                    <h1 className="text-2xl font-bold">{profile?.full_name || 'Welkom!'}</h1>
+                    <h1 className="text-2xl font-bold">{profile?.full_name || user.email?.split('@')[0] || 'Welkom!'}</h1>
                     <p className="text-gray-500">{user.email}</p>
                   </div>
                 </div>

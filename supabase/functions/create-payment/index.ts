@@ -53,135 +53,225 @@ serve(async (req) => {
   }
 
   try {
+    console.log('=== CREATE PAYMENT START ===');
+    
     const MOLLIE_API_KEY = Deno.env.get('MOLLIE_API_KEY');
     const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
     const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
     const SITE_URL = Deno.env.get('SITE_URL') || 'http://localhost:5173';
 
+    console.log('Environment check:', {
+      hasMollieKey: !!MOLLIE_API_KEY,
+      mollieKeyPrefix: MOLLIE_API_KEY ? MOLLIE_API_KEY.substring(0, 10) + '...' : 'MISSING',
+      hasSupabaseUrl: !!SUPABASE_URL,
+      hasServiceKey: !!SUPABASE_SERVICE_ROLE_KEY,
+      siteUrl: SITE_URL
+    });
+
     if (!MOLLIE_API_KEY) {
-      throw new Error('MOLLIE_API_KEY niet geconfigureerd');
+      throw new Error('MOLLIE_API_KEY niet geconfigureerd. Ga naar Supabase Dashboard > Project Settings > Edge Functions > Secrets en voeg MOLLIE_API_KEY toe.');
     }
 
     if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      throw new Error('Supabase configuratie ontbreekt');
+      throw new Error('Supabase configuratie ontbreekt (SUPABASE_URL of SUPABASE_SERVICE_ROLE_KEY)');
     }
 
     // Initialize Supabase client with service role
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
     // Parse request body
+    console.log('Parsing request body...');
     const body: PaymentRequest = await req.json();
     const { items, customer, shippingAddress, carrier, notes, userId } = body;
 
-    // Validate request
+    console.log('Request received:', {
+      itemCount: items?.length,
+      customerEmail: customer?.email,
+      hasShippingAddress: !!shippingAddress,
+      carrier: carrier,
+      userId: userId
+    });
+
+    // Validate request with specific error messages
     if (!items || items.length === 0) {
-      throw new Error('Winkelmandje is leeg');
+      throw new Error('Winkelmandje is leeg. Voeg eerst producten toe.');
     }
 
-    if (!customer?.email || !customer?.firstName || !customer?.lastName) {
-      throw new Error('Klantgegevens zijn onvolledig');
+    if (!customer?.email) {
+      throw new Error('E-mailadres is verplicht');
+    }
+    if (!customer?.firstName) {
+      throw new Error('Voornaam is verplicht');
+    }
+    if (!customer?.lastName) {
+      throw new Error('Achternaam is verplicht');
     }
 
-    if (!shippingAddress?.street || !shippingAddress?.postalCode || !shippingAddress?.city || !shippingAddress?.country) {
-      throw new Error('Verzendadres is onvolledig');
+    if (!shippingAddress?.street) {
+      throw new Error('Straat is verplicht');
+    }
+    if (!shippingAddress?.postalCode) {
+      throw new Error('Postcode is verplicht');
+    }
+    if (!shippingAddress?.city) {
+      throw new Error('Plaats is verplicht');
+    }
+    if (!shippingAddress?.country) {
+      throw new Error('Land is verplicht');
     }
 
     // Validate carrier info
     if (!carrier || !carrier.code || !carrier.name) {
       console.error('Carrier validation failed:', JSON.stringify(carrier));
-      throw new Error('Verzendmethode niet geselecteerd');
+      throw new Error('Selecteer een verzendmethode (DHL of PostNL)');
     }
+
+    console.log('Validation passed ✓');
 
     // Calculate totals
     const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const shippingCost = carrier?.cost || 0;
     const total = subtotal + shippingCost;
 
-    console.log('Order totals:', { subtotal, shippingCost, total, carrier });
+    console.log('Order totals calculated:', { subtotal, shippingCost, total });
 
-    // Create order in database
-    const { data: order, error: orderError } = await supabase
+    // Create order in database - only include columns that exist
+    console.log('Creating order with:', {
+      email: customer.email,
+      subtotal,
+      shipping_cost: shippingCost,
+      total,
+      carrier_code: carrier?.code,
+      carrier_name: carrier?.name
+    });
+
+    // Build full customer name
+    const customerName = [customer.firstName, customer.lastName].filter(Boolean).join(' ');
+
+    const { data: order, error: orderError} = await supabase
       .from('orders')
       .insert({
         user_id: userId || null,
         email: customer.email,
+        customer_name: customerName || null,  // ✅ Klant naam opslaan
+        customer_phone: customer.phone || null,  // ✅ Klant telefoonnummer opslaan
         status: 'pending',
         subtotal: subtotal,
         shipping_cost: shippingCost,
         total: total,
         shipping_address: shippingAddress,
-        billing_address: shippingAddress, // Same as shipping for now
-        chosen_carrier_code: carrier?.code || null,
-        chosen_carrier_name: carrier?.name || null,
+        billing_address: shippingAddress,
+        carrier_name: carrier?.name || null,  // ✅ Vervoerder naam opslaan
         notes: notes || null
       })
       .select()
       .single();
 
     if (orderError) {
-      console.error('Order creation error:', orderError);
-      throw new Error('Kon bestelling niet aanmaken');
+      console.error('Order creation error:', JSON.stringify(orderError));
+      throw new Error(`Kon bestelling niet aanmaken: ${orderError.message || orderError.code}`);
     }
 
-    // Create order items
-    const orderItems = items.map(item => ({
-      order_id: order.id,
-      product_id: item.productId,
-      product_name: item.name,
-      product_slug: item.slug,
-      quantity: item.quantity,
-      price_at_purchase: item.price
-    }));
+    console.log('Order created:', order.id, order.order_number);
+
+    // Create order items - product_id is optional (might be a UUID or null)
+    console.log('Creating order items for order:', order.id);
+    
+    const orderItems = items.map(item => {
+      // Check if productId is a valid UUID, otherwise set to null
+      const isValidUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(item.productId);
+      
+      return {
+        order_id: order.id,
+        product_id: isValidUUID ? item.productId : null,
+        product_name: item.name,
+        product_slug: item.slug,
+        quantity: item.quantity,
+        price_at_purchase: item.price
+      };
+    });
+
+    console.log('Order items to insert:', JSON.stringify(orderItems));
 
     const { error: itemsError } = await supabase
       .from('order_items')
       .insert(orderItems);
 
     if (itemsError) {
-      console.error('Order items error:', itemsError);
+      console.error('Order items error:', JSON.stringify(itemsError));
       // Cleanup: delete the order
       await supabase.from('orders').delete().eq('id', order.id);
-      throw new Error('Kon bestellingsitems niet aanmaken');
+      throw new Error(`Kon bestellingsitems niet aanmaken: ${itemsError.message || itemsError.code}`);
     }
+    
+    console.log('Order items created successfully');
 
     // Build order description for Mollie
     const description = `Bereschoon Order ${order.order_number}`;
 
+    console.log('Creating Mollie payment...', {
+      amount: total.toFixed(2),
+      description: description,
+      redirectUrl: `${SITE_URL}/winkel/betaling-succes?order=${order.order_number}`
+    });
+
     // Create Mollie payment
+    const molliePayload = {
+      amount: {
+        currency: 'EUR',
+        value: total.toFixed(2)
+      },
+      description: description,
+      redirectUrl: `${SITE_URL}/winkel/betaling-succes?order=${order.order_number}`,
+      cancelUrl: `${SITE_URL}/winkel/betaling-mislukt?reason=cancelled`,
+      webhookUrl: `${SUPABASE_URL}/functions/v1/mollie-webhook`,
+      metadata: {
+        order_id: order.id,
+        order_number: order.order_number
+      },
+      locale: 'nl_NL'
+    };
+
     const mollieResponse = await fetch('https://api.mollie.com/v2/payments', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${MOLLIE_API_KEY}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        amount: {
-          currency: 'EUR',
-          value: total.toFixed(2)
-        },
-        description: description,
-        redirectUrl: `${SITE_URL}/winkel/betaling-succes?order=${order.order_number}`,
-        cancelUrl: `${SITE_URL}/winkel/betaling-mislukt?reason=cancelled`,
-        webhookUrl: `${SUPABASE_URL}/functions/v1/mollie-webhook`,
-        metadata: {
-          order_id: order.id,
-          order_number: order.order_number
-        },
-        locale: 'nl_NL',
-        method: ['ideal', 'bancontact', 'creditcard', 'paypal', 'applepay', 'googlepay']
-      })
+      body: JSON.stringify(molliePayload)
     });
 
+    const mollieResponseText = await mollieResponse.text();
+    console.log('Mollie response status:', mollieResponse.status);
+    console.log('Mollie response:', mollieResponseText);
+
     if (!mollieResponse.ok) {
-      const errorData = await mollieResponse.json();
-      console.error('Mollie error:', errorData);
+      let errorMessage = 'Kon betaling niet aanmaken bij Mollie';
+      try {
+        const errorData = JSON.parse(mollieResponseText);
+        console.error('Mollie error details:', errorData);
+        
+        if (errorData.status === 401) {
+          errorMessage = 'Mollie API key is ongeldig. Controleer je API key in Supabase secrets.';
+        } else if (errorData.detail) {
+          errorMessage = `Mollie fout: ${errorData.detail}`;
+        } else if (errorData.title) {
+          errorMessage = `Mollie fout: ${errorData.title}`;
+        }
+      } catch (e) {
+        errorMessage = `Mollie fout: ${mollieResponseText}`;
+      }
+      
       // Cleanup: delete order and items
+      console.log('Cleaning up order after Mollie error...');
       await supabase.from('order_items').delete().eq('order_id', order.id);
       await supabase.from('orders').delete().eq('id', order.id);
-      throw new Error(errorData.detail || 'Kon betaling niet aanmaken');
+      
+      throw new Error(errorMessage);
     }
 
-    const payment = await mollieResponse.json();
+    const payment = JSON.parse(mollieResponseText);
+    console.log('Mollie payment created:', payment.id);
 
     // Update order with payment ID
     await supabase
@@ -189,16 +279,24 @@ serve(async (req) => {
       .update({ payment_id: payment.id })
       .eq('id', order.id);
 
-    // Add initial tracking history entry
+    // Add initial tracking history entry (optional - don't fail if not available)
     try {
-      await supabase.rpc('add_tracking_history', {
-        p_order_id: order.id,
-        p_status: 'pending',
-        p_description: 'Bestelling geplaatst en wacht op betaling',
-        p_is_automated: true
-      });
+      const { error: historyError } = await supabase
+        .from('order_tracking_history')
+        .insert({
+          order_id: order.id,
+          status: 'pending',
+          description: '⏳ Bestelling geplaatst en wacht op betaling via Mollie',
+          is_automated: true
+        });
+      
+      if (historyError) {
+        console.warn('Tracking history not available:', historyError.message);
+      } else {
+        console.log('Initial tracking history added');
+      }
     } catch (trackingError) {
-      console.error('Failed to add tracking history:', trackingError);
+      console.warn('Failed to add tracking history:', trackingError);
       // Don't fail the order creation if tracking fails
     }
 
@@ -219,13 +317,20 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('Payment creation error:', error);
+    console.error('=== PAYMENT ERROR ===');
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
+    
+    const errorResponse = {
+      success: false,
+      error: error.message || 'Er is een fout opgetreden',
+      timestamp: new Date().toISOString()
+    };
+    
+    console.error('Returning error response:', JSON.stringify(errorResponse));
     
     return new Response(
-      JSON.stringify({
-        success: false,
-        error: error.message || 'Er is een fout opgetreden'
-      }),
+      JSON.stringify(errorResponse),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 400

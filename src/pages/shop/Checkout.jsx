@@ -28,17 +28,45 @@ const Checkout = () => {
   const [selectedCarrier, setSelectedCarrier] = useState(null);
 
   const [formData, setFormData] = useState({
-    email: user?.email || '',
-    firstName: profile?.full_name?.split(' ')[0] || '',
-    lastName: profile?.full_name?.split(' ').slice(1).join(' ') || '',
-    phone: profile?.phone || '',
-    street: profile?.default_address?.street || '',
-    houseNumber: profile?.default_address?.houseNumber || '',
-    postalCode: profile?.default_address?.postalCode || '',
-    city: profile?.default_address?.city || '',
-    country: profile?.default_address?.country || 'NL',
+    email: '',
+    firstName: '',
+    lastName: '',
+    phone: '',
+    street: '',
+    houseNumber: '',
+    postalCode: '',
+    city: '',
+    country: 'NL',
     notes: ''
   });
+
+  // Auto-fill form when user logs in or profile loads
+  useEffect(() => {
+    if (user?.email && !formData.email) {
+      setFormData(prev => ({
+        ...prev,
+        email: user.email
+      }));
+    }
+  }, [user]);
+
+  // Auto-fill profile data when it loads
+  useEffect(() => {
+    if (profile) {
+      setFormData(prev => ({
+        ...prev,
+        email: user?.email || prev.email,
+        firstName: profile.full_name?.split(' ')[0] || prev.firstName,
+        lastName: profile.full_name?.split(' ').slice(1).join(' ') || prev.lastName,
+        phone: profile.phone || prev.phone,
+        street: profile.default_address?.street || prev.street,
+        houseNumber: profile.default_address?.houseNumber || prev.houseNumber,
+        postalCode: profile.default_address?.postalCode || prev.postalCode,
+        city: profile.default_address?.city || prev.city,
+        country: profile.default_address?.country || prev.country || 'NL'
+      }));
+    }
+  }, [profile, user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -86,72 +114,194 @@ const Checkout = () => {
 
   // Calculate totals
   const { subtotal } = getCartSummary();
-  const shippingCost = selectedCarrier && subtotal >= FREE_SHIPPING_THRESHOLD 
+  
+  // Use carrier-specific free shipping threshold (default to 50 if not set)
+  const freeShippingThreshold = selectedCarrier?.free_shipping_threshold || FREE_SHIPPING_THRESHOLD;
+  
+  // Calculate shipping cost: free if above threshold, otherwise carrier's flat rate
+  const shippingCost = selectedCarrier && subtotal >= freeShippingThreshold
     ? 0 
     : (selectedCarrier?.flat_rate || 0);
+    
   const total = subtotal + shippingCost;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
     
+    // Client-side validation with specific messages
     if (items.length === 0) {
-      setError('Je winkelmandje is leeg');
+      setError('Je winkelmandje is leeg. Voeg eerst producten toe.');
+      return;
+    }
+
+    if (!formData.email || !formData.email.includes('@')) {
+      setError('Vul een geldig e-mailadres in');
+      return;
+    }
+
+    if (!formData.firstName.trim()) {
+      setError('Vul je voornaam in');
+      return;
+    }
+
+    if (!formData.lastName.trim()) {
+      setError('Vul je achternaam in');
+      return;
+    }
+
+    if (!formData.street.trim()) {
+      setError('Vul je straatnaam in');
+      return;
+    }
+
+    if (!formData.houseNumber.trim()) {
+      setError('Vul je huisnummer in');
+      return;
+    }
+
+    if (!formData.postalCode.trim()) {
+      setError('Vul je postcode in');
+      return;
+    }
+
+    if (!formData.city.trim()) {
+      setError('Vul je plaats in');
       return;
     }
 
     if (!selectedCarrier) {
-      setError('Selecteer een verzendmethode');
+      setError('Selecteer een verzendmethode (DHL of PostNL)');
       return;
     }
 
     setLoading(true);
-    setError(null);
 
     try {
+      // Prepare payload
+      const payload = {
+        items: items.map(item => ({
+          productId: item.id,
+          name: item.name,
+          slug: item.slug,
+          quantity: item.quantity,
+          price: item.price
+        })),
+        customer: {
+          email: formData.email,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          phone: formData.phone || ''
+        },
+        shippingAddress: {
+          street: formData.street,
+          houseNumber: formData.houseNumber,
+          postalCode: formData.postalCode,
+          city: formData.city,
+          country: formData.country
+        },
+        carrier: {
+          code: selectedCarrier?.carrier_code || 'dhl',
+          name: selectedCarrier?.carrier_name || 'DHL',
+          cost: shippingCost
+        },
+        notes: formData.notes || '',
+        userId: user?.id || null
+      };
+
+      console.log('Sending payment request:', payload);
+
       // Call the create-payment edge function
-      const { data, error: fnError } = await supabase.functions.invoke('create-payment', {
-        body: {
-          items: items.map(item => ({
-            productId: item.id,
-            name: item.name,
-            slug: item.slug,
-            quantity: item.quantity,
-            price: item.price
-          })),
-          customer: {
-            email: formData.email,
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            phone: formData.phone
-          },
-          shippingAddress: {
-            street: formData.street,
-            houseNumber: formData.houseNumber,
-            postalCode: formData.postalCode,
-            city: formData.city,
-            country: formData.country
-          },
-          carrier: {
-            code: selectedCarrier?.carrier_code || 'dhl',
-            name: selectedCarrier?.carrier_name || 'DHL',
-            cost: shippingCost
-          },
-          notes: formData.notes,
-          userId: user?.id || null
-        }
+      const response = await supabase.functions.invoke('create-payment', {
+        body: payload
       });
 
-      if (fnError) throw fnError;
+      console.log('Payment response:', response);
+      console.log('Payment response data:', response.data);
+      console.log('Payment response error:', response.error);
+
+      // Check for errors in response
+      if (response.error) {
+        console.error('Function invoke error:', response.error);
+        
+        // The error details are often in response.data when there's an error
+        let errorDetail = 'Onbekende fout';
+        
+        if (response.data?.error) {
+          errorDetail = response.data.error;
+        } else if (response.error?.message) {
+          errorDetail = response.error.message;
+        } else if (typeof response.data === 'string') {
+          errorDetail = response.data;
+        }
+        
+        // Also check error context
+        if (response.error?.context?.body) {
+          try {
+            const contextError = JSON.parse(response.error.context.body);
+            errorDetail = contextError.error || errorDetail;
+          } catch (e) {
+            // ignore
+          }
+        }
+        
+        console.error('Error detail extracted:', errorDetail);
+        throw new Error(errorDetail);
+      }
+
+      const data = response.data;
+      console.log('Response data:', data);
+
+      if (data?.success === false) {
+        console.error('Success false, error:', data.error);
+        throw new Error(data.error || 'Betaling aanmaken mislukt');
+      }
 
       if (data?.checkoutUrl) {
         // Redirect to Mollie checkout
+        console.log('✅ Success! Redirecting to:', data.checkoutUrl);
         window.location.href = data.checkoutUrl;
       } else {
-        throw new Error('Geen checkout URL ontvangen');
+        console.error('No checkout URL in response:', data);
+        throw new Error('Geen checkout URL ontvangen van Mollie');
       }
     } catch (err) {
-      console.error('Checkout error:', err);
-      setError(err.message || 'Er ging iets mis bij het afrekenen');
+      console.error('=== CHECKOUT ERROR ===');
+      console.error('Error object:', err);
+      console.error('Error message:', err?.message);
+      console.error('Error context:', err?.context);
+      console.error('Error context body:', err?.context?.body);
+      
+      // Extract the most useful error message
+      let errorMessage = 'Er ging iets mis bij het afrekenen';
+      
+      // Try different error formats
+      if (err?.context?.body) {
+        console.log('Parsing error body...');
+        try {
+          const parsed = JSON.parse(err.context.body);
+          console.log('Parsed error:', parsed);
+          errorMessage = parsed.error || parsed.message || errorMessage;
+        } catch (e) {
+          // If body is not JSON, use it directly
+          console.log('Body is not JSON:', err.context.body);
+          errorMessage = err.context.body;
+        }
+      } else if (err?.message) {
+        errorMessage = err.message;
+      }
+      
+      console.error('Final error message:', errorMessage);
+      
+      // Make error message user-friendly but keep original for debugging
+      let displayError = errorMessage;
+      if (errorMessage.includes('MOLLIE_API_KEY niet geconfigureerd')) {
+        displayError = '⚠️ Mollie API key niet ingesteld. Ga naar Supabase Dashboard > Project Settings > Edge Functions > Secrets en voeg MOLLIE_API_KEY toe.';
+      } else if (errorMessage.includes('Supabase configuratie')) {
+        displayError = '⚠️ Database configuratie fout. Neem contact op met support.';
+      }
+      
+      setError(displayError);
       setLoading(false);
     }
   };
@@ -433,7 +583,7 @@ const Checkout = () => {
                             </div>
                           </div>
                           <div className="text-right">
-                            {subtotal >= FREE_SHIPPING_THRESHOLD ? (
+                            {subtotal >= (carrier.free_shipping_threshold || FREE_SHIPPING_THRESHOLD) ? (
                               <div>
                                 <p className="font-bold text-green-600">Gratis</p>
                                 <p className="text-xs text-gray-500 line-through">€{carrier.flat_rate.toFixed(2)}</p>
@@ -447,10 +597,10 @@ const Checkout = () => {
                     ))}
                   </div>
 
-                  {subtotal < FREE_SHIPPING_THRESHOLD && (
+                  {selectedCarrier && subtotal < freeShippingThreshold && (
                     <div className="mt-4 p-4 bg-blue-50 rounded-xl">
                       <p className="text-sm text-blue-800">
-                        💡 Nog €{(FREE_SHIPPING_THRESHOLD - subtotal).toFixed(2)} voor gratis verzending!
+                        💡 Nog €{(freeShippingThreshold - subtotal).toFixed(2)} voor gratis verzending!
                       </p>
                     </div>
                   )}
@@ -521,9 +671,9 @@ const Checkout = () => {
                       </span>
                       <span>{shippingCost === 0 ? 'Gratis' : `€${shippingCost.toFixed(2)}`}</span>
                     </div>
-                    {shippingCost > 0 && (
+                    {selectedCarrier && shippingCost > 0 && subtotal < freeShippingThreshold && (
                       <p className="text-xs text-gray-500">
-                        Nog €{(FREE_SHIPPING_THRESHOLD - subtotal).toFixed(2)} voor gratis verzending
+                        Nog €{(freeShippingThreshold - subtotal).toFixed(2)} voor gratis verzending
                       </p>
                     )}
                     <div className="flex justify-between text-xl font-bold pt-4 border-t">
