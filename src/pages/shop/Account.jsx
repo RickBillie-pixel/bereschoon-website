@@ -88,10 +88,14 @@ const Account = () => {
     }
   };
 
+  // Remove loading state - render immediately for speed
+  // Profile data will load in background and update reactively
+
+  // Show loading only during initial auth check (very fast)
   if (authLoading) {
     return (
       <PageTransition className="pt-24">
-        <div className="min-h-screen flex items-center justify-center">
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
           <Loader2 className="w-8 h-8 animate-spin text-primary" />
         </div>
       </PageTransition>

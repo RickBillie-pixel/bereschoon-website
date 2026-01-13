@@ -19,7 +19,7 @@ export const NotificationProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [showToast, setShowToast] = useState(null);
 
-  // Fetch notifications
+  // Fetch notifications (disabled for performance)
   const fetchNotifications = useCallback(async () => {
     if (!user) {
       setNotifications([]);
@@ -27,6 +27,14 @@ export const NotificationProvider = ({ children }) => {
       return;
     }
 
+    // DISABLED: Skip fetching for now to improve performance
+    // Will be enabled when notifications system is implemented
+    setNotifications([]);
+    setUnreadCount(0);
+    setLoading(false);
+    return;
+
+    /* COMMENTED OUT FOR PERFORMANCE
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -37,7 +45,6 @@ export const NotificationProvider = ({ children }) => {
         .limit(50);
 
       if (error) {
-        // Table might not exist yet, fail silently
         console.warn('Notifications table not available:', error.message);
         setNotifications([]);
         setUnreadCount(0);
@@ -54,6 +61,7 @@ export const NotificationProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
+    */
   }, [user]);
 
   // Mark notification as read

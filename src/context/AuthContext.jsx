@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Fetch user profile and admin status
+  // Fetch user profile and admin status (non-blocking)
   const fetchUserData = async (userId) => {
     if (!userId) {
       setProfile(null);
@@ -25,59 +25,59 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    try {
-      // Fetch profile - don't fail if it doesn't exist yet
-      const { data: profileData, error: profileError } = await supabase
+    // Fetch in background without blocking - fire and forget
+    Promise.all([
+      supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
-        .single();
-
-      if (profileError && profileError.code !== 'PGRST116') {
-        // PGRST116 = not found, which is OK
-        console.warn('Profile error:', profileError.message);
-      }
-
-      // Check admin status - fail silently if not admin
-      const { data: adminData } = await supabase
+        .single()
+        .then(({ data }) => data)
+        .catch(() => null),
+      supabase
         .from('admin_users')
         .select('role')
         .eq('user_id', userId)
-        .single();
-
+        .single()
+        .then(({ data }) => data)
+        .catch(() => null)
+    ]).then(([profileData, adminData]) => {
       setProfile(profileData);
       setIsAdmin(!!adminData);
-    } catch (error) {
-      console.error('Error fetching user data:', error);
+    }).catch(() => {
       setProfile(null);
       setIsAdmin(false);
-    }
+    });
   };
 
   useEffect(() => {
-    // Get initial session
+    // Get initial session - FAST, no blocking
     const getSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       setUser(session?.user ?? null);
+      setLoading(false); // ✅ Set loading false IMMEDIATELY
+      
+      // Fetch profile data in background (non-blocking)
       if (session?.user) {
-        await fetchUserData(session.user.id);
+        fetchUserData(session.user.id); // Don't await!
       }
-      setLoading(false);
     };
 
     getSession();
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         setUser(session?.user ?? null);
+        setLoading(false); // ✅ Set loading false IMMEDIATELY
+        
+        // Fetch profile data in background (non-blocking)
         if (session?.user) {
-          await fetchUserData(session.user.id);
+          fetchUserData(session.user.id); // Don't await!
         } else {
           setProfile(null);
           setIsAdmin(false);
         }
-        setLoading(false);
       }
     );
 
