@@ -44,13 +44,6 @@ interface PaymentRequest {
   userId?: string;
 }
 
-// Shipping costs per country
-const SHIPPING_RATES: Record<string, number> = {
-  'NL': 4.95,
-  'BE': 5.95,
-  'LU': 6.95
-};
-
 const FREE_SHIPPING_THRESHOLD = 50;
 
 serve(async (req) => {
@@ -93,9 +86,9 @@ serve(async (req) => {
       throw new Error('Verzendadres is onvolledig');
     }
 
-    // Check if country is supported
-    if (!SHIPPING_RATES[shippingAddress.country]) {
-      throw new Error(`Verzending naar ${shippingAddress.country} wordt niet ondersteund`);
+    // Validate carrier info
+    if (!carrier || !carrier.code || !carrier.name) {
+      throw new Error('Verzendmethode niet geselecteerd');
     }
 
     // Calculate totals

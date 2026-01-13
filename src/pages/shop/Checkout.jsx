@@ -81,6 +81,7 @@ const Checkout = () => {
   // Load carriers on mount and when country changes
   useEffect(() => {
     fetchCarriers(formData.country);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Calculate totals
@@ -95,6 +96,11 @@ const Checkout = () => {
     
     if (items.length === 0) {
       setError('Je winkelmandje is leeg');
+      return;
+    }
+
+    if (!selectedCarrier) {
+      setError('Selecteer een verzendmethode');
       return;
     }
 
@@ -511,7 +517,7 @@ const Checkout = () => {
                     <div className="flex justify-between text-gray-600">
                       <span className="flex items-center gap-1">
                         <Truck className="w-4 h-4" />
-                        Verzending ({selectedCountry.name})
+                        Verzending {selectedCarrier ? `(${selectedCarrier.carrier_name})` : ''}
                       </span>
                       <span>{shippingCost === 0 ? 'Gratis' : `€${shippingCost.toFixed(2)}`}</span>
                     </div>
