@@ -38,9 +38,9 @@ const prefetchProducts = async () => {
   try {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-    
+
     if (!supabaseUrl || !supabaseKey) return;
-    
+
     const response = await fetch(
       `${supabaseUrl}/rest/v1/products?active=eq.true&select=*`,
       {
@@ -50,11 +50,11 @@ const prefetchProducts = async () => {
         }
       }
     );
-    
+
     if (!response.ok) return;
-    
+
     const data = await response.json();
-    
+
     // Prefetch afbeeldingen
     if (data) {
       data.forEach(product => {
@@ -77,11 +77,19 @@ prefetchProducts();
 // ScrollToTop component - scrollt naar boven bij route changes
 function ScrollToTop() {
   const { pathname } = useLocation();
-  
+
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Disable browser's default scroll restoration to handle it manually
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+
+    // Always scroll to top on route change, with a slight delay to ensure render is complete
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 10);
   }, [pathname]);
-  
+
   return null;
 }
 
@@ -109,7 +117,7 @@ function App() {
                 <Route path="/oprit-terras-terrein" element={<OpritTerrasTerrein />} />
                 <Route path="/gevelreiniging" element={<Gevelreiniging />} />
                 <Route path="/onkruidbeheersing" element={<Onkruidbeheersing />} />
-                
+
                 {/* Webshop routes */}
                 <Route path="/winkel" element={<Winkel />} />
                 <Route path="/winkel/product/:slug" element={<ProductDetail />} />
@@ -122,7 +130,7 @@ function App() {
                 <Route path="/winkel/account/meldingen" element={<AccountNotifications />} />
                 <Route path="/winkel/account/wachtwoord-reset" element={<ResetPassword />} />
                 <Route path="/winkel/admin/*" element={<ShopAdmin />} />
-                
+
                 {/* Order tracking - public */}
                 <Route path="/track" element={<TrackOrder />} />
                 <Route path="/track/:trackingCode" element={<TrackOrder />} />

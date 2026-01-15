@@ -69,6 +69,16 @@ const FAQSection = () => {
         setOpenIndex(openIndex === index ? null : index);
     };
 
+    const handleMouseEnter = (index) => {
+        // Clear any existing timeout to prevent bouncing
+        if (window.faqTimeout) clearTimeout(window.faqTimeout);
+
+        // Add a small delay so scrolling doesn't trigger it immediately
+        window.faqTimeout = setTimeout(() => {
+            setOpenIndex(index);
+        }, 150);
+    };
+
     return (
         <section className="py-24 bg-gray-50">
             <div className="container mx-auto px-6 max-w-5xl">
@@ -86,7 +96,10 @@ const FAQSection = () => {
                         <div
                             key={index}
                             className="h-full"
-                            onMouseEnter={() => setOpenIndex(index)}
+                            onMouseEnter={() => handleMouseEnter(index)}
+                            onMouseLeave={() => {
+                                if (window.faqTimeout) clearTimeout(window.faqTimeout);
+                            }}
                         >
                             <FAQItem
                                 icon={item.icon}

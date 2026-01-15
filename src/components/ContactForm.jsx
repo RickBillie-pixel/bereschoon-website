@@ -329,7 +329,7 @@ const ContactForm = ({ preselectedService = null }) => {
         <div className="p-6 md:p-8">
             <div className="mb-8">
                 <h2 className="text-3xl font-bold text-foreground mb-2">Stel uw aanvraag samen</h2>
-                <p className="text-muted-foreground">Binnen 1 minuut ingevuld – wij reageren binnen 24 uur</p>
+                <p className="text-stone-400">Binnen 1 minuut ingevuld – wij reageren binnen 24 uur</p>
             </div>
             <p className="text-muted-foreground mb-6 font-medium text-sm uppercase tracking-wider text-primary">Stap {displayStep} van {totalSteps}</p>
 

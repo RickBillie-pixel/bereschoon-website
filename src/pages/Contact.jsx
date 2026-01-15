@@ -23,29 +23,23 @@ const Contact = () => {
                             </div>
 
                             {/* Trust Indicators - Single Line, Subtle */}
-                            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-secondary font-medium mb-12">
+                            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-secondary font-medium mb-12">
                                 <a
                                     href="https://www.google.com/search?q=Bereschoon+Helmond+reviews"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                                 >
-                                    <div className="flex items-center gap-0.5">
-                                        {[...Array(5)].map((_, i) => (
-                                            <svg key={i} className="w-4 h-4 text-yellow-500 fill-current" viewBox="0 0 20 20">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                            </svg>
-                                        ))}
-                                    </div>
-                                    <span className="font-bold">4.8/5</span>
-                                    <span className="text-stone-500">(125+ Google reviews)</span>
+                                    <div className="flex text-yellow-500 text-base">★★★★★</div>
+                                    <span className="font-bold">5.0/5</span>
+                                    <span className="text-stone-500 font-normal">op Google</span>
                                 </a>
                                 <span className="text-stone-300 hidden sm:inline">•</span>
-                                <span>1000+ projecten</span>
+                                <span>150+ projecten</span>
                                 <span className="text-stone-300 hidden sm:inline">•</span>
-                                <span>10+ jaar ervaring</span>
+                                <span>3+ jaar ervaring</span>
                                 <span className="text-stone-300 hidden sm:inline">•</span>
-                                <span>Garantie</span>
+                                <span>100% Tevredenheid</span>
                             </div>
 
                             {/* Intro Text */}
@@ -56,15 +50,15 @@ const Contact = () => {
                             {/* Direct Contact - Simple List */}
                             <div className="space-y-4 mb-10">
                                 <a href="tel:+31639494059" className="flex items-center gap-4 text-secondary hover:text-primary transition-colors group w-fit">
-                                    <Phone className="text-primary group-hover:scale-110 transition-transform" size={20} />
+                                    <Phone className="text-primary group-hover:scale-110 transition-transform" size={18} />
                                     <span className="font-semibold text-lg">+31 (0)6 3949 4059</span>
                                 </a>
                                 <a href="mailto:info@bereschoon.nl" className="flex items-center gap-4 text-secondary hover:text-primary transition-colors group w-fit">
-                                    <Mail className="text-primary group-hover:scale-110 transition-transform" size={20} />
+                                    <Mail className="text-primary group-hover:scale-110 transition-transform" size={18} />
                                     <span className="font-semibold text-lg">info@bereschoon.nl</span>
                                 </a>
                                 <div className="flex items-center gap-4 text-secondary">
-                                    <MapPin className="text-primary" size={20} />
+                                    <MapPin className="text-primary" size={18} />
                                     <span className="font-medium">Helmond, Nederland</span>
                                 </div>
                             </div>
@@ -72,7 +66,7 @@ const Contact = () => {
                             {/* Human Touch */}
                             <div className="flex items-center gap-3 text-stone-500 mb-16">
                                 <User size={18} className="text-stone-400" />
-                                <span>U spreekt direct met ons team — geen tussenpersonen.</span>
+                                <span>U spreekt direct met Barend — geen tussenpersonen.</span>
                             </div>
 
                             {/* Footer/Legal Details */}

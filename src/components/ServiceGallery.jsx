@@ -29,7 +29,6 @@ const fetchServiceProjects = async (serviceId) => {
     }
 
     try {
-        console.log(`Fetching from ${tableName}...`);
         const { data, error } = await supabase
             .from(tableName)
             .select('*')
@@ -45,20 +44,32 @@ const fetchServiceProjects = async (serviceId) => {
             return [];
         }
 
-        // Transform database projects to match the expected format
+        // Transform database projects with robust field checking
         return data
-            .filter(project => project.before_image_url && project.after_image_url)
-            .map(project => ({
-                id: project.id,
-                projectName: project.name,
-                before: project.before_image_url,
-                after: project.after_image_url,
-                category: serviceCategoryDefaults[serviceId] || 'Project',
-                date: project.date,
-                // Try multiple casing options as Supabase can be tricky with quoted identifiers
-                challenge: project['Uitdaging'] || project['uitdaging'] || project.challenge || "",
-                solution: project['Oplossing'] || project['oplossing'] || project.solution || ""
-            }));
+            .map(project => {
+                // Try multiple casing/naming options
+                const beforeImage = project.before_image_url || project.before_image || project.beforeImage || project['before_image_url'] || null;
+                const afterImage = project.after_image_url || project.after_image || project.afterImage || project['after_image_url'] || null;
+
+                return {
+                    id: project.id,
+                    projectName: project.name,
+                    before: beforeImage,
+                    after: afterImage,
+                    category: serviceCategoryDefaults[serviceId] || 'Project',
+                    date: project.date,
+                    challenge: project['Uitdaging'] || project['uitdaging'] || project.challenge || "",
+                    solution: project['Oplossing'] || project['oplossing'] || project.solution || ""
+                };
+            })
+            // Filter out invalid projects (must have both images)
+            .filter(project => {
+                const isValid = project.before && project.after;
+                if (!isValid) {
+                    console.warn('Skipping invalid project (missing images):', project.projectName);
+                }
+                return isValid;
+            });
 
     } catch (error) {
         console.error('Exception in fetchServiceProjects:', error);
