@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Lock, Eye, EyeOff, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import PageTransition from '../../components/PageTransition';
+import SEO from '../../components/SEO';
 import { useAuth } from '../../context/AuthContext';
 
 const ResetPassword = () => {
@@ -85,6 +86,11 @@ const ResetPassword = () => {
 
   return (
     <PageTransition className="pt-24">
+      <SEO
+        title="Wachtwoord Resetten"
+        description="Reset je wachtwoord voor je Bereschoon account."
+        noindex={true}
+      />
       <div className="min-h-screen bg-gradient-to-br from-primary/5 via-white to-primary/10 flex items-center justify-center py-12 px-4">
         <div className="max-w-md w-full">
           <motion.div

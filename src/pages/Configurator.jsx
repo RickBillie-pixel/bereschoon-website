@@ -9,6 +9,10 @@ const Configurator = () => {
             <SEO
                 title="Offerte Aanvragen"
                 description="Stel eenvoudig uw eigen schoonmaakpakket samen en ontvang direct een indicatie of offerte."
+                breadcrumbs={[
+                    { name: 'Home', url: 'https://bereschoon.nl' },
+                    { name: 'Offerte Aanvragen', url: 'https://bereschoon.nl/configurator' }
+                ]}
             />
             <ConfiguratorContact />
         </PageTransition>

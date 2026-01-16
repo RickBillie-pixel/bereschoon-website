@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CheckCircle, Package, ArrowRight, Mail } from 'lucide-react';
 import PageTransition from '../../components/PageTransition';
+import SEO from '../../components/SEO';
 import { useCartStore } from '../../stores/cartStore';
 
 const CheckoutSuccess = () => {
@@ -17,6 +18,11 @@ const CheckoutSuccess = () => {
 
   return (
     <PageTransition className="pt-24">
+      <SEO
+        title="Betaling Geslaagd"
+        description="Je betaling is succesvol ontvangen."
+        noindex={true}
+      />
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
         <div className="max-w-md w-full">
           <motion.div

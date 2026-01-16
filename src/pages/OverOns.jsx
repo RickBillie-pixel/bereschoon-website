@@ -122,6 +122,10 @@ const OverOns = () => {
             <SEO
                 title="Over Ons"
                 description="Bereschoon is uw specialist in buitenreiniging. Leer meer over onze missie, visie en het team achter de schermen."
+                breadcrumbs={[
+                    { name: 'Home', url: 'https://bereschoon.nl' },
+                    { name: 'Over Ons', url: 'https://bereschoon.nl/over-ons' }
+                ]}
             />
             {/* Hero Section */}
             <section className="relative min-h-[70vh] flex items-center bg-secondary overflow-hidden">

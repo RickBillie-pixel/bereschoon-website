@@ -55,6 +55,10 @@ const Projecten = () => {
             <SEO
                 title="Projecten"
                 description="Bekijk onze gerealiseerde projecten. Van opritreiniging tot gevelreiniging, zie het resultaat van ons werk."
+                breadcrumbs={[
+                    { name: 'Home', url: 'https://bereschoon.nl' },
+                    { name: 'Projecten', url: 'https://bereschoon.nl/projecten' }
+                ]}
             />
             <div className="container mx-auto px-6">
 

@@ -9,6 +9,7 @@ import {
 import PageTransition from '../../components/PageTransition';
 import { useCartStore } from '../../stores/cartStore';
 import SEO from '../../components/SEO';
+import { generateProductSchema } from '../../utils/structuredData';
 
 const ProductDetail = () => {
   const { slug } = useParams();
@@ -96,22 +97,15 @@ const ProductDetail = () => {
   const images = product.images || [];
   const features = product.features || [];
 
-  const structuredData = {
-    "@context": "https://schema.org/",
-    "@type": "Product",
-    "name": product.name,
-    "image": images,
-    "description": product.short_description || product.description,
-    "sku": product.id,
-    "offers": {
-      "@type": "Offer",
-      "url": window.location.href,
-      "priceCurrency": "EUR",
-      "price": product.price,
-      "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-      "itemCondition": "https://schema.org/NewCondition"
-    }
-  };
+  // Gebruik de helper functie voor consistent schema
+  const structuredData = generateProductSchema(product);
+  
+  // Breadcrumbs voor deze pagina
+  const breadcrumbs = [
+    { name: 'Home', url: 'https://bereschoon.nl' },
+    { name: 'Webshop', url: 'https://bereschoon.nl/winkel' },
+    { name: product.name, url: `https://bereschoon.nl/winkel/product/${product.slug}` }
+  ];
 
   return (
     <PageTransition className="pt-24">
@@ -121,6 +115,7 @@ const ProductDetail = () => {
         image={images[0]}
         type="product"
         structuredData={structuredData}
+        breadcrumbs={breadcrumbs}
       />
       <div className="min-h-screen bg-gray-50">
         {/* Product Content */}

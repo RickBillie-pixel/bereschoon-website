@@ -13,6 +13,7 @@ const Home = () => {
                 title="Professionele Buitenreiniging"
                 description="Bereschoon biedt uitzonderlijke schoonmaakdiensten voor uw oprit, gevel, terras en meer. Professioneel, efficiënt en milieubewust."
                 keywords="reiniging, oprit reiniging, gevelreiniging, terras reiniging, softwash, hoge druk reiniging"
+                canonicalUrl="https://bereschoon.nl"
             />
             <Hero />
             <Stats />

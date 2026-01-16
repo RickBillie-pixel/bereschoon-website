@@ -7,6 +7,7 @@ import Navbar from './components/Navbar';
 import AnnouncementBanner from './components/AnnouncementBanner';
 import CookieConsent from './components/CookieConsent';
 import Footer from './components/Footer';
+import StructuredData from './components/StructuredData';
 import Home from './pages/Home';
 import Configurator from './pages/Configurator';
 import Contact from './pages/Contact';
@@ -17,6 +18,7 @@ import OpritTerrasTerrein from './pages/OpritTerrasTerrein';
 import Gevelreiniging from './pages/Gevelreiniging';
 import Onkruidbeheersing from './pages/Onkruidbeheersing';
 import SplashScreen from './components/SplashScreen';
+import NotFound from './pages/NotFound';
 
 // Shop pages
 import ProductDetail from './pages/shop/ProductDetail';
@@ -106,6 +108,7 @@ function App() {
           <div className={`min-h-screen flex flex-col font-sans text-foreground bg-background transition-opacity duration-700 ${loading ? 'opacity-0' : 'opacity-100'}`}>
             <Router>
               <ScrollToTop />
+              <StructuredData />
               <AnnouncementBanner />
               <Navbar />
 
@@ -136,6 +139,9 @@ function App() {
                   {/* Order tracking - public */}
                   <Route path="/track" element={<TrackOrder />} />
                   <Route path="/track/:trackingCode" element={<TrackOrder />} />
+
+                  {/* 404 - catch all */}
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
 

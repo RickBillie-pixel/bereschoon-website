@@ -6,6 +6,7 @@ import {
   AlertCircle, ExternalLink, ArrowLeft, MapPin, Home
 } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
+import SEO from '../components/SEO';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 
@@ -370,6 +371,11 @@ const TrackOrder = () => {
 
   return (
     <PageTransition>
+      <SEO
+        title="Bestelling Volgen"
+        description="Volg de status van je bestelling bij Bereschoon."
+        noindex={true}
+      />
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary/5">
 
         <div className="max-w-4xl mx-auto px-4 py-8 pt-28">

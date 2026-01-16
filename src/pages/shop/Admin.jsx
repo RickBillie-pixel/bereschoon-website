@@ -7,6 +7,7 @@ import {
   Upload, X, GripVertical, Save, Image as ImageIcon
 } from 'lucide-react';
 import PageTransition from '../../components/PageTransition';
+import SEO from '../../components/SEO';
 import { useAuth } from '../../context/AuthContext';
 import { supabase, uploadFile, deleteFile } from '../../lib/supabase';
 import OrdersManagementTable from '../../components/shop/OrdersManagementTable';
@@ -43,6 +44,11 @@ const AdminLayout = ({ children }) => {
 
   return (
     <PageTransition className="pt-24">
+      <SEO
+        title="Admin Dashboard"
+        description="Beheer de Bereschoon webshop."
+        noindex={true}
+      />
       <div className="min-h-screen bg-gray-100">
         {/* Header */}
         <div className="bg-white border-b shadow-sm">

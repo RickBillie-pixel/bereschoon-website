@@ -7,14 +7,33 @@ import FAQSection from '../components/FAQSection';
 import ProcessSteps from '../components/ProcessSteps';
 import CallToAction from '../components/CallToAction';
 import SEO from '../components/SEO';
+import { generateFAQSchema, generateServiceSchema, SERVICE_FAQ_DATA } from '../utils/structuredData';
 
 const Onkruidbeheersing = () => {
+    // Structured data voor deze pagina
+    const faqSchema = generateFAQSchema(SERVICE_FAQ_DATA);
+    const serviceSchema = generateServiceSchema({
+        name: 'Onkruidbeheersing',
+        description: 'Professionele onkruidbeheersing voor uw tuin en bestrating. Milieuvriendelijk en effectief onderhoud het hele jaar door.',
+        type: 'Onkruidbeheersing',
+        url: '/onkruidbeheersing',
+        image: '/images/images_optimized/onkruid tuin voor.webp'
+    });
+    
+    // Combineer alle schemas
+    const combinedSchema = [faqSchema, serviceSchema].filter(Boolean);
+
     return (
         <PageTransition>
             <SEO
                 title="Onkruidbeheersing"
                 description="Professionele onkruidbeheersing voor uw tuin en bestrating. Milieuvriendelijk en effectief."
                 keywords="onkruidbeheersing, onkruid verwijderen, tuinonderhoud, bestrating schoonmaken"
+                structuredData={combinedSchema.length === 1 ? combinedSchema[0] : combinedSchema}
+                breadcrumbs={[
+                    { name: 'Home', url: 'https://bereschoon.nl' },
+                    { name: 'Onkruidbeheersing', url: 'https://bereschoon.nl/onkruidbeheersing' }
+                ]}
             />
             {/* Hero Section */}
             <ServiceHero

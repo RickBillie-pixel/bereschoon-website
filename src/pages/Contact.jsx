@@ -11,6 +11,10 @@ const Contact = () => {
             <SEO
                 title="Contact"
                 description="Neem contact op met Bereschoon voor al uw vragen over buitenreiniging. Wij staan u graag te woord."
+                breadcrumbs={[
+                    { name: 'Home', url: 'https://bereschoon.nl' },
+                    { name: 'Contact', url: 'https://bereschoon.nl/contact' }
+                ]}
             />
             <section className="pt-32 pb-24 min-h-screen bg-white">
                 <div className="container mx-auto px-6">

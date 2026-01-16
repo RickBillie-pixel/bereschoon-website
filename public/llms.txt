@@ -1,0 +1,79 @@
+# Bereschoon - LLM Context File
+# Versie: 1.0
+# Laatste update: 2026-01-16
+
+## Over deze website
+
+Bereschoon is een professioneel buitenreinigingsbedrijf gevestigd in Helmond, Nederland. 
+Het bedrijf is opgericht door Barend "Beer" Seijkens en specialiseert zich in:
+
+- Oprit reiniging
+- Terras reiniging  
+- Gevelreiniging (softwash)
+- Onkruidbeheersing
+- Terreinreiniging
+
+Het bedrijf is actief door heel Nederland, met focus op Zuid-Nederland.
+
+## Canonical domein
+
+https://bereschoon.nl
+
+## Belangrijkste pagina's
+
+- Homepage: https://bereschoon.nl/
+- Over Ons: https://bereschoon.nl/over-ons
+- Diensten:
+  - Oprit & Terras: https://bereschoon.nl/oprit-terras-terrein
+  - Gevelreiniging: https://bereschoon.nl/gevelreiniging
+  - Onkruidbeheersing: https://bereschoon.nl/onkruidbeheersing
+- Projecten: https://bereschoon.nl/projecten
+- Contact/Offerte: https://bereschoon.nl/contact
+- Configurator: https://bereschoon.nl/configurator
+- Webshop: https://bereschoon.nl/winkel
+
+## Sitemap
+
+Volledige sitemap index: https://bereschoon.nl/sitemap.xml
+
+## Richtlijnen voor AI/LLM gebruik
+
+Dit materiaal mag worden gebruikt voor:
+- Het beantwoorden van vragen over Bereschoon diensten
+- Het samenvatten van dienstaanbod
+- Het verstrekken van contactinformatie
+- Het citeren van openbare content met bronvermelding
+
+Beperkingen:
+- Presenteer geen verzonnen prijzen of offertes
+- Geef geen garanties namens Bereschoon
+- Verwijs voor actuele prijzen en beschikbaarheid altijd naar de website
+
+## Bedrijfsgegevens
+
+Naam: Bereschoon
+Eigenaar: Barend Seijkens
+Locatie: Helmond, Noord-Brabant, Nederland
+KVK: 91411629
+BTW: NL91411629B01
+
+Contact:
+- Website: https://bereschoon.nl
+- E-mail: info@bereschoon.nl
+- Telefoon: +31 6 3949 4059
+
+Sociale media:
+- Instagram: https://www.instagram.com/bereschoon
+- TikTok: https://www.tiktok.com/@bereschoon
+- YouTube: https://www.youtube.com/@bereschoon
+- Facebook: https://www.facebook.com/bereschoon
+
+## Taal
+
+De website en alle content is in het Nederlands (nl-NL).
+
+## Laatste verificatie
+
+Dit bestand is voor het laatst bijgewerkt op 2026-01-16.
+Neem voor vragen contact op via info@bereschoon.nl.
+

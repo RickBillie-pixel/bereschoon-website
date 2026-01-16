@@ -6,6 +6,7 @@ import {
   Eye, EyeOff, Loader2, AlertCircle, CheckCircle, Bell
 } from 'lucide-react';
 import PageTransition from '../../components/PageTransition';
+import SEO from '../../components/SEO';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
 
@@ -105,6 +106,11 @@ const Account = () => {
   if (user) {
     return (
       <PageTransition className="pt-24">
+        <SEO
+          title="Mijn Account"
+          description="Beheer je account en bestellingen bij Bereschoon."
+          noindex={true}
+        />
         <div className="min-h-screen bg-gray-50 py-12">
           <div className="container mx-auto px-6">
             <div className="max-w-4xl mx-auto">

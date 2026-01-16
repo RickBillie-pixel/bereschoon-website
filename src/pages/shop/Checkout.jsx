@@ -6,6 +6,7 @@ import {
   ChevronDown, Loader2, AlertCircle, UserPlus, Package, Clock, ArrowLeft
 } from 'lucide-react';
 import PageTransition from '../../components/PageTransition';
+import SEO from '../../components/SEO';
 import { useCartStore } from '../../stores/cartStore';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
@@ -327,6 +328,11 @@ const Checkout = () => {
 
   return (
     <PageTransition className="pt-24">
+      <SEO
+        title="Afrekenen"
+        description="Rond je bestelling af in de Bereschoon webshop."
+        noindex={true}
+      />
       <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto px-6 py-12">
           <h1 className="text-3xl font-bold mb-8">Afrekenen</h1>

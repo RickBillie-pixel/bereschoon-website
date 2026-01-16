@@ -6,6 +6,7 @@ import {
   Truck, XCircle, Eye, ExternalLink, RefreshCw, Bell
 } from 'lucide-react';
 import PageTransition from '../../components/PageTransition';
+import SEO from '../../components/SEO';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
 
@@ -148,6 +149,11 @@ const AccountOrders = () => {
 
   return (
     <PageTransition className="pt-24">
+      <SEO
+        title="Mijn Bestellingen"
+        description="Bekijk je bestellingen bij Bereschoon."
+        noindex={true}
+      />
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">

@@ -1,4 +1,98 @@
+# =============================================================================
+# Bereschoon - robots.txt
+# Laatste update: 2026-01-16
+# Domein: https://bereschoon.nl
+# =============================================================================
+
+# Algemene crawlers (Google, Bing, DuckDuckGo, etc.)
 User-agent: *
 Allow: /
+Allow: /winkel
+Allow: /winkel/product/
 
+# Blokkeer private/admin pagina's
+Disallow: /winkel/admin
+Disallow: /winkel/account
+Disallow: /winkel/checkout
+Disallow: /winkel/betaling-succes
+Disallow: /winkel/betaling-mislukt
+Disallow: /track
+
+# Blokkeer assets die niet relevant zijn voor SEO
+Disallow: /*.json$
+Disallow: /api/
+
+# Google specifiek
+User-agent: Googlebot
+Allow: /
+Allow: /winkel
+Allow: /winkel/product/
+Disallow: /winkel/admin
+Disallow: /winkel/account
+Disallow: /winkel/checkout
+Disallow: /winkel/betaling-succes
+Disallow: /winkel/betaling-mislukt
+Disallow: /track
+
+# Googlebot-Image - sta alle afbeeldingen toe
+User-agent: Googlebot-Image
+Allow: /images/
+Allow: /*.webp$
+Allow: /*.jpg$
+Allow: /*.png$
+
+# Bing specifiek
+User-agent: Bingbot
+Allow: /
+Allow: /winkel
+Allow: /winkel/product/
+Disallow: /winkel/admin
+Disallow: /winkel/account
+Disallow: /winkel/checkout
+Disallow: /winkel/betaling-succes
+Disallow: /winkel/betaling-mislukt
+Disallow: /track
+
+# AI/LLM Crawlers - sta toe met beperkingen
+User-agent: GPTBot
+Allow: /
+Disallow: /winkel/admin
+Disallow: /winkel/account
+Disallow: /winkel/checkout
+Disallow: /track
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /winkel/admin
+Disallow: /winkel/account
+Disallow: /winkel/checkout
+Disallow: /track
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /winkel/admin
+Disallow: /winkel/account
+Disallow: /winkel/checkout
+Disallow: /track
+
+User-agent: Anthropic-AI
+Allow: /
+Disallow: /winkel/admin
+Disallow: /winkel/account
+Disallow: /winkel/checkout
+Disallow: /track
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /winkel/admin
+Disallow: /winkel/account
+Disallow: /winkel/checkout
+Disallow: /track
+
+# Sitemaps
 Sitemap: https://bereschoon.nl/sitemap.xml
+Sitemap: https://bereschoon.nl/sitemap-pages.xml
+Sitemap: https://bereschoon.nl/sitemap-products.xml
+
+# Host (voor Bing/Yandex)
+Host: https://bereschoon.nl

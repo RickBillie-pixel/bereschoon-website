@@ -1,5 +1,4 @@
 import React from 'react';
-import { Clock, Search, ShieldCheck } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import ServiceHero from '../components/ServiceHero';
 import ContactForm from '../components/ContactForm';
@@ -8,14 +7,33 @@ import FAQSection from '../components/FAQSection';
 import ProcessSteps from '../components/ProcessSteps';
 import CallToAction from '../components/CallToAction';
 import SEO from '../components/SEO';
+import { generateFAQSchema, generateServiceSchema, SERVICE_FAQ_DATA } from '../utils/structuredData';
 
 const OpritTerrasTerrein = () => {
+    // Structured data voor deze pagina
+    const faqSchema = generateFAQSchema(SERVICE_FAQ_DATA);
+    const serviceSchema = generateServiceSchema({
+        name: 'Oprit, Terras & Terreinreiniging',
+        description: 'Professionele reiniging van uw oprit, terras en terrein. Verwijderen van onkruid, groene aanslag en vuil met hogedruk technieken.',
+        type: 'Oprit en Terras Reiniging',
+        url: '/oprit-terras-terrein',
+        image: '/images/images_optimized/IMG_3251.webp'
+    });
+    
+    // Combineer alle schemas
+    const combinedSchema = [faqSchema, serviceSchema].filter(Boolean);
+
     return (
         <PageTransition>
             <SEO
                 title="Oprit & Terras Reiniging"
                 description="Professionele reiniging van uw oprit, terras en terrein. Verwijderen van onkruid en groene aanslag."
                 keywords="oprit reiniging, terras reiniging, terrein onderhoud, onkruid verwijderen"
+                structuredData={combinedSchema.length === 1 ? combinedSchema[0] : combinedSchema}
+                breadcrumbs={[
+                    { name: 'Home', url: 'https://bereschoon.nl' },
+                    { name: 'Oprit & Terras', url: 'https://bereschoon.nl/oprit-terras-terrein' }
+                ]}
             />
             {/* Hero Section */}
             <ServiceHero

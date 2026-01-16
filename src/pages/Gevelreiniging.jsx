@@ -7,14 +7,33 @@ import FAQSection from '../components/FAQSection';
 import ProcessSteps from '../components/ProcessSteps';
 import CallToAction from '../components/CallToAction';
 import SEO from '../components/SEO';
+import { generateFAQSchema, generateServiceSchema, SERVICE_FAQ_DATA } from '../utils/structuredData';
 
 const Gevelreiniging = () => {
+    // Structured data voor deze pagina
+    const faqSchema = generateFAQSchema(SERVICE_FAQ_DATA);
+    const serviceSchema = generateServiceSchema({
+        name: 'Gevelreiniging',
+        description: 'Professionele gevelreiniging met softwash technieken. Verwijderen van groene aanslag, algen en vuil voor een frisse uitstraling.',
+        type: 'Gevelreiniging',
+        url: '/gevelreiniging',
+        image: '/images/images_optimized/IMG_2566.webp'
+    });
+    
+    // Combineer alle schemas
+    const combinedSchema = [faqSchema, serviceSchema].filter(Boolean);
+
     return (
         <PageTransition>
             <SEO
                 title="Gevelreiniging"
                 description="Laat uw gevel reinigen door Bereschoon. Verwijderen van groene aanslag en vuil voor een frisse uitstraling."
                 keywords="gevelreiniging, gevel schoonmaken, groene aanslag verwijderen, softwash"
+                structuredData={combinedSchema.length === 1 ? combinedSchema[0] : combinedSchema}
+                breadcrumbs={[
+                    { name: 'Home', url: 'https://bereschoon.nl' },
+                    { name: 'Gevelreiniging', url: 'https://bereschoon.nl/gevelreiniging' }
+                ]}
             />
             {/* Hero Section */}
             <ServiceHero

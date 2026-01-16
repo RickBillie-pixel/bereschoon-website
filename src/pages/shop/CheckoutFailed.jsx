@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { XCircle, RefreshCw, ArrowLeft, HelpCircle } from 'lucide-react';
 import PageTransition from '../../components/PageTransition';
+import SEO from '../../components/SEO';
 
 const CheckoutFailed = () => {
   const [searchParams] = useSearchParams();
@@ -23,6 +24,11 @@ const CheckoutFailed = () => {
 
   return (
     <PageTransition className="pt-24">
+      <SEO
+        title="Betaling Mislukt"
+        description="Er is iets misgegaan met de betaling."
+        noindex={true}
+      />
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
         <div className="max-w-md w-full">
           <motion.div

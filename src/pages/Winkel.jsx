@@ -11,6 +11,10 @@ const Winkel = () => {
       <SEO
         title="Webshop"
         description="Bestel professionele reinigingsproducten voor uw tuin en terras in de Bereschoon webshop."
+        breadcrumbs={[
+          { name: 'Home', url: 'https://bereschoon.nl' },
+          { name: 'Webshop', url: 'https://bereschoon.nl/winkel' }
+        ]}
       />
       {/* USPs */}
       <section className="border-b bg-white">
