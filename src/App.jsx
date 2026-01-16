@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './context/AuthContext';
 import { NotificationProvider } from './context/NotificationContext';
 import Navbar from './components/Navbar';
@@ -98,52 +99,54 @@ function App() {
 
   return (
     <AuthProvider>
-      <NotificationProvider>
-        {loading && <SplashScreen onFinish={() => setLoading(false)} />}
+      <HelmetProvider>
+        <NotificationProvider>
+          {loading && <SplashScreen onFinish={() => setLoading(false)} />}
 
-        <div className={`min-h-screen flex flex-col font-sans text-foreground bg-background transition-opacity duration-700 ${loading ? 'opacity-0' : 'opacity-100'}`}>
-          <Router>
-            <ScrollToTop />
-            <AnnouncementBanner />
-            <Navbar />
+          <div className={`min-h-screen flex flex-col font-sans text-foreground bg-background transition-opacity duration-700 ${loading ? 'opacity-0' : 'opacity-100'}`}>
+            <Router>
+              <ScrollToTop />
+              <AnnouncementBanner />
+              <Navbar />
 
-            <main className="flex-grow">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/configurator" element={<Configurator />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/projecten" element={<Projecten />} />
-                <Route path="/over-ons" element={<OverOns />} />
-                <Route path="/oprit-terras-terrein" element={<OpritTerrasTerrein />} />
-                <Route path="/gevelreiniging" element={<Gevelreiniging />} />
-                <Route path="/onkruidbeheersing" element={<Onkruidbeheersing />} />
+              <main className="flex-grow">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/configurator" element={<Configurator />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/projecten" element={<Projecten />} />
+                  <Route path="/over-ons" element={<OverOns />} />
+                  <Route path="/oprit-terras-terrein" element={<OpritTerrasTerrein />} />
+                  <Route path="/gevelreiniging" element={<Gevelreiniging />} />
+                  <Route path="/onkruidbeheersing" element={<Onkruidbeheersing />} />
 
-                {/* Webshop routes */}
-                <Route path="/winkel" element={<Winkel />} />
-                <Route path="/winkel/product/:slug" element={<ProductDetail />} />
-                <Route path="/winkel/checkout" element={<Checkout />} />
-                <Route path="/winkel/betaling-succes" element={<CheckoutSuccess />} />
-                <Route path="/winkel/betaling-mislukt" element={<CheckoutFailed />} />
-                <Route path="/winkel/account" element={<Account />} />
-                <Route path="/winkel/account/bestellingen" element={<AccountOrders />} />
-                <Route path="/winkel/account/instellingen" element={<AccountSettings />} />
-                <Route path="/winkel/account/meldingen" element={<AccountNotifications />} />
-                <Route path="/winkel/account/wachtwoord-reset" element={<ResetPassword />} />
-                <Route path="/winkel/admin/*" element={<ShopAdmin />} />
+                  {/* Webshop routes */}
+                  <Route path="/winkel" element={<Winkel />} />
+                  <Route path="/winkel/product/:slug" element={<ProductDetail />} />
+                  <Route path="/winkel/checkout" element={<Checkout />} />
+                  <Route path="/winkel/betaling-succes" element={<CheckoutSuccess />} />
+                  <Route path="/winkel/betaling-mislukt" element={<CheckoutFailed />} />
+                  <Route path="/winkel/account" element={<Account />} />
+                  <Route path="/winkel/account/bestellingen" element={<AccountOrders />} />
+                  <Route path="/winkel/account/instellingen" element={<AccountSettings />} />
+                  <Route path="/winkel/account/meldingen" element={<AccountNotifications />} />
+                  <Route path="/winkel/account/wachtwoord-reset" element={<ResetPassword />} />
+                  <Route path="/winkel/admin/*" element={<ShopAdmin />} />
 
-                {/* Order tracking - public */}
-                <Route path="/track" element={<TrackOrder />} />
-                <Route path="/track/:trackingCode" element={<TrackOrder />} />
-              </Routes>
-            </main>
+                  {/* Order tracking - public */}
+                  <Route path="/track" element={<TrackOrder />} />
+                  <Route path="/track/:trackingCode" element={<TrackOrder />} />
+                </Routes>
+              </main>
 
-            <Footer />
-            <CookieConsent />
-            <CartSidebar />
-            <NotificationToast />
-          </Router>
-        </div>
-      </NotificationProvider>
+              <Footer />
+              <CookieConsent />
+              <CartSidebar />
+              <NotificationToast />
+            </Router>
+          </div>
+        </NotificationProvider>
+      </HelmetProvider>
     </AuthProvider>
   );
 }

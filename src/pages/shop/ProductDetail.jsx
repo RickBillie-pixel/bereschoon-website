@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ShoppingBag, Check, Minus, Plus, 
+import {
+  ShoppingBag, Check, Minus, Plus,
   ChevronLeft, ChevronRight, Play, Truck, Shield, Clock,
   Loader2, ArrowLeft
 } from 'lucide-react';
 import PageTransition from '../../components/PageTransition';
 import { useCartStore } from '../../stores/cartStore';
+import SEO from '../../components/SEO';
 
 const ProductDetail = () => {
   const { slug } = useParams();
@@ -27,10 +28,10 @@ const ProductDetail = () => {
   const fetchProduct = async () => {
     try {
       setLoading(true);
-      
+
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-      
+
       const response = await fetch(
         `${supabaseUrl}/rest/v1/products?slug=eq.${encodeURIComponent(slug)}&active=eq.true&select=*`,
         {
@@ -40,12 +41,12 @@ const ProductDetail = () => {
           }
         }
       );
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Error fetching product');
       }
-      
+
       const data = await response.json();
       if (!data || data.length === 0) throw new Error('Product niet gevonden');
 
@@ -95,8 +96,32 @@ const ProductDetail = () => {
   const images = product.images || [];
   const features = product.features || [];
 
+  const structuredData = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": product.name,
+    "image": images,
+    "description": product.short_description || product.description,
+    "sku": product.id,
+    "offers": {
+      "@type": "Offer",
+      "url": window.location.href,
+      "priceCurrency": "EUR",
+      "price": product.price,
+      "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  };
+
   return (
     <PageTransition className="pt-24">
+      <SEO
+        title={product.name}
+        description={product.short_description || product.description?.substring(0, 160)}
+        image={images[0]}
+        type="product"
+        structuredData={structuredData}
+      />
       <div className="min-h-screen bg-gray-50">
         {/* Product Content */}
         <div className="container mx-auto px-6 py-12">
@@ -181,11 +206,10 @@ const ProductDetail = () => {
                         setSelectedImageIndex(index);
                         setShowVideo(false);
                       }}
-                      className={`w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${
-                        selectedImageIndex === index && !showVideo
-                          ? 'border-primary'
-                          : 'border-transparent hover:border-gray-300'
-                      }`}
+                      className={`w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${selectedImageIndex === index && !showVideo
+                        ? 'border-primary'
+                        : 'border-transparent hover:border-gray-300'
+                        }`}
                     >
                       <img src={image} alt="" className="w-full h-full object-cover" />
                     </button>
@@ -193,9 +217,8 @@ const ProductDetail = () => {
                   {product.video_url && (
                     <button
                       onClick={() => setShowVideo(true)}
-                      className={`w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all bg-gray-900 flex items-center justify-center ${
-                        showVideo ? 'border-primary' : 'border-transparent hover:border-gray-300'
-                      }`}
+                      className={`w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all bg-gray-900 flex items-center justify-center ${showVideo ? 'border-primary' : 'border-transparent hover:border-gray-300'
+                        }`}
                     >
                       <Play className="w-8 h-8 text-white" />
                     </button>

@@ -329,7 +329,7 @@ const ContactForm = ({ preselectedService = null }) => {
         <div className="p-6 md:p-8">
             <div className="mb-8">
                 <h2 className="text-3xl font-bold text-foreground mb-2">Stel uw aanvraag samen</h2>
-                <p className="text-stone-400">Binnen 1 minuut ingevuld – wij reageren binnen 24 uur</p>
+                <p className="text-stone-300 text-sm">Binnen 1 minuut ingevuld – wij reageren binnen 24 uur</p>
             </div>
             <p className="text-muted-foreground mb-6 font-medium text-sm uppercase tracking-wider text-primary">Stap {displayStep} van {totalSteps}</p>
 
@@ -342,14 +342,14 @@ const ContactForm = ({ preselectedService = null }) => {
                     {Array.from({ length: totalSteps }, (_, i) => i + 1).map((s) => (
                         <div key={s} className="flex flex-col items-center group">
                             <div
-                                className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg border-4 transition-all duration-300 ${s < displayStep
+                                className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-base border-4 transition-all duration-300 ${s < displayStep
                                     ? 'bg-green-500 border-green-500 text-white'
                                     : s === displayStep
                                         ? 'bg-primary border-primary text-white scale-110 shadow-lg shadow-primary/30'
                                         : 'bg-white border-gray-200 text-gray-300'
                                     }`}
                             >
-                                {s < displayStep ? <Check size={20} /> : s}
+                                {s < displayStep ? <Check size={18} /> : s}
                             </div>
                             {/* Optional: Add label for current step if needed, or just numbers */}
                             {s === displayStep && (

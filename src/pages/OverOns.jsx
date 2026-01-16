@@ -3,15 +3,16 @@ import { motion, useInView, useSpring, useTransform } from 'framer-motion';
 import { MapPin, ArrowRight, Instagram, Facebook, Youtube } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import { staggerContainer, fadeInUp, fadeInLeft, fadeInRight } from '../utils/animations';
+import SEO from '../components/SEO';
 
 // Animated counter component
 const AnimatedCounter = ({ value, suffix = '', inView }) => {
-    const spring = useSpring(0, { 
-        stiffness: 50, 
+    const spring = useSpring(0, {
+        stiffness: 50,
         damping: 20,
-        duration: 2000 
+        duration: 2000
     });
-    
+
     const display = useTransform(spring, (current) => Math.floor(current));
 
     React.useEffect(() => {
@@ -69,7 +70,7 @@ const MissionVisionCard = ({ title, text, highlight, variant, inView }) => {
                 <motion.div
                     className="absolute inset-0 rounded-2xl"
                     style={{
-                        background: isHovered 
+                        background: isHovered
                             ? 'linear-gradient(135deg, rgba(132, 204, 22, 0.2), rgba(6, 182, 212, 0.1))'
                             : 'transparent',
                     }}
@@ -118,6 +119,10 @@ const OverOns = () => {
 
     return (
         <PageTransition>
+            <SEO
+                title="Over Ons"
+                description="Bereschoon is uw specialist in buitenreiniging. Leer meer over onze missie, visie en het team achter de schermen."
+            />
             {/* Hero Section */}
             <section className="relative min-h-[70vh] flex items-center bg-secondary overflow-hidden">
                 {/* Background Pattern */}
@@ -135,38 +140,38 @@ const OverOns = () => {
                             initial="hidden"
                             animate="visible"
                         >
-                            <motion.h1 
+                            <motion.h1
                                 variants={fadeInUp}
                                 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
                             >
                                 Maak kennis met{' '}
                                 <span className="text-primary">Beer</span>
                             </motion.h1>
-                            
-                            <motion.p 
+
+                            <motion.p
                                 variants={fadeInUp}
                                 className="text-lg text-white/70 leading-relaxed mb-8"
                             >
-                                Mijn naam is <span className="text-white font-semibold">Barend Seijkens</span> (23), 
-                                oftewel 'Beer'. Hierdoor is ook de naam <span className="text-primary font-semibold">'Bereschoon'</span> ontstaan! 
+                                Mijn naam is <span className="text-white font-semibold">Barend Seijkens</span> (23),
+                                oftewel 'Beer'. Hierdoor is ook de naam <span className="text-primary font-semibold">'Bereschoon'</span> ontstaan!
                                 Ik woon in Helmond (Noord-Brabant).
                             </motion.p>
 
-                            <motion.p 
+                            <motion.p
                                 variants={fadeInUp}
                                 className="text-white/60 leading-relaxed mb-8"
                             >
-                                Na vele opritten en terrassen gratis gereinigd te hebben, is de onderneming 'Bereschoon' ontstaan. 
-                                Reizend door heel het land reinigt Beer opritten, terrassen, looppaden, pleinen, fietspaden, 
+                                Na vele opritten en terrassen gratis gereinigd te hebben, is de onderneming 'Bereschoon' ontstaan.
+                                Reizend door heel het land reinigt Beer opritten, terrassen, looppaden, pleinen, fietspaden,
                                 terreinen en nog veel meer!
                             </motion.p>
 
-                            <motion.div 
+                            <motion.div
                                 variants={fadeInUp}
                                 className="flex flex-wrap gap-4 mb-8"
                             >
-                                <a 
-                                    href="/contact" 
+                                <a
+                                    href="/contact"
                                     className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary/90 transition-all shadow-lg shadow-primary/30"
                                 >
                                     Offerte Aanvragen
@@ -191,10 +196,10 @@ const OverOns = () => {
                                 {/* Decorative elements */}
                                 <div className="absolute -top-4 -right-4 w-72 h-72 bg-primary/20 rounded-full blur-3xl" />
                                 <div className="absolute -bottom-4 -left-4 w-48 h-48 bg-cyan-400/20 rounded-full blur-2xl" />
-                                
+
                                 {/* Photo container - simple, no glass effect */}
-                                <img 
-                                    src="/images/Barend.png" 
+                                <img
+                                    src="/images/Barend.png"
                                     alt="Barend 'Beer' Seijkens - Oprichter Bereschoon"
                                     className="w-full max-w-md mx-auto rounded-2xl shadow-2xl"
                                 />
@@ -206,7 +211,7 @@ const OverOns = () => {
                 {/* Wave divider - original simple version, on top of photo */}
                 <div className="absolute bottom-0 left-0 right-0 z-10">
                     <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-                        <path d="M0 100V60C240 20 480 0 720 20C960 40 1200 80 1440 60V100H0Z" fill="white"/>
+                        <path d="M0 100V60C240 20 480 0 720 20C960 40 1200 80 1440 60V100H0Z" fill="white" />
                     </svg>
                 </div>
             </section>
@@ -231,9 +236,9 @@ const OverOns = () => {
                             </a>
                         </p>
                         <div className="flex flex-wrap justify-center gap-3">
-                            <a 
-                                href="https://www.instagram.com/bereschoon" 
-                                target="_blank" 
+                            <a
+                                href="https://www.instagram.com/bereschoon"
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-foreground px-5 py-3 rounded-full font-medium transition-all border border-primary/20"
                                 aria-label="Instagram"
@@ -241,21 +246,21 @@ const OverOns = () => {
                                 <Instagram size={20} className="text-primary" />
                                 <span>Instagram</span>
                             </a>
-                            <a 
-                                href="https://www.tiktok.com/@bereschoon" 
-                                target="_blank" 
+                            <a
+                                href="https://www.tiktok.com/@bereschoon"
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-foreground px-5 py-3 rounded-full font-medium transition-all border border-primary/20"
                                 aria-label="TikTok"
                             >
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-primary">
-                                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
                                 </svg>
                                 <span>TikTok</span>
                             </a>
-                            <a 
-                                href="https://www.youtube.com/@bereschoon" 
-                                target="_blank" 
+                            <a
+                                href="https://www.youtube.com/@bereschoon"
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-foreground px-5 py-3 rounded-full font-medium transition-all border border-primary/20"
                                 aria-label="YouTube"
@@ -263,9 +268,9 @@ const OverOns = () => {
                                 <Youtube size={20} className="text-primary" />
                                 <span>YouTube</span>
                             </a>
-                            <a 
-                                href="https://www.facebook.com/bereschoon" 
-                                target="_blank" 
+                            <a
+                                href="https://www.facebook.com/bereschoon"
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-foreground px-5 py-3 rounded-full font-medium transition-all border border-primary/20"
                                 aria-label="Facebook"
@@ -281,21 +286,21 @@ const OverOns = () => {
             {/* Stats Section */}
             <section className="py-20 bg-white" ref={statsRef}>
                 <div className="container mx-auto px-6">
-                    <motion.div 
+                    <motion.div
                         className="grid md:grid-cols-3 gap-8"
                         variants={staggerContainer}
                         initial="hidden"
                         animate={statsInView ? "visible" : "hidden"}
                     >
                         {stats.map((stat, index) => (
-                            <motion.div 
+                            <motion.div
                                 key={index}
                                 variants={fadeInUp}
                                 className="text-center p-8 rounded-2xl bg-muted/30 hover:bg-muted/50 transition-colors"
                             >
                                 <div className="text-5xl md:text-6xl font-bold text-primary mb-2">
-                                    <AnimatedCounter 
-                                        value={stat.value} 
+                                    <AnimatedCounter
+                                        value={stat.value}
                                         suffix={stat.suffix}
                                         inView={statsInView}
                                     />
@@ -315,7 +320,7 @@ const OverOns = () => {
             {/* Mission & Vision Section */}
             <section className="py-24 bg-gradient-to-b from-white via-muted/20 to-white" ref={missionRef}>
                 <div className="container mx-auto px-6">
-                    <motion.div 
+                    <motion.div
                         className="text-center mb-16"
                         initial={{ opacity: 0, y: 20 }}
                         animate={missionInView ? { opacity: 1, y: 0 } : {}}
@@ -354,7 +359,7 @@ const OverOns = () => {
             {/* CTA Section */}
             <section className="py-24 bg-secondary">
                 <div className="container mx-auto px-6">
-                    <motion.div 
+                    <motion.div
                         className="max-w-3xl mx-auto text-center"
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -367,7 +372,7 @@ const OverOns = () => {
                         <p className="text-white/70 text-lg mb-8">
                             Vraag vrijblijvend een offerte aan. En wie weet staat Bereschoon binnenkort bij u op de oprit!
                         </p>
-                        <a 
+                        <a
                             href="/contact"
                             className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/30"
                         >

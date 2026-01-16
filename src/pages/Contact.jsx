@@ -3,13 +3,18 @@ import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, User, Star } from 'lucide-react';
 import ContactForm from '../components/ContactForm';
 import PageTransition from '../components/PageTransition';
+import SEO from '../components/SEO';
 
 const Contact = () => {
     return (
         <PageTransition>
+            <SEO
+                title="Contact"
+                description="Neem contact op met Bereschoon voor al uw vragen over buitenreiniging. Wij staan u graag te woord."
+            />
             <section className="pt-32 pb-24 min-h-screen bg-white">
                 <div className="container mx-auto px-6">
-                    <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+                    <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
                         {/* Left Column - Clean, Unified Text Block */}
                         <div className="flex flex-col h-full lg:pt-8">
                             {/* Main Header Group */}
@@ -18,7 +23,7 @@ const Contact = () => {
                                     Persoonlijk contact met Bereschoon
                                 </h1>
                                 <p className="text-lg text-stone-600 leading-relaxed max-w-lg">
-                                    Wij helpen particulieren en bedrijven met professionele buitenreiniging. U spreekt direct met een specialist.
+                                    Professionele buitenreiniging voor particulieren en bedrijven. U spreekt direct met een specialist.
                                 </p>
                             </div>
 
@@ -43,30 +48,37 @@ const Contact = () => {
                             </div>
 
                             {/* Intro Text */}
-                            <p className="text-stone-600 leading-relaxed mb-12 max-w-lg">
+                            <p className="text-stone-600 leading-relaxed mb-6 max-w-lg">
                                 Bereschoon is actief door heel Nederland met eigen materieel en vakmensen. Kwaliteit en langdurig resultaat staan centraal.
                             </p>
 
                             {/* Direct Contact - Simple List */}
-                            <div className="space-y-4 mb-10">
+                            <div className="space-y-4 mb-6">
                                 <a href="tel:+31639494059" className="flex items-center gap-4 text-secondary hover:text-primary transition-colors group w-fit">
-                                    <Phone className="text-primary group-hover:scale-110 transition-transform" size={18} />
+                                    <Phone className="text-stone-400 group-hover:scale-110 transition-transform" size={16} />
                                     <span className="font-semibold text-lg">+31 (0)6 3949 4059</span>
                                 </a>
                                 <a href="mailto:info@bereschoon.nl" className="flex items-center gap-4 text-secondary hover:text-primary transition-colors group w-fit">
-                                    <Mail className="text-primary group-hover:scale-110 transition-transform" size={18} />
+                                    <Mail className="text-stone-400 group-hover:scale-110 transition-transform" size={16} />
                                     <span className="font-semibold text-lg">info@bereschoon.nl</span>
                                 </a>
                                 <div className="flex items-center gap-4 text-secondary">
-                                    <MapPin className="text-primary" size={18} />
+                                    <MapPin className="text-stone-400" size={16} />
                                     <span className="font-medium">Helmond, Nederland</span>
                                 </div>
                             </div>
 
-                            {/* Human Touch */}
-                            <div className="flex items-center gap-3 text-stone-500 mb-16">
-                                <User size={18} className="text-stone-400" />
-                                <span>U spreekt direct met Barend — geen tussenpersonen.</span>
+                            {/* Human Touch & Visual Anchor */}
+                            <div className="flex items-center gap-5 mb-8">
+                                <img
+                                    src="/images/Barend.png"
+                                    alt="Uw specialist"
+                                    className="w-16 h-16 object-cover rounded-2xl shadow-sm border border-stone-100"
+                                />
+                                <div className="flex items-center gap-3 text-stone-500">
+                                    <User size={16} className="text-stone-400" />
+                                    <span>U spreekt direct met ons team — persoonlijk contact.</span>
+                                </div>
                             </div>
 
                             {/* Footer/Legal Details */}

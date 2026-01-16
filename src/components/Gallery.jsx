@@ -13,11 +13,11 @@ const fetchProjects = async () => {
             .select('*')
             .order('created_at', { ascending: false });
 
-        console.log('🔍 Projects Query Result:', { 
-            data, 
-            error, 
+        console.log('🔍 Projects Query Result:', {
+            data,
+            error,
             dataLength: data?.length,
-            hasError: !!error 
+            hasError: !!error
         });
 
         if (error) {
@@ -161,7 +161,7 @@ const BeforeAfterModal = ({ projectGroup, onClose, onPrev, onNext, currentGroupI
                             className="w-full h-[70vh] md:h-[80vh]"
                         />
                     </motion.div>
-                    
+
                     {/* Labels */}
                     <div className="absolute top-4 left-4 px-4 py-2 bg-black/60 backdrop-blur-sm rounded-full text-white text-sm font-semibold">
                         VOOR
@@ -215,11 +215,10 @@ const BeforeAfterModal = ({ projectGroup, onClose, onPrev, onNext, currentGroupI
                                     setCurrentImageIndex(idx);
                                     setSliderPosition(50);
                                 }}
-                                className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                                    idx === currentImageIndex
+                                className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${idx === currentImageIndex
                                         ? 'border-primary scale-110'
                                         : 'border-transparent opacity-60 hover:opacity-100'
-                                }`}
+                                    }`}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
@@ -260,7 +259,7 @@ const ProjectCard = ({ project, onClick, index }) => {
                     animate={{ scale: isHovered ? 1.1 : 1 }}
                     transition={{ duration: 0.4 }}
                 />
-                
+
                 {/* Hover overlay */}
                 <motion.div
                     className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-4"

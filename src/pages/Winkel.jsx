@@ -3,10 +3,15 @@ import { motion } from 'framer-motion';
 import { Shield, Truck, Clock } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import ProductGrid from '../components/shop/ProductGrid';
+import SEO from '../components/SEO';
 
 const Winkel = () => {
   return (
     <PageTransition className="pt-24">
+      <SEO
+        title="Webshop"
+        description="Bestel professionele reinigingsproducten voor uw tuin en terras in de Bereschoon webshop."
+      />
       {/* USPs */}
       <section className="border-b bg-white">
         <div className="container mx-auto px-6 py-5">

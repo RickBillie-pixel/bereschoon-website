@@ -6,10 +6,16 @@ import ServiceGallery from '../components/ServiceGallery';
 import FAQSection from '../components/FAQSection';
 import ProcessSteps from '../components/ProcessSteps';
 import CallToAction from '../components/CallToAction';
+import SEO from '../components/SEO';
 
 const Onkruidbeheersing = () => {
     return (
         <PageTransition>
+            <SEO
+                title="Onkruidbeheersing"
+                description="Professionele onkruidbeheersing voor uw tuin en bestrating. Milieuvriendelijk en effectief."
+                keywords="onkruidbeheersing, onkruid verwijderen, tuinonderhoud, bestrating schoonmaken"
+            />
             {/* Hero Section */}
             <ServiceHero
                 title="Onkruidbeheersing"

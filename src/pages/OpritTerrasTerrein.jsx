@@ -7,10 +7,16 @@ import ServiceGallery from '../components/ServiceGallery';
 import FAQSection from '../components/FAQSection';
 import ProcessSteps from '../components/ProcessSteps';
 import CallToAction from '../components/CallToAction';
+import SEO from '../components/SEO';
 
 const OpritTerrasTerrein = () => {
     return (
         <PageTransition>
+            <SEO
+                title="Oprit & Terras Reiniging"
+                description="Professionele reiniging van uw oprit, terras en terrein. Verwijderen van onkruid en groene aanslag."
+                keywords="oprit reiniging, terras reiniging, terrein onderhoud, onkruid verwijderen"
+            />
             {/* Hero Section */}
             <ServiceHero
                 title="Oprit, Terras & Terreinreiniging"

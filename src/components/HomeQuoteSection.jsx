@@ -21,7 +21,7 @@ const HomeQuoteSection = () => {
     ];
 
     return (
-        <section 
+        <section
             ref={ref}
             className="relative py-24 overflow-hidden"
             style={{
@@ -31,25 +31,25 @@ const HomeQuoteSection = () => {
             {/* Decorative Background Elements */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 {/* Gradient orbs */}
-                <motion.div 
+                <motion.div
                     className="absolute -top-40 -left-40 w-96 h-96 bg-primary/20 rounded-full blur-3xl"
-                    animate={{ 
+                    animate={{
                         scale: [1, 1.2, 1],
                         opacity: [0.3, 0.5, 0.3]
                     }}
                     transition={{ duration: 8, repeat: Infinity }}
                 />
-                <motion.div 
+                <motion.div
                     className="absolute -bottom-40 -right-40 w-96 h-96 bg-primary/15 rounded-full blur-3xl"
-                    animate={{ 
+                    animate={{
                         scale: [1.2, 1, 1.2],
                         opacity: [0.2, 0.4, 0.2]
                     }}
                     transition={{ duration: 10, repeat: Infinity }}
                 />
-                
+
                 {/* Subtle grid pattern */}
-                <div 
+                <div
                     className="absolute inset-0 opacity-5"
                     style={{
                         backgroundImage: `
@@ -92,7 +92,7 @@ const HomeQuoteSection = () => {
                         className="text-white"
                     >
                         {/* Badge */}
-                        <motion.div 
+                        <motion.div
                             className="inline-flex items-center gap-2 bg-primary/20 backdrop-blur-sm border border-primary/30 rounded-full px-4 py-2 mb-6"
                             initial={{ opacity: 0, y: 20 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -103,7 +103,7 @@ const HomeQuoteSection = () => {
                         </motion.div>
 
                         {/* Heading */}
-                        <motion.h2 
+                        <motion.h2
                             className="text-4xl md:text-5xl font-bold mb-6 leading-tight"
                             initial={{ opacity: 0, y: 20 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -115,25 +115,25 @@ const HomeQuoteSection = () => {
                         </motion.h2>
 
                         {/* Description */}
-                        <motion.p 
+                        <motion.p
                             className="text-lg text-white/70 leading-relaxed mb-8"
                             initial={{ opacity: 0, y: 20 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6, delay: 0.4 }}
                         >
-                            In slechts een paar stappen ontvangt u een persoonlijke offerte. 
+                            In slechts een paar stappen ontvangt u een persoonlijke offerte.
                             Selecteer uw dienst, geef uw wensen aan, en wij zorgen voor de rest.
                         </motion.p>
 
                         {/* Benefits */}
-                        <motion.div 
+                        <motion.div
                             className="flex flex-wrap gap-4 mb-8"
                             initial={{ opacity: 0, y: 20 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6, delay: 0.5 }}
                         >
                             {benefits.map((benefit, index) => (
-                                <div 
+                                <div
                                     key={index}
                                     className="flex items-center gap-2 bg-white/5 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/10"
                                 >
@@ -144,14 +144,14 @@ const HomeQuoteSection = () => {
                         </motion.div>
 
                         {/* Checkmarks */}
-                        <motion.div 
+                        <motion.div
                             className="space-y-3"
                             initial={{ opacity: 0, y: 20 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6, delay: 0.6 }}
                         >
                             {checkmarks.map((item, index) => (
-                                <motion.div 
+                                <motion.div
                                     key={index}
                                     className="flex items-center gap-3"
                                     initial={{ opacity: 0, x: -20 }}
@@ -165,28 +165,23 @@ const HomeQuoteSection = () => {
                         </motion.div>
 
                         {/* Trust indicator */}
-                        <motion.div 
+                        <motion.div
                             className="mt-10 pt-8 border-t border-white/10"
                             initial={{ opacity: 0 }}
                             animate={isInView ? { opacity: 1 } : {}}
                             transition={{ duration: 0.6, delay: 1 }}
                         >
-                            <div className="flex items-center gap-4">
-                                <div className="flex -space-x-2">
-                                    {[1, 2, 3, 4].map((i) => (
-                                        <div 
-                                            key={i}
-                                            className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/80 to-primary border-2 border-secondary flex items-center justify-center text-white text-xs font-bold"
-                                        >
-                                            {['R', 'M', 'J', 'A'][i-1]}
-                                        </div>
-                                    ))}
+                            <a
+                                href="https://www.google.com/search?q=Bereschoon+Helmond+reviews"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-3 bg-white/5 p-3 rounded-lg border border-white/10 max-w-max hover:bg-white/10 transition-colors cursor-pointer"
+                            >
+                                <div className="text-yellow-400 flex text-base">★★★★★</div>
+                                <div className="text-sm text-stone-300">
+                                    <span className="font-bold text-white">5.0/5</span> op Google
                                 </div>
-                                <div>
-                                    <p className="text-white font-semibold">500+ tevreden klanten</p>
-                                    <p className="text-white/50 text-sm">gingen u voor</p>
-                                </div>
-                            </div>
+                            </a>
                         </motion.div>
                     </motion.div>
 
@@ -199,9 +194,9 @@ const HomeQuoteSection = () => {
                     >
                         {/* Glow effect behind form */}
                         <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 via-primary/10 to-transparent rounded-2xl blur-2xl" />
-                        
+
                         {/* Form container with subtle shadow */}
-                        <div className="relative">
+                        <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden p-1">
                             <ContactForm />
                         </div>
                     </motion.div>

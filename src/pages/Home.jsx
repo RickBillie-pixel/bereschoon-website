@@ -4,10 +4,16 @@ import Stats from '../components/Stats';
 import Services from '../components/Services';
 import HomeQuoteSection from '../components/HomeQuoteSection';
 import PageTransition from '../components/PageTransition';
+import SEO from '../components/SEO';
 
 const Home = () => {
     return (
         <PageTransition>
+            <SEO
+                title="Professionele Buitenreiniging"
+                description="Bereschoon biedt uitzonderlijke schoonmaakdiensten voor uw oprit, gevel, terras en meer. Professioneel, efficiënt en milieubewust."
+                keywords="reiniging, oprit reiniging, gevelreiniging, terras reiniging, softwash, hoge druk reiniging"
+            />
             <Hero />
             <Stats />
             <Services />
