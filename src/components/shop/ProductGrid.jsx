@@ -16,7 +16,7 @@ const ProductGrid = () => {
     try {
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-      
+
       const response = await fetch(
         `${supabaseUrl}/rest/v1/products?active=eq.true&select=*&order=featured.desc,created_at.desc`,
         {
@@ -26,12 +26,12 @@ const ProductGrid = () => {
           }
         }
       );
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Error fetching products');
       }
-      
+
       const data = await response.json();
       setProducts(data || []);
     } catch (err) {
@@ -66,7 +66,7 @@ const ProductGrid = () => {
             }
           } else if (payload.eventType === 'UPDATE') {
             const updatedProduct = payload.new;
-            
+
             if (updatedProduct.active) {
               setProducts(prev => {
                 const exists = prev.find(p => p.id === updatedProduct.id);
@@ -146,9 +146,8 @@ const ProductGrid = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -30 }}
               transition={{ delay: index * 0.1, layout: { duration: 0.3 } }}
-              className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-8 lg:gap-16 relative ${
-                isRecentlyUpdated ? 'ring-2 ring-primary ring-offset-4 rounded-3xl' : ''
-              }`}
+              className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-8 lg:gap-16 relative ${isRecentlyUpdated ? 'ring-2 ring-primary ring-offset-4 rounded-3xl' : ''
+                }`}
             >
               {/* Update indicator */}
               <AnimatePresence>
@@ -164,6 +163,13 @@ const ProductGrid = () => {
                   </motion.div>
                 )}
               </AnimatePresence>
+
+              {/* Mobile Title (visible only on mobile) */}
+              <div className="w-full lg:hidden text-left mb-2">
+                <h3 className="text-xl font-bold text-gray-900 truncate">
+                  {product.name}
+                </h3>
+              </div>
 
               {/* Video/Image Side */}
               <div className="lg:w-1/2 w-full">
@@ -218,19 +224,41 @@ const ProductGrid = () => {
               </div>
 
               {/* Content Side */}
-              <div className="lg:w-1/2 w-full space-y-6">
+              <div className="lg:w-1/2 w-full space-y-4 lg:space-y-6">
                 {product.category && (
-                  <span className="text-sm text-primary font-medium uppercase tracking-wide">
+                  <span className="hidden lg:block text-sm text-primary font-medium uppercase tracking-wide">
                     {product.category}
                   </span>
                 )}
-                
-                <h3 className="text-3xl md:text-4xl font-bold text-gray-900">
+
+                {/* Desktop Title */}
+                <h3 className="hidden lg:block text-3xl md:text-4xl font-bold text-gray-900">
                   {product.name}
                 </h3>
 
-                {/* Price */}
-                <div className="flex items-baseline gap-3">
+                {/* Mobile: Price + Shopping Icon Row */}
+                <div className="flex lg:hidden items-center justify-between">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-2xl font-bold text-primary">
+                      €{product.price?.toFixed(2) || '0.00'}
+                    </span>
+                    {product.compare_price && (
+                      <span className="text-lg text-gray-400 line-through">
+                        €{product.compare_price.toFixed(2)}
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => handleAddToCart(product)}
+                    disabled={product.stock === 0}
+                    className="bg-primary text-white p-3 rounded-xl shadow-lg active:scale-95 transition-transform disabled:bg-gray-300"
+                  >
+                    <ShoppingBag className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Desktop Price */}
+                <div className="hidden lg:flex items-baseline gap-3">
                   <span className="text-3xl font-bold text-primary">
                     €{product.price?.toFixed(2) || '0.00'}
                   </span>
@@ -241,15 +269,32 @@ const ProductGrid = () => {
                   )}
                 </div>
 
+                {/* Reviews */}
+                <a
+                  href="https://www.google.com/search?q=Bereschoon+Helmond+reviews"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 group w-fit"
+                >
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <span key={star} className="text-yellow-400 text-sm">★</span>
+                    ))}
+                  </div>
+                  <span className="text-sm text-gray-500 group-hover:text-primary transition-colors border-b border-gray-200 group-hover:border-primary">
+                    Al meer dan 50+ Google reviews
+                  </span>
+                </a>
+
                 {product.short_description && (
                   <p className="text-lg text-gray-600 leading-relaxed">
                     {product.short_description}
                   </p>
                 )}
 
-                {/* Features */}
+                {/* Desktop: Features */}
                 {features.length > 0 && (
-                  <ul className="space-y-3">
+                  <ul className="hidden lg:block space-y-3">
                     {features.slice(0, 4).map((feature, idx) => (
                       <li key={idx} className="flex items-center gap-3 text-gray-700">
                         <div className="bg-green-100 text-green-600 rounded-full p-1 flex-shrink-0">
@@ -261,8 +306,8 @@ const ProductGrid = () => {
                   </ul>
                 )}
 
-                {/* Actions */}
-                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                {/* Desktop: Actions */}
+                <div className="hidden lg:flex flex-col sm:flex-row gap-4 pt-4">
                   <button
                     onClick={() => handleAddToCart(product)}
                     disabled={product.stock === 0}
@@ -279,6 +324,16 @@ const ProductGrid = () => {
                   </Link>
                 </div>
 
+                {/* Mobile: Link to detail */}
+                <div className="lg:hidden pt-2">
+                  <Link
+                    to={`/winkel/product/${product.slug}`}
+                    className="block w-full py-3 rounded-xl font-medium border border-gray-200 text-center text-gray-600 hover:text-primary hover:border-primary transition-colors"
+                  >
+                    Meer details
+                  </Link>
+                </div>
+
                 {/* Stock warning */}
                 {product.stock !== undefined && product.stock <= 5 && product.stock > 0 && (
                   <p className="text-orange-500 text-sm">
@@ -286,7 +341,7 @@ const ProductGrid = () => {
                   </p>
                 )}
 
-                <p className="text-sm text-gray-500">
+                <p className="hidden lg:block text-sm text-gray-500">
                   * Vandaag besteld, morgen in huis. Gratis verzending vanaf €50.
                 </p>
               </div>

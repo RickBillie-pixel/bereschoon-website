@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  Bell, Loader2, ChevronRight, Check, Package, Truck, 
-  CheckCircle, XCircle, Clock, ExternalLink, Trash2
+import {
+  Bell, Loader2, ChevronRight, Check, Package, Truck,
+  CheckCircle, XCircle, Clock, ExternalLink, Trash2, ArrowLeft
 } from 'lucide-react';
 import PageTransition from '../../components/PageTransition';
 import SEO from '../../components/SEO';
@@ -53,7 +53,7 @@ const AccountNotifications = () => {
     if (diffMins < 60) return `${diffMins} minuten geleden`;
     if (diffHours < 24) return `${diffHours} uur geleden`;
     if (diffDays < 7) return `${diffDays} dagen geleden`;
-    
+
     return date.toLocaleDateString('nl-NL', {
       day: 'numeric',
       month: 'long',
@@ -67,7 +67,7 @@ const AccountNotifications = () => {
     if (!notification.read) {
       markAsRead([notification.id]);
     }
-    
+
     // Navigate to order if there's an order_id
     if (notification.order_id) {
       navigate(`/winkel/account/bestellingen?order=${notification.order_id}`);
@@ -95,6 +95,15 @@ const AccountNotifications = () => {
         <div className="container mx-auto px-6">
           <div className="max-w-2xl mx-auto">
             {/* Header */}
+            <div className="mb-4">
+              <Link
+                to="/winkel/account"
+                className="inline-flex items-center gap-2 text-gray-500 hover:text-primary transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Terug naar account
+              </Link>
+            </div>
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h1 className="text-3xl font-bold">Meldingen</h1>
@@ -147,9 +156,8 @@ const AccountNotifications = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.05 }}
                       onClick={() => handleNotificationClick(notification)}
-                      className={`bg-white rounded-xl p-4 shadow-sm cursor-pointer hover:shadow-md transition-all ${
-                        !notification.read ? 'ring-2 ring-primary/20' : ''
-                      }`}
+                      className={`bg-white rounded-xl p-4 shadow-sm cursor-pointer hover:shadow-md transition-all ${!notification.read ? 'ring-2 ring-primary/20' : ''
+                        }`}
                     >
                       <div className="flex gap-4">
                         <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${colorClass}`}>
@@ -179,7 +187,7 @@ const AccountNotifications = () => {
                           <p className="text-gray-600 mt-2">
                             {notification.message}
                           </p>
-                          
+
                           {/* Action buttons */}
                           <div className="flex items-center gap-4 mt-3">
                             {notification.order_id && (
@@ -200,15 +208,7 @@ const AccountNotifications = () => {
               </div>
             )}
 
-            {/* Back link */}
-            <div className="mt-8">
-              <Link
-                to="/winkel/account"
-                className="text-gray-500 hover:text-primary transition-colors"
-              >
-                ← Terug naar account
-              </Link>
-            </div>
+
           </div>
         </div>
       </div>

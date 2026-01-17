@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   ShoppingBag, Check, Minus, Plus,
   ChevronLeft, ChevronRight, Play, Truck, Shield, Clock,
-  Loader2, ArrowLeft
+  Loader2, ArrowLeft, Star
 } from 'lucide-react';
 import PageTransition from '../../components/PageTransition';
 import { useCartStore } from '../../stores/cartStore';
@@ -66,6 +66,12 @@ const ProductDetail = () => {
     }
   };
 
+  const handleQuickAdd = () => {
+    if (product) {
+      addItem(product, 1);
+    }
+  };
+
   const discountPercentage = product?.compare_price
     ? Math.round(((product.compare_price - product.price) / product.compare_price) * 100)
     : null;
@@ -96,11 +102,7 @@ const ProductDetail = () => {
 
   const images = product.images || [];
   const features = product.features || [];
-
-  // Gebruik de helper functie voor consistent schema
   const structuredData = generateProductSchema(product);
-  
-  // Breadcrumbs voor deze pagina
   const breadcrumbs = [
     { name: 'Home', url: 'https://bereschoon.nl' },
     { name: 'Webshop', url: 'https://bereschoon.nl/winkel' },
@@ -118,12 +120,28 @@ const ProductDetail = () => {
         breadcrumbs={breadcrumbs}
       />
       <div className="min-h-screen bg-gray-50">
-        {/* Product Content */}
         <div className="container mx-auto px-6 py-12">
+          {/* Back link - Top Left */}
+          <div className="mb-6">
+            <Link
+              to="/winkel"
+              className="inline-flex items-center gap-2 text-gray-500 hover:text-primary transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Terug naar shop
+            </Link>
+          </div>
+
+          {/* Mobile Title - Single Line, Top */}
+          <div className="md:hidden mb-4">
+            <h1 className="text-xl font-bold text-gray-900 truncate tracking-tight">
+              {product.name}
+            </h1>
+          </div>
+
           <div className="grid lg:grid-cols-2 gap-12">
-            {/* Image Gallery */}
+            {/* Left Column: Image/Video */}
             <div className="space-y-4">
-              {/* Main Image */}
               <div className="relative aspect-square bg-white rounded-2xl overflow-hidden shadow-sm">
                 <AnimatePresence mode="wait">
                   {showVideo && product.video_url ? (
@@ -222,9 +240,11 @@ const ProductDetail = () => {
               )}
             </div>
 
-            {/* Product Info */}
+            {/* Right Column: Info & Actions */}
             <div className="space-y-6">
-              <div>
+
+              {/* Desktop Header (Title & Category) */}
+              <div className="hidden md:block">
                 {product.category && (
                   <p className="text-sm text-gray-500 uppercase tracking-wide mb-2">
                     {product.category}
@@ -233,30 +253,58 @@ const ProductDetail = () => {
                 <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                   {product.name}
                 </h1>
+              </div>
 
-                {/* Price */}
-                <div className="flex items-baseline gap-3 mb-4">
+              {/* Mobile: Price + Quick Add Row */}
+              <div className="flex md:hidden items-center justify-between mb-4">
+                <div className="flex items-baseline gap-2">
                   <span className="text-3xl font-bold text-primary">
                     €{product.price?.toFixed(2) || '0.00'}
                   </span>
                   {product.compare_price && (
-                    <span className="text-xl text-gray-400 line-through">
+                    <span className="text-lg text-gray-400 line-through">
                       €{product.compare_price.toFixed(2)}
                     </span>
                   )}
                 </div>
+                <button
+                  onClick={handleQuickAdd}
+                  className="bg-primary text-white w-12 h-12 rounded-xl flex items-center justify-center shadow-lg active:scale-95 transition-transform"
+                >
+                  <ShoppingBag className="w-6 h-6" />
+                </button>
+              </div>
 
-                {/* Short Description */}
-                {product.short_description && (
-                  <p className="text-lg text-gray-600">
-                    {product.short_description}
-                  </p>
+              {/* Mobile: Reviews */}
+              <div className="flex md:hidden items-center gap-2 mb-4">
+                <div className="flex text-yellow-400">
+                  {[1, 2, 3, 4, 5].map(i => <Star key={i} size={16} fill="currentColor" strokeWidth={0} />)}
+                </div>
+                <span className="text-xs font-medium text-gray-500 underline">50+ Google reviews</span>
+              </div>
+
+              {/* Desktop: Price */}
+              <div className="hidden md:flex items-baseline gap-3 mb-4">
+                <span className="text-3xl font-bold text-primary">
+                  €{product.price?.toFixed(2) || '0.00'}
+                </span>
+                {product.compare_price && (
+                  <span className="text-xl text-gray-400 line-through">
+                    €{product.compare_price.toFixed(2)}
+                  </span>
                 )}
               </div>
 
-              {/* Features */}
+              {/* Short Description */}
+              {product.short_description && (
+                <p className="text-lg text-gray-600">
+                  {product.short_description}
+                </p>
+              )}
+
+              {/* Features List */}
               {features.length > 0 && (
-                <div className="space-y-3">
+                <div className="space-y-3 pt-2">
                   {features.map((feature, index) => (
                     <div key={index} className="flex items-start gap-3">
                       <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -268,8 +316,24 @@ const ProductDetail = () => {
                 </div>
               )}
 
-              {/* Quantity & Add to Cart */}
-              <div className="pt-6 border-t space-y-4">
+              {/* Mobile: USPs */}
+              <div className="grid md:hidden grid-cols-3 gap-2 py-4 border-t border-b border-gray-100">
+                <div className="text-center">
+                  <Truck className="w-5 h-5 text-primary mx-auto mb-1" />
+                  <p className="text-[10px] text-gray-600">Gratis v.a. €50</p>
+                </div>
+                <div className="text-center">
+                  <Clock className="w-5 h-5 text-primary mx-auto mb-1" />
+                  <p className="text-[10px] text-gray-600">1-3 werkdagen</p>
+                </div>
+                <div className="text-center">
+                  <Shield className="w-5 h-5 text-primary mx-auto mb-1" />
+                  <p className="text-[10px] text-gray-600">Veilig betalen</p>
+                </div>
+              </div>
+
+              {/* Desktop: Quantity & Add to Cart */}
+              <div className="hidden md:block pt-6 border-t space-y-4">
                 <div className="flex items-center gap-4">
                   <span className="text-gray-700 font-medium">Aantal:</span>
                   <div className="flex items-center gap-3 bg-gray-100 rounded-xl p-1">
@@ -294,7 +358,7 @@ const ProductDetail = () => {
                   whileTap={{ scale: 0.98 }}
                   onClick={handleAddToCart}
                   disabled={product.stock === 0}
-                  className="w-full bg-primary text-white py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 hover:bg-primary/90 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  className="w-full bg-primary text-white py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 hover:bg-primary/90 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed shadow-lg shadow-primary/20"
                 >
                   <ShoppingBag className="w-6 h-6" />
                   {product.stock === 0 ? 'Uitverkocht' : 'In Winkelmandje'}
@@ -307,8 +371,8 @@ const ProductDetail = () => {
                 )}
               </div>
 
-              {/* USPs */}
-              <div className="grid grid-cols-3 gap-4 pt-6 border-t">
+              {/* Desktop: USPs */}
+              <div className="hidden md:grid grid-cols-3 gap-4 pt-6 border-t">
                 <div className="text-center">
                   <Truck className="w-6 h-6 text-primary mx-auto mb-2" />
                   <p className="text-xs text-gray-600">Gratis verzending vanaf €50</p>
@@ -336,17 +400,6 @@ const ProductDetail = () => {
               </div>
             </div>
           )}
-
-          {/* Back link */}
-          <div className="mt-8">
-            <Link
-              to="/winkel"
-              className="text-gray-500 hover:text-primary transition-colors flex items-center gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Terug naar shop
-            </Link>
-          </div>
         </div>
       </div>
     </PageTransition>

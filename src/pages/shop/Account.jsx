@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
+import {
   User, Package, Settings, LogOut, Mail, Lock, ChevronRight,
   Eye, EyeOff, Loader2, AlertCircle, CheckCircle, Bell
 } from 'lucide-react';
@@ -16,7 +16,7 @@ const Account = () => {
   const [searchParams] = useSearchParams();
   const { user, profile, loading: authLoading, signIn, signUp, signOut, resetPassword } = useAuth();
   const { unreadCount } = useNotifications();
-  
+
   // Get redirect URL from query params or location state
   const redirectUrl = searchParams.get('redirect') || location.state?.from || null;
 
@@ -114,6 +114,13 @@ const Account = () => {
         <div className="min-h-screen bg-gray-50 py-12">
           <div className="container mx-auto px-6">
             <div className="max-w-4xl mx-auto">
+              <Link
+                to="/winkel"
+                className="inline-flex items-center gap-2 text-gray-500 hover:text-primary transition-colors mb-6"
+              >
+                ← Terug naar shop
+              </Link>
+
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -182,12 +189,7 @@ const Account = () => {
                 </div>
               </motion.div>
 
-              <Link
-                to="/winkel"
-                className="text-gray-500 hover:text-primary transition-colors"
-              >
-                ← Terug naar shop
-              </Link>
+
             </div>
           </div>
         </div>
@@ -211,17 +213,15 @@ const Account = () => {
                 <div className="flex mb-8 bg-gray-100 rounded-xl p-1">
                   <button
                     onClick={() => { setMode('login'); setError(null); setSuccess(null); }}
-                    className={`flex-1 py-3 rounded-lg font-medium transition-all ${
-                      mode === 'login' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'
-                    }`}
+                    className={`flex-1 py-3 rounded-lg font-medium transition-all ${mode === 'login' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'
+                      }`}
                   >
                     Inloggen
                   </button>
                   <button
                     onClick={() => { setMode('register'); setError(null); setSuccess(null); }}
-                    className={`flex-1 py-3 rounded-lg font-medium transition-all ${
-                      mode === 'register' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'
-                    }`}
+                    className={`flex-1 py-3 rounded-lg font-medium transition-all ${mode === 'register' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'
+                      }`}
                   >
                     Registreren
                   </button>

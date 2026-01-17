@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+import {
   Package, Loader2, Clock, CheckCircle, ChevronRight,
-  Truck, XCircle, Eye, ExternalLink, RefreshCw, Bell
+  Truck, XCircle, Eye, ExternalLink, RefreshCw, Bell, ArrowLeft
 } from 'lucide-react';
 import PageTransition from '../../components/PageTransition';
 import SEO from '../../components/SEO';
@@ -32,7 +32,7 @@ const AccountOrders = () => {
 
   const fetchOrders = useCallback(async () => {
     if (!user) return;
-    
+
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -105,16 +105,16 @@ const AccountOrders = () => {
         },
         (payload) => {
           const updatedOrder = payload.new;
-          
+
           // Update de order in de lijst
-          setOrders(prevOrders => 
-            prevOrders.map(order => 
-              order.id === updatedOrder.id 
+          setOrders(prevOrders =>
+            prevOrders.map(order =>
+              order.id === updatedOrder.id
                 ? { ...order, ...updatedOrder }
                 : order
             )
           );
-          
+
           // Toon update indicator
           setRecentUpdate(updatedOrder.id);
           setTimeout(() => setRecentUpdate(null), 3000);
@@ -158,6 +158,15 @@ const AccountOrders = () => {
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">
             {/* Header */}
+            <div className="mb-4">
+              <Link
+                to="/winkel/account"
+                className="inline-flex items-center gap-2 text-gray-500 hover:text-primary transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Terug naar account
+              </Link>
+            </div>
             <div className="mb-8">
               <h1 className="text-3xl font-bold">Mijn Bestellingen</h1>
             </div>
@@ -193,9 +202,8 @@ const AccountOrders = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className={`bg-white rounded-2xl shadow-sm overflow-hidden relative ${
-                        isRecentlyUpdated ? 'ring-2 ring-primary ring-offset-2' : ''
-                      }`}
+                      className={`bg-white rounded-2xl shadow-sm overflow-hidden relative ${isRecentlyUpdated ? 'ring-2 ring-primary ring-offset-2' : ''
+                        }`}
                     >
                       {/* Recent update indicator */}
                       <AnimatePresence>

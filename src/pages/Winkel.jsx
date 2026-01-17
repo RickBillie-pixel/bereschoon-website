@@ -6,6 +6,21 @@ import ProductGrid from '../components/shop/ProductGrid';
 import SEO from '../components/SEO';
 
 const Winkel = () => {
+  const uspItems = [
+    {
+      icon: Truck,
+      text: <span><strong>Gratis verzending</strong> vanaf €50</span>
+    },
+    {
+      icon: Clock,
+      text: <span><strong>1-3 werkdagen</strong> levering</span>
+    },
+    {
+      icon: Shield,
+      text: <span><strong>Veilig</strong> iDEAL & meer</span>
+    }
+  ];
+
   return (
     <PageTransition className="pt-24">
       <SEO
@@ -17,39 +32,44 @@ const Winkel = () => {
         ]}
       />
       {/* USPs */}
-      <section className="border-b bg-white">
-        <div className="container mx-auto px-6 py-5">
-          <div className="flex flex-wrap justify-center gap-8 md:gap-16">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="flex items-center gap-3"
-            >
-              <Truck className="w-5 h-5 text-primary" />
-              <span className="text-sm"><strong>Gratis verzending</strong> vanaf €50</span>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="flex items-center gap-3"
-            >
-              <Clock className="w-5 h-5 text-primary" />
-              <span className="text-sm"><strong>1-3 werkdagen</strong> levering</span>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="flex items-center gap-3"
-            >
-              <Shield className="w-5 h-5 text-primary" />
-              <span className="text-sm"><strong>Veilig</strong> iDEAL & meer</span>
-            </motion.div>
+      <section className="border-b bg-white overflow-hidden">
+        {/* Desktop View */}
+        <div className="hidden md:block container mx-auto px-6 py-5">
+          <div className="flex justify-between items-center max-w-7xl mx-auto">
+            {uspItems.map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * (index + 1) }}
+                className="flex items-center gap-3"
+              >
+                <item.icon className="w-5 h-5 text-primary" />
+                <span className="text-sm text-gray-700">{item.text}</span>
+              </motion.div>
+            ))}
           </div>
+        </div>
+
+        {/* Mobile View (Marquee) */}
+        <div className="md:hidden py-4 bg-gray-50/50">
+          <motion.div
+            className="flex gap-12 whitespace-nowrap pl-6"
+            animate={{ x: "-50%" }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          >
+            {/* Duplicate items multiple times for smooth loop */}
+            {[...uspItems, ...uspItems, ...uspItems, ...uspItems].map((item, index) => (
+              <div key={index} className="flex items-center gap-3 flex-shrink-0">
+                <item.icon className="w-5 h-5 text-primary" />
+                <span className="text-sm text-gray-700">{item.text}</span>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
@@ -61,7 +81,7 @@ const Winkel = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <h2 className="text-2xl font-bold mb-12 text-center">Onze Producten</h2>
+            {/* Title removed as requested */}
             <ProductGrid />
           </motion.div>
         </div>

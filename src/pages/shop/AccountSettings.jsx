@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
+import {
   User, MapPin, Lock, Save, ChevronRight,
-  Loader2, AlertCircle, CheckCircle
+  Loader2, AlertCircle, CheckCircle, ArrowLeft
 } from 'lucide-react';
 import PageTransition from '../../components/PageTransition';
 import SEO from '../../components/SEO';
@@ -129,6 +129,15 @@ const AccountSettings = () => {
         <div className="container mx-auto px-6">
           <div className="max-w-2xl mx-auto">
             {/* Header */}
+            <div className="mb-4">
+              <Link
+                to="/winkel/account"
+                className="inline-flex items-center gap-2 text-gray-500 hover:text-primary transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Terug naar account
+              </Link>
+            </div>
             <div className="mb-8">
               <h1 className="text-3xl font-bold">Instellingen</h1>
             </div>
@@ -141,11 +150,10 @@ const AccountSettings = () => {
                   <button
                     key={tab.id}
                     onClick={() => { setActiveTab(tab.id); setError(null); setSuccess(null); }}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium whitespace-nowrap transition-all ${
-                      activeTab === tab.id
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium whitespace-nowrap transition-all ${activeTab === tab.id
                         ? 'bg-primary text-white'
                         : 'bg-white text-gray-600 hover:bg-gray-100'
-                    }`}
+                      }`}
                   >
                     <Icon className="w-4 h-4" />
                     {tab.label}
@@ -188,7 +196,7 @@ const AccountSettings = () => {
               {activeTab === 'profile' && (
                 <form onSubmit={handleProfileSubmit} className="space-y-4">
                   <h2 className="text-xl font-bold mb-4">Profielgegevens</h2>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       E-mailadres
@@ -242,7 +250,7 @@ const AccountSettings = () => {
               {activeTab === 'address' && (
                 <form onSubmit={handleAddressSubmit} className="space-y-4">
                   <h2 className="text-xl font-bold mb-4">Standaard verzendadres</h2>
-                  
+
                   <div className="grid grid-cols-3 gap-4">
                     <div className="col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -324,7 +332,7 @@ const AccountSettings = () => {
               {activeTab === 'password' && (
                 <form onSubmit={handlePasswordSubmit} className="space-y-4">
                   <h2 className="text-xl font-bold mb-4">Wachtwoord wijzigen</h2>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Nieuw wachtwoord

@@ -173,13 +173,40 @@ const Navbar = () => {
                     )}
                 </div>
 
-                {/* Mobile Menu Button */}
-                <button
-                    className="md:hidden text-foreground"
-                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                >
-                    {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                </button>
+                {/* Mobile Actions Wrapper */}
+                <div className="flex items-center gap-2 md:hidden">
+                    {/* Shop Icons - only show on shop pages */}
+                    {isShopPage && (
+                        <div className="flex items-center gap-1">
+                            <Link
+                                to="/winkel/account"
+                                className={`p-2 rounded-full transition-colors ${isShopPage ? 'text-gray-600 hover:text-primary hover:bg-gray-100' : ''}`}
+                            >
+                                <User className="w-5 h-5" />
+                            </Link>
+
+                            <button
+                                onClick={openCart}
+                                className={`p-2 rounded-full transition-colors relative ${isShopPage ? 'text-gray-600 hover:text-primary hover:bg-gray-100' : ''}`}
+                            >
+                                <ShoppingBag className="w-5 h-5" />
+                                {itemCount > 0 && (
+                                    <span className="absolute -top-1 -right-1 bg-primary text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+                                        {itemCount > 9 ? '9+' : itemCount}
+                                    </span>
+                                )}
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Mobile Menu Button */}
+                    <button
+                        className="text-foreground"
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    >
+                        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                    </button>
+                </div>
             </div>
 
             {/* Mobile Menu */}
