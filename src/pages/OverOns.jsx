@@ -273,7 +273,7 @@ const OverOns = () => {
                                 <span>YouTube</span>
                             </a>
                             <a
-                                href="https://www.facebook.com/bereschoon"
+                                href="https://www.facebook.com/p/Bereschoon-100094353067993/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-foreground px-5 py-3 rounded-full font-medium transition-all border border-primary/20"
