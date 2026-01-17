@@ -23,7 +23,7 @@ const HomeQuoteSection = () => {
     return (
         <section
             ref={ref}
-            className="relative py-24 overflow-hidden"
+            className="relative py-12 md:py-24 overflow-hidden"
             style={{
                 background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%)'
             }}
@@ -104,7 +104,7 @@ const HomeQuoteSection = () => {
 
                         {/* Heading */}
                         <motion.h2
-                            className="text-4xl md:text-5xl font-bold mb-6 leading-tight"
+                            className="text-3xl md:text-5xl font-bold mb-6 leading-tight"
                             initial={{ opacity: 0, y: 20 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6, delay: 0.3 }}
@@ -127,7 +127,7 @@ const HomeQuoteSection = () => {
 
                         {/* Benefits */}
                         <motion.div
-                            className="flex flex-wrap gap-4 mb-8"
+                            className="flex flex-wrap gap-2 md:gap-4 mb-8"
                             initial={{ opacity: 0, y: 20 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6, delay: 0.5 }}
@@ -135,7 +135,7 @@ const HomeQuoteSection = () => {
                             {benefits.map((benefit, index) => (
                                 <div
                                     key={index}
-                                    className="flex items-center gap-2 bg-white/5 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/10"
+                                    className="flex items-center gap-2 bg-white/5 backdrop-blur-sm rounded-lg px-3 py-1.5 md:px-4 md:py-2 border border-white/10"
                                 >
                                     <benefit.icon className="text-primary" size={18} />
                                     <span className="text-sm text-white/80">{benefit.text}</span>

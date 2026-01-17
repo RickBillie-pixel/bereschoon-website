@@ -60,21 +60,33 @@ const ProjectGrid = ({ projects, onProjectClick }) => {
     if (!projects || projects.length === 0) return null;
 
     return (
-        <section className="py-12">
+        <section className="pb-12 pt-0">
             {/* Filter Tabs */}
-            <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-12">
-                {CATEGORIES.map((cat) => (
-                    <button
-                        key={cat.id}
-                        onClick={() => setActiveCategory(cat.id)}
-                        className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${activeCategory === cat.id
-                                ? 'bg-primary text-white shadow-lg shadow-primary/25 scale-105'
-                                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100'
-                            }`}
-                    >
-                        {cat.label}
-                    </button>
-                ))}
+            {/* Filter Tabs - Modern Pill Design */}
+            <div className="flex justify-center mb-12">
+                <div className="flex flex-wrap justify-center gap-2 p-1.5 bg-gray-100/80 backdrop-blur-sm rounded-full border border-gray-200/50 shadow-inner">
+                    {CATEGORIES.map((cat) => {
+                        const isActive = activeCategory === cat.id;
+                        return (
+                            <button
+                                key={cat.id}
+                                onClick={() => setActiveCategory(cat.id)}
+                                className={`relative px-6 py-2.5 rounded-full text-sm font-semibold transition-colors duration-300 z-10 ${isActive ? 'text-white' : 'text-gray-500 hover:text-gray-900'
+                                    }`}
+                            >
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="activeTab"
+                                        className="absolute inset-0 bg-primary rounded-full shadow-md"
+                                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                        style={{ zIndex: -1 }}
+                                    />
+                                )}
+                                {cat.label}
+                            </button>
+                        );
+                    })}
+                </div>
             </div>
 
             {/* Grid */}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { ChevronDown, ArrowRight, Check } from 'lucide-react';
 import LogoMarquee from './LogoMarquee';
 import WaveDivider from './effects/WaveDivider';
@@ -17,7 +18,8 @@ const ServiceHero = ({
     showOverlay = true, // New prop for extra overlay
     reviewData = null, // { score: "4.8", count: 126, text: "..." }
     usps = [], // Array of { icon: Icon, text: "..." }
-    companyLogos = [] // New prop for logo marquee
+    companyLogos = [], // New prop for logo marquee
+    mobileDescription = null // New prop for shorter mobile text
 }) => {
     const { scrollY } = useScroll();
 
@@ -26,16 +28,26 @@ const ServiceHero = ({
     const contentY = useTransform(scrollY, [0, 500], [0, 50]);
     const opacity = useTransform(scrollY, [0, 400], [1, 0]);
 
-    const scrollToForm = (e) => {
+    const navigate = useNavigate();
+
+    const handleCtaClick = (e) => {
+        // If it's a direct link to another page
+        if (ctaHref && !ctaHref.startsWith('#')) {
+            e.preventDefault();
+            navigate(ctaHref);
+            return;
+        }
+
         e.preventDefault();
-        const formElement = document.getElementById('formulier');
-        if (formElement) {
-            formElement.scrollIntoView({ behavior: 'smooth' });
+        const targetId = ctaHref ? ctaHref.replace('#', '') : 'formulier';
+        const element = document.getElementById(targetId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
         }
     };
 
     return (
-        <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-secondary">
+        <section className="relative h-[100svh] md:min-h-screen flex flex-col justify-center overflow-hidden bg-secondary">
             {/* Parallax Background */}
             <motion.div
                 className="absolute inset-0 z-0"
@@ -57,7 +69,7 @@ const ServiceHero = ({
 
             {/* Main Content */}
             <motion.div
-                className="relative z-20 text-center px-6 max-w-4xl mx-auto mt-20 md:mt-0 flex-grow flex flex-col justify-center"
+                className="relative z-20 text-center px-6 max-w-6xl mx-auto flex-grow flex flex-col justify-center pb-24 md:pb-0"
                 style={{ y: contentY, opacity }}
                 variants={heroStagger}
                 initial="hidden"
@@ -67,7 +79,7 @@ const ServiceHero = ({
                 {subtitle && (
                     <motion.div
                         variants={heroText}
-                        className="inline-block mb-6"
+                        className="inline-block mb-6 pt-20 md:pt-0"
                     >
                         <span className="bg-primary/20 text-primary px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-primary/30">
                             {subtitle}
@@ -78,18 +90,28 @@ const ServiceHero = ({
                 {/* Main Title */}
                 <motion.h1
                     variants={heroText}
-                    className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight text-white drop-shadow-lg"
+                    className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 tracking-tighter text-white drop-shadow-lg"
                 >
                     {title}
                 </motion.h1>
 
                 {/* Description */}
-                <motion.p
-                    variants={heroText}
-                    className="text-lg md:text-xl text-gray-100 mb-8 max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium"
-                >
-                    {description}
-                </motion.p>
+                <motion.div variants={heroText} className="mb-6 md:mb-8">
+                    {mobileDescription ? (
+                        <>
+                            <p className="md:hidden text-lg text-gray-100 max-w-xl mx-auto leading-relaxed drop-shadow-md font-medium">
+                                {mobileDescription}
+                            </p>
+                            <p className="hidden md:block text-xl text-gray-100 max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium">
+                                {description}
+                            </p>
+                        </>
+                    ) : (
+                        <p className="text-lg md:text-xl text-gray-100 max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium">
+                            {description}
+                        </p>
+                    )}
+                </motion.div>
 
                 {/* Social Proof - Reviews */}
                 {reviewData && (
@@ -140,7 +162,7 @@ const ServiceHero = ({
                 {features.length > 0 && (
                     <motion.div
                         variants={heroText}
-                        className="flex flex-wrap justify-center gap-4 mb-10"
+                        className="hidden md:flex flex-wrap justify-center gap-4 mb-10"
                     >
                         {features.map((feature, index) => (
                             <div
@@ -160,7 +182,7 @@ const ServiceHero = ({
                     className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
                 >
                     <motion.button
-                        onClick={scrollToForm}
+                        onClick={handleCtaClick}
                         className="group bg-primary text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-primary/90 transition-all flex items-center shadow-[0_0_30px_rgba(132,204,22,0.4)] hover:shadow-[0_0_50px_rgba(132,204,22,0.6)] btn-shine"
                         whileHover={{ scale: 1.02, y: -2 }}
                         whileTap={{ scale: 0.98 }}
@@ -173,39 +195,52 @@ const ServiceHero = ({
                             e.preventDefault();
                             document.getElementById('resultaten')?.scrollIntoView({ behavior: 'smooth' });
                         }}
-                        className="group bg-transparent text-white border-2 border-white px-8 py-4 rounded-full text-lg font-bold hover:bg-white hover:text-secondary transition-all flex items-center"
+                        className="hidden md:flex group bg-transparent text-white border-2 border-white px-8 py-4 rounded-full text-lg font-bold hover:bg-white hover:text-secondary transition-all items-center"
                         whileHover={{ scale: 1.02, y: -2 }}
                         whileTap={{ scale: 0.98 }}
                     >
                         Bekijk resultaten
                     </motion.button>
+                    {/* Mobile Only Link for Secondary Action to save space */}
+                    <motion.button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            document.getElementById('resultaten')?.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                        className="md:hidden text-white/90 underline underline-offset-4 text-sm font-medium mt-2"
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        Of bekijk direct resultaten
+                    </motion.button>
                 </motion.div>
             </motion.div>
 
             {/* USPs Bar or Logo Marquee */}
-            {companyLogos.length > 0 ? (
-                <LogoMarquee logos={companyLogos} />
-            ) : usps.length > 0 && (
-                <motion.div
-                    className="relative z-30 bg-white/5 backdrop-blur-md border-t border-white/10 py-6"
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                >
-                    <div className="container mx-auto px-6">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {usps.map((usp, index) => (
-                                <div key={index} className="flex items-center justify-center gap-3">
-                                    <div className="bg-primary/20 p-2 rounded-full">
-                                        <usp.icon size={24} className="text-primary" />
+            <div className="absolute bottom-0 left-0 right-0 z-30 md:relative">
+                {companyLogos.length > 0 ? (
+                    <LogoMarquee logos={companyLogos} />
+                ) : usps.length > 0 && (
+                    <motion.div
+                        className="relative z-30 bg-white/5 backdrop-blur-md border-t border-white/10 py-6"
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 }}
+                    >
+                        <div className="container mx-auto px-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {usps.map((usp, index) => (
+                                    <div key={index} className="flex items-center justify-center gap-3">
+                                        <div className="bg-primary/20 p-2 rounded-full">
+                                            <usp.icon size={24} className="text-primary" />
+                                        </div>
+                                        <span className="text-white font-medium">{usp.text}</span>
                                     </div>
-                                    <span className="text-white font-medium">{usp.text}</span>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                </motion.div>
-            )}
+                    </motion.div>
+                )}
+            </div>
 
             {/* Scroll Indicator (Hide if USPs are showing to avoid clutter, or adjust position) */}
             {usps.length === 0 && (

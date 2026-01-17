@@ -91,7 +91,7 @@ const ContactForm = ({ preselectedService = null }) => {
         if (selectedService === 'onkruidbeheersing') {
             return 'Kies een plan';
         } else if (selectedService === 'gevelreiniging') {
-            return 'Welke gevelbehandeling(en) heeft u nodig?';
+            return 'Welke dienst(en) heeft u nodig?';
         } else if (isOpritTerrasTerreinCategory(selectedService)) {
             return 'Welke dienst(en) heeft u nodig?';
         }
@@ -326,10 +326,10 @@ const ContactForm = ({ preselectedService = null }) => {
     const displayStep = preselectedService ? step - 1 : step;
 
     return (
-        <div className="p-6 md:p-8">
+        <div className="p-4 md:p-8">
             <div className="mb-8">
-                <h2 className="text-3xl font-bold text-foreground mb-2">Stel uw aanvraag samen</h2>
-                <p className="text-stone-300 text-sm">Binnen 1 minuut ingevuld – wij reageren binnen 24 uur</p>
+                <h2 className="text-xl md:text-3xl font-bold text-foreground mb-2 whitespace-nowrap">Stel uw aanvraag samen</h2>
+                <p className="text-stone-300 text-[11px] md:text-sm whitespace-nowrap">Binnen 1 minuut ingevuld – wij reageren binnen 24 uur</p>
             </div>
             <p className="text-muted-foreground mb-6 font-medium text-sm uppercase tracking-wider text-primary">Stap {displayStep} van {totalSteps}</p>
 
@@ -371,7 +371,7 @@ const ContactForm = ({ preselectedService = null }) => {
             {/* Step 1: Service Selection */}
             {step === 1 && (
                 <div className="animate-in slide-in-from-right-8 duration-500">
-                    <h3 className="text-2xl font-bold text-foreground mb-6">Welke dienst heeft u nodig?</h3>
+                    <h3 className="text-lg md:text-2xl font-bold text-foreground mb-6 whitespace-nowrap">Welke dienst heeft u nodig?</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {services.map((service) => {
                             const Icon = service.icon;
@@ -379,18 +379,18 @@ const ContactForm = ({ preselectedService = null }) => {
                                 <button
                                     key={service.id}
                                     onClick={() => handleServiceSelect(service.id)}
-                                    className={`p-6 border-2 rounded-xl text-left transition-all hover:scale-105 ${selectedService === service.id
+                                    className={`p-4 md:p-6 border-2 rounded-xl text-left transition-all hover:scale-105 ${selectedService === service.id
                                         ? 'border-primary bg-primary/5 shadow-lg'
                                         : 'border-gray-200 hover:border-primary/50'
                                         }`}
                                 >
                                     <div className="flex items-center justify-between mb-3">
-                                        <Icon className={`${selectedService === service.id ? 'text-primary' : 'text-gray-400'}`} size={32} />
+                                        <Icon className={`${selectedService === service.id ? 'text-primary' : 'text-gray-400'} w-6 h-6 md:w-8 md:h-8`} />
                                         {selectedService === service.id && (
                                             <Check className="text-primary" size={24} />
                                         )}
                                     </div>
-                                    <h4 className="text-lg font-bold text-foreground">{service.label}</h4>
+                                    <h4 className="text-sm md:text-lg font-bold text-foreground text-left">{service.label}</h4>
                                 </button>
                             );
                         })}
@@ -401,7 +401,7 @@ const ContactForm = ({ preselectedService = null }) => {
             {/* Step 2: Options/Plan Selection */}
             {step === 2 && (
                 <div className="animate-in slide-in-from-right-8 duration-500">
-                    <h3 className="text-2xl font-bold text-foreground mb-6">{getStep2Title()}</h3>
+                    <h3 className="text-lg md:text-2xl font-bold text-foreground mb-6 whitespace-nowrap">{getStep2Title()}</h3>
 
                     {selectedService === 'onkruidbeheersing' ? (
                         <div className="space-y-3">
@@ -409,7 +409,7 @@ const ContactForm = ({ preselectedService = null }) => {
                                 <button
                                     key={plan.id}
                                     onClick={() => handlePlanSelect(plan.id)}
-                                    className={`w-full p-5 border-2 rounded-xl text-left transition-all ${selectedPlan === plan.id
+                                    className={`w-full p-4 md:p-5 border-2 rounded-xl text-left transition-all ${selectedPlan === plan.id
                                         ? 'border-primary bg-primary/5 shadow-lg'
                                         : 'border-gray-200 hover:border-primary/50'
                                         }`}
@@ -429,7 +429,7 @@ const ContactForm = ({ preselectedService = null }) => {
                                 <button
                                     key={option.id}
                                     onClick={() => handleOptionToggle(option.id)}
-                                    className={`w-full p-5 border-2 rounded-xl text-left transition-all ${selectedOptions.includes(option.id)
+                                    className={`w-full p-4 md:p-5 border-2 rounded-xl text-left transition-all ${selectedOptions.includes(option.id)
                                         ? 'border-primary bg-primary/5 shadow-lg'
                                         : 'border-gray-200 hover:border-primary/50'
                                         }`}
@@ -449,7 +449,7 @@ const ContactForm = ({ preselectedService = null }) => {
                                 <button
                                     key={option.id}
                                     onClick={() => handleOptionToggle(option.id)}
-                                    className={`w-full p-5 border-2 rounded-xl text-left transition-all ${selectedOptions.includes(option.id)
+                                    className={`w-full p-4 md:p-5 border-2 rounded-xl text-left transition-all ${selectedOptions.includes(option.id)
                                         ? 'border-primary bg-primary/5 shadow-lg'
                                         : 'border-gray-200 hover:border-primary/50'
                                         }`}
@@ -468,18 +468,18 @@ const ContactForm = ({ preselectedService = null }) => {
                     <div className="flex gap-4 mt-8">
                         <button
                             onClick={handleBack}
-                            className="flex items-center px-6 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-all"
+                            className="flex items-center px-4 py-3 md:px-6 md:py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-all text-sm md:text-base"
                         >
-                            <ArrowLeft className="mr-2" size={20} />
+                            <ArrowLeft className="mr-2" size={18} />
                             Terug
                         </button>
                         <button
                             onClick={handleNext}
                             disabled={!canProceedToNextStep()}
-                            className="flex-1 flex items-center justify-center bg-primary text-white px-6 py-3 rounded-lg font-bold hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex-1 flex items-center justify-center bg-primary text-white px-4 py-3 md:px-6 md:py-3 rounded-lg font-bold hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
                         >
                             Volgende
-                            <ArrowRight className="ml-2" size={20} />
+                            <ArrowRight className="ml-2" size={18} />
                         </button>
                     </div>
                 </div>
@@ -488,7 +488,7 @@ const ContactForm = ({ preselectedService = null }) => {
             {/* Step 3: Square Meters */}
             {step === 3 && (
                 <div className="animate-in slide-in-from-right-8 duration-500">
-                    <h3 className="text-2xl font-bold text-foreground mb-2">Geschatte vierkante meters</h3>
+                    <h3 className="text-lg md:text-2xl font-bold text-foreground mb-2 whitespace-nowrap">Geschatte vierkante meters</h3>
                     <p className="text-muted-foreground mb-6">Dit veld is optioneel. U kunt deze stap overslaan.</p>
 
                     <div className="mb-8">
@@ -507,29 +507,29 @@ const ContactForm = ({ preselectedService = null }) => {
                         />
                     </div>
 
-                    <div className="flex gap-4">
+                    <div className="flex flex-wrap md:flex-nowrap gap-3 md:gap-4">
                         <button
                             type="button"
                             onClick={handleBack}
-                            className="flex items-center px-6 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-all"
+                            className="flex-1 md:flex-none flex items-center justify-center px-4 py-3 md:px-6 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-all text-sm md:text-base order-1"
                         >
-                            <ArrowLeft className="mr-2" size={20} />
+                            <ArrowLeft className="mr-2" size={18} />
                             Terug
                         </button>
                         <button
                             type="button"
                             onClick={handleSkip}
-                            className="flex items-center px-6 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-all"
+                            className="flex-1 md:flex-none flex items-center justify-center px-4 py-3 md:px-6 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-all text-sm md:text-base order-2"
                         >
                             Overslaan
                         </button>
                         <button
                             type="button"
                             onClick={handleNext}
-                            className="flex-1 flex items-center justify-center bg-primary text-white px-6 py-3 rounded-lg font-bold hover:bg-primary/90 transition-all"
+                            className="w-full md:w-auto md:flex-1 flex items-center justify-center bg-primary text-white px-4 py-3 md:px-6 rounded-lg font-bold hover:bg-primary/90 transition-all text-sm md:text-base order-3"
                         >
                             Volgende
-                            <ArrowRight className="ml-2" size={20} />
+                            <ArrowRight className="ml-2" size={18} />
                         </button>
                     </div>
                 </div>
@@ -538,7 +538,7 @@ const ContactForm = ({ preselectedService = null }) => {
             {/* Step 4: Photo Upload */}
             {step === 4 && (
                 <div className="animate-in slide-in-from-right-8 duration-500">
-                    <h3 className="text-2xl font-bold text-foreground mb-2">Foto's toevoegen</h3>
+                    <h3 className="text-lg md:text-2xl font-bold text-foreground mb-2 whitespace-nowrap">Foto's toevoegen</h3>
                     <p className="text-muted-foreground mb-6">U kunt meerdere foto's uploaden (optioneel). U kunt deze stap overslaan.</p>
 
                     <div className="mb-6">
@@ -554,7 +554,7 @@ const ContactForm = ({ preselectedService = null }) => {
                         <button
                             type="button"
                             onClick={() => fileInputRef.current?.click()}
-                            className="w-full border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-primary hover:bg-primary/5 transition-all cursor-pointer"
+                            className="w-full border-2 border-dashed border-gray-300 rounded-lg p-6 md:p-8 text-center hover:border-primary hover:bg-primary/5 transition-all cursor-pointer"
                         >
                             <Upload className="mx-auto mb-3 text-gray-400" size={32} />
                             <p className="text-sm font-medium text-foreground mb-1">Klik om foto's te uploaden</p>
@@ -583,29 +583,29 @@ const ContactForm = ({ preselectedService = null }) => {
                         )}
                     </div>
 
-                    <div className="flex gap-4">
+                    <div className="flex flex-wrap md:flex-nowrap gap-3 md:gap-4">
                         <button
                             type="button"
                             onClick={handleBack}
-                            className="flex items-center px-6 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-all"
+                            className="flex-1 md:flex-none flex items-center justify-center px-4 py-3 md:px-6 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-all text-sm md:text-base order-1"
                         >
-                            <ArrowLeft className="mr-2" size={20} />
+                            <ArrowLeft className="mr-2" size={18} />
                             Terug
                         </button>
                         <button
                             type="button"
                             onClick={handleSkip}
-                            className="flex items-center px-6 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-all"
+                            className="flex-1 md:flex-none flex items-center justify-center px-4 py-3 md:px-6 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-all text-sm md:text-base order-2"
                         >
                             Overslaan
                         </button>
                         <button
                             type="button"
                             onClick={() => setStep(5)}
-                            className="flex-1 flex items-center justify-center bg-primary text-white px-6 py-3 rounded-lg font-bold hover:bg-primary/90 transition-all"
+                            className="w-full md:w-auto md:flex-1 flex items-center justify-center bg-primary text-white px-4 py-3 md:px-6 rounded-lg font-bold hover:bg-primary/90 transition-all text-sm md:text-base order-3"
                         >
                             Volgende
-                            <ArrowRight className="ml-2" size={20} />
+                            <ArrowRight className="ml-2" size={18} />
                         </button>
                     </div>
                 </div>
@@ -614,7 +614,7 @@ const ContactForm = ({ preselectedService = null }) => {
             {/* Step 5: Contact Information */}
             {step === 5 && (
                 <form onSubmit={handleSubmit} className="animate-in slide-in-from-right-8 duration-500">
-                    <h3 className="text-2xl font-bold text-foreground mb-6">Uw contactgegevens</h3>
+                    <h3 className="text-lg md:text-2xl font-bold text-foreground mb-6 whitespace-nowrap">Uw contactgegevens</h3>
 
                     <div className="space-y-6">
                         <div>
@@ -631,7 +631,7 @@ const ContactForm = ({ preselectedService = null }) => {
                                     value={formData.naam}
                                     onChange={handleInputChange}
                                     placeholder="Volledige naam"
-                                    className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-base placeholder:text-muted-foreground/60"
+                                    className="w-full pl-12 pr-4 py-3 md:py-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-base placeholder:text-muted-foreground/60"
                                 />
                             </div>
                         </div>
@@ -650,7 +650,7 @@ const ContactForm = ({ preselectedService = null }) => {
                                     value={formData.email}
                                     onChange={handleInputChange}
                                     placeholder="uw@email.nl"
-                                    className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-base placeholder:text-muted-foreground/60"
+                                    className="w-full pl-12 pr-4 py-3 md:py-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-base placeholder:text-muted-foreground/60"
                                 />
                             </div>
                         </div>
@@ -668,7 +668,7 @@ const ContactForm = ({ preselectedService = null }) => {
                                     value={formData.telefoon}
                                     onChange={handleInputChange}
                                     placeholder="+31 6 12345678"
-                                    className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-base placeholder:text-muted-foreground/60"
+                                    className="w-full pl-12 pr-4 py-3 md:py-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-base placeholder:text-muted-foreground/60"
                                 />
                             </div>
                         </div>
@@ -686,7 +686,7 @@ const ContactForm = ({ preselectedService = null }) => {
                                     value={formData.adres}
                                     onChange={handleInputChange}
                                     placeholder="Straatnaam + huisnummer, plaats"
-                                    className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-base placeholder:text-muted-foreground/60"
+                                    className="w-full pl-12 pr-4 py-3 md:py-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-base placeholder:text-muted-foreground/60"
                                 />
                             </div>
                         </div>
@@ -704,7 +704,7 @@ const ContactForm = ({ preselectedService = null }) => {
                                     value={formData.toelichting}
                                     onChange={handleInputChange}
                                     placeholder="Heeft u aanvullende vragen of opmerkingen?"
-                                    className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-base placeholder:text-muted-foreground/60 resize-none"
+                                    className="w-full pl-12 pr-4 py-3 md:py-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-base placeholder:text-muted-foreground/60 resize-none"
                                 />
                             </div>
                         </div>
@@ -714,7 +714,7 @@ const ContactForm = ({ preselectedService = null }) => {
                         <button
                             type="button"
                             onClick={handleBack}
-                            className="flex items-center px-6 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-all"
+                            className="flex items-center px-4 py-3 md:px-6 md:py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-all text-sm md:text-base"
                         >
                             <ArrowLeft className="mr-2" size={20} />
                             Terug
@@ -722,7 +722,7 @@ const ContactForm = ({ preselectedService = null }) => {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="flex-1 flex items-center justify-center bg-primary text-white px-8 py-4 rounded-lg font-bold hover:bg-primary/90 transition-all shadow-lg hover:shadow-primary/40 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex-1 flex items-center justify-center bg-primary text-white px-4 py-3 md:px-8 md:py-4 rounded-lg font-bold hover:bg-primary/90 transition-all shadow-lg hover:shadow-primary/40 disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
                         >
                             {isSubmitting ? (
                                 <>

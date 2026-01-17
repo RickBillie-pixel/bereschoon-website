@@ -61,9 +61,9 @@ const Footer = () => {
     };
 
     return (
-        <footer className="bg-secondary text-white pt-16 pb-8 border-t border-white/5">
+        <footer className="bg-secondary text-white pt-10 md:pt-16 pb-6 md:pb-8 border-t border-white/5">
             <div className="container mx-auto px-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 mb-8 md:mb-12">
                     {/* Brand Column */}
                     <div className="space-y-6">
                         <img src="/images/logo.png" alt="Bereschoon" className="h-16 w-auto" />
@@ -137,7 +137,7 @@ const Footer = () => {
                     </div>
 
                     {/* Quick Links & Contact Combined */}
-                    <div className="flex flex-col lg:flex-row gap-32 pt-6">
+                    <div className="flex flex-col lg:flex-row gap-10 lg:gap-32 pt-6">
                         {/* Quick Links */}
                         <div>
                             <h4 className="font-semibold text-white mb-6">Snelle Links</h4>
@@ -190,7 +190,7 @@ const Footer = () => {
                     </div>
 
                     {/* Contact Form */}
-                    <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                    <div className="bg-white/5 backdrop-blur-sm rounded-xl p-5 md:p-6 border border-white/10">
                         <h4 className="font-semibold text-white mb-3">Nieuwsgierig geworden?</h4>
                         <p className="text-stone-300 text-sm mb-6">
                             Laat je gegevens achter en wij nemen zo snel mogelijk contact op.
@@ -226,7 +226,7 @@ const Footer = () => {
                                             disabled={isSubmitting}
                                             value={formData.name}
                                             onChange={handleInputChange}
-                                            className="w-full bg-white/5 border border-white/10 rounded-lg py-2.5 px-4 text-white placeholder-stone-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm disabled:opacity-50"
+                                            className="w-full bg-white/5 border border-white/10 rounded-lg py-2.5 px-4 text-white placeholder-stone-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-base md:text-sm disabled:opacity-50"
                                             placeholder="Naam"
                                         />
                                     </div>
@@ -242,7 +242,7 @@ const Footer = () => {
                                             disabled={isSubmitting}
                                             value={formData.email}
                                             onChange={handleInputChange}
-                                            className="w-full bg-white/5 border border-white/10 rounded-lg py-2.5 px-4 text-white placeholder-stone-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm disabled:opacity-50"
+                                            className="w-full bg-white/5 border border-white/10 rounded-lg py-2.5 px-4 text-white placeholder-stone-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-base md:text-sm disabled:opacity-50"
                                             placeholder="Email"
                                         />
                                     </div>
@@ -258,7 +258,7 @@ const Footer = () => {
                                         disabled={isSubmitting}
                                         value={formData.phone}
                                         onChange={handleInputChange}
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg py-2.5 px-4 text-white placeholder-stone-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm disabled:opacity-50"
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg py-2.5 px-4 text-white placeholder-stone-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-base md:text-sm disabled:opacity-50"
                                         placeholder="Telefoonnummer"
                                     />
                                 </div>

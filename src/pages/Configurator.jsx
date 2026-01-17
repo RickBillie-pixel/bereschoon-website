@@ -5,13 +5,13 @@ import SEO from '../components/SEO';
 
 const Configurator = () => {
     return (
-        <PageTransition className="pt-20">
+        <PageTransition>
             <SEO
-                title="Offerte Aanvragen"
-                description="Stel eenvoudig uw eigen schoonmaakpakket samen en ontvang direct een indicatie of offerte."
+                title="Directe Prijsindicatie & Reinigingsadvies | AI Scan"
+                description="Upload een foto en ontvang direct een vrijblijvende prijsindicatie en advies voor het reinigen van uw oprit, terras of gevel."
                 breadcrumbs={[
                     { name: 'Home', url: 'https://bereschoon.nl' },
-                    { name: 'Offerte Aanvragen', url: 'https://bereschoon.nl/configurator' }
+                    { name: 'Prijsindicatie & Advies', url: 'https://bereschoon.nl/configurator' }
                 ]}
             />
             <ConfiguratorContact />

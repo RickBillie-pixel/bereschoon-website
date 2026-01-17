@@ -81,16 +81,18 @@ prefetchProducts();
 function ScrollToTop() {
   const { pathname } = useLocation();
 
-  useEffect(() => {
+  React.useLayoutEffect(() => {
     // Disable browser's default scroll restoration to handle it manually
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
     }
 
-    // Always scroll to top on route change, with a slight delay to ensure render is complete
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-    }, 10);
+    // Always scroll to top on route change immediately
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant'
+    });
   }, [pathname]);
 
   return null;

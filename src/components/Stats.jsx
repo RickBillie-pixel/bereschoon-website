@@ -41,14 +41,14 @@ const Stats = () => {
     const isInView = useInView(ref, { once: true, amount: 0.3 });
 
     return (
-        <section className="py-20 bg-secondary text-white relative overflow-hidden">
+        <section className="py-6 md:py-20 bg-secondary text-white relative overflow-hidden">
             {/* Subtle gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-b from-secondary via-secondary to-secondary/95" />
 
-            <div className="container mx-auto px-6 relative z-10" ref={ref}>
+            <div className="container mx-auto px-4 md:px-6 relative z-10" ref={ref}>
                 {/* Stats Grid */}
                 <motion.div
-                    className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8"
+                    className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-8"
                     variants={staggerContainer}
                     initial="hidden"
                     animate={isInView ? "visible" : "hidden"}
@@ -60,23 +60,23 @@ const Stats = () => {
                             className="relative group text-center"
                         >
                             <motion.div
-                                className="relative p-6 md:p-8"
+                                className="relative p-2 md:p-8"
                                 whileHover={{ y: -4 }}
                                 transition={{ duration: 0.3 }}
                             >
                                 {/* Icon */}
                                 <motion.div
-                                    className="mb-4 flex justify-center"
+                                    className="mb-2 md:mb-4 flex justify-center"
                                     whileHover={{ scale: 1.1 }}
                                     transition={{ duration: 0.3 }}
                                 >
-                                    <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-all duration-300">
-                                        <stat.icon size={22} className="text-primary" />
+                                    <div className="w-8 h-8 md:w-12 md:h-12 bg-white/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-all duration-300">
+                                        <stat.icon size={16} className="text-primary md:w-[22px] md:h-[22px]" />
                                     </div>
                                 </motion.div>
 
                                 {/* Animated Value */}
-                                <div className="text-4xl md:text-5xl font-bold mb-2 tracking-tight text-white">
+                                <div className="text-xl md:text-5xl font-bold mb-0.5 md:mb-2 tracking-tight text-white">
                                     <AnimatedCounter
                                         value={stat.value}
                                         suffix={stat.suffix}
@@ -86,7 +86,7 @@ const Stats = () => {
                                 </div>
 
                                 {/* Label */}
-                                <div className="text-sm md:text-base text-white/70 font-medium">
+                                <div className="text-xs md:text-base text-white/70 font-medium leading-tight">
                                     {stat.label}
                                 </div>
 

@@ -13,14 +13,14 @@ const Navbar = () => {
     const { user } = useAuth();
     const { items, openCart } = useCartStore();
     const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-    
+
     const isHome = location.pathname === '/';
     const isOverOns = location.pathname === '/over-ons';
     const isOpritTerrasTerrein = location.pathname === '/oprit-terras-terrein';
     const isGevelreiniging = location.pathname === '/gevelreiniging';
     const isOnkruidbeheersing = location.pathname === '/onkruidbeheersing';
     const isShopPage = location.pathname.startsWith('/winkel');
-    
+
     // Pages that should have white text when navbar is transparent (pages with hero sections)
     const hasHeroSection = isHome || isOverOns || isOpritTerrasTerrein || isGevelreiniging || isOnkruidbeheersing;
 
@@ -37,18 +37,23 @@ const Navbar = () => {
         const checkBanner = () => {
             setHasBanner(document.body.classList.contains('has-banner'));
         };
-        
+
         checkBanner();
-        
+
         // Watch for class changes
         const observer = new MutationObserver(checkBanner);
         observer.observe(document.body, {
             attributes: true,
             attributeFilter: ['class']
         });
-        
+
         return () => observer.disconnect();
     }, []);
+
+    // Close mobile menu on route change
+    useEffect(() => {
+        setIsMobileMenuOpen(false);
+    }, [location.pathname]);
 
     const navLinks = [
         { label: 'Over Ons', path: '/over-ons', isAnchor: false },
@@ -58,22 +63,23 @@ const Navbar = () => {
 
     return (
         <nav
-            className={`fixed left-0 right-0 z-50 transition-all duration-300 ${
-                hasBanner ? 'top-[44px]' : 'top-0'
-            } ${isScrolled
-                ? 'bg-white/80 backdrop-blur-md shadow-sm py-4'
-                : 'bg-transparent py-6'
+            className={`fixed left-0 right-0 z-50 transition-all duration-300 ${hasBanner ? 'top-[44px]' : 'top-0'
+                } ${isMobileMenuOpen
+                    ? 'bg-white py-4 shadow-sm'
+                    : isScrolled
+                        ? 'bg-white/80 backdrop-blur-md shadow-sm py-4'
+                        : 'bg-transparent py-6'
                 }`}
             style={hasBanner ? { marginTop: 0 } : {}}
         >
             <div className="container mx-auto px-6 flex items-center justify-between">
-                <Link 
-                    to="/" 
+                <Link
+                    to="/"
                     className="flex items-center relative w-20 h-20"
                 >
-                    <img 
-                        src="/images/logo.png" 
-                        alt="Bereschoon" 
+                    <img
+                        src="/images/logo.png"
+                        alt="Bereschoon"
                         className="w-full h-full object-contain"
                     />
                 </Link>
@@ -136,27 +142,25 @@ const Navbar = () => {
                         <div className="flex items-center gap-2 ml-2 pl-4 border-l border-gray-200">
                             {/* Notification Bell - only for logged in users */}
                             {user && <NotificationBell />}
-                            
+
                             {/* Account Link */}
                             <Link
                                 to="/winkel/account"
-                                className={`p-2 rounded-full transition-colors ${
-                                    isScrolled ? 'text-gray-600 hover:text-primary hover:bg-gray-100' : 
-                                    hasHeroSection ? 'text-white/80 hover:text-white hover:bg-white/10' : 
-                                    'text-gray-600 hover:text-primary hover:bg-gray-100'
-                                }`}
+                                className={`p-2 rounded-full transition-colors ${isScrolled ? 'text-gray-600 hover:text-primary hover:bg-gray-100' :
+                                    hasHeroSection ? 'text-white/80 hover:text-white hover:bg-white/10' :
+                                        'text-gray-600 hover:text-primary hover:bg-gray-100'
+                                    }`}
                             >
                                 <User className="w-5 h-5" />
                             </Link>
-                            
+
                             {/* Cart Button */}
                             <button
                                 onClick={openCart}
-                                className={`p-2 rounded-full transition-colors relative ${
-                                    isScrolled ? 'text-gray-600 hover:text-primary hover:bg-gray-100' : 
-                                    hasHeroSection ? 'text-white/80 hover:text-white hover:bg-white/10' : 
-                                    'text-gray-600 hover:text-primary hover:bg-gray-100'
-                                }`}
+                                className={`p-2 rounded-full transition-colors relative ${isScrolled ? 'text-gray-600 hover:text-primary hover:bg-gray-100' :
+                                    hasHeroSection ? 'text-white/80 hover:text-white hover:bg-white/10' :
+                                        'text-gray-600 hover:text-primary hover:bg-gray-100'
+                                    }`}
                             >
                                 <ShoppingBag className="w-5 h-5" />
                                 {itemCount > 0 && (

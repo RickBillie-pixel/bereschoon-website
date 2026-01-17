@@ -8,14 +8,14 @@ import { CurvedDivider } from './effects/WaveDivider';
 
 // Custom Pressure Wash Icon - hogedruk spuit
 const PressureWashIcon = ({ size = 24, className = '' }) => (
-    <svg 
-        width={size} 
-        height={size} 
-        viewBox="0 0 24 24" 
-        fill="none" 
-        stroke="currentColor" 
-        strokeWidth="2" 
-        strokeLinecap="round" 
+    <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
         strokeLinejoin="round"
         className={className}
     >
@@ -77,12 +77,12 @@ const PressureWashEffect = ({ isActive }) => {
                         className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/60 to-white/0"
                         initial={{ x: '-100%' }}
                         animate={{ x: '200%' }}
-                        transition={{ 
-                            duration: 0.8, 
+                        transition={{
+                            duration: 0.8,
                             ease: "easeOut",
                         }}
                     />
-                    
+
                     {/* Spray particles */}
                     {[...Array(12)].map((_, i) => (
                         <motion.div
@@ -92,12 +92,12 @@ const PressureWashEffect = ({ isActive }) => {
                                 left: 0,
                                 top: `${15 + (i % 4) * 20}%`,
                             }}
-                            initial={{ 
-                                x: 0, 
+                            initial={{
+                                x: 0,
                                 opacity: 0,
                                 scale: 0.5,
                             }}
-                            animate={{ 
+                            animate={{
                                 x: [0, 150 + Math.random() * 200],
                                 y: [0, (Math.random() - 0.5) * 40],
                                 opacity: [0, 1, 0],
@@ -120,8 +120,8 @@ const PressureWashEffect = ({ isActive }) => {
                         }}
                         initial={{ x: '-100%' }}
                         animate={{ x: '1500%' }}
-                        transition={{ 
-                            duration: 0.7, 
+                        transition={{
+                            duration: 0.7,
                             ease: "easeOut",
                         }}
                     />
@@ -153,16 +153,16 @@ const ServiceCard = ({ service, index }) => {
                 setIsButtonHovered(false);
             }}
         >
-            <motion.div 
+            <motion.div
                 className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 h-full"
-                whileHover={{ 
+                whileHover={{
                     y: -8,
                     boxShadow: '0 25px 50px -12px rgba(132, 204, 22, 0.15)',
                 }}
                 transition={{ duration: 0.3 }}
             >
                 {/* Image Container */}
-                <div className="h-64 overflow-hidden relative">
+                <div className="h-48 md:h-64 overflow-hidden relative">
                     <motion.img
                         src={service.image}
                         alt={service.title}
@@ -170,15 +170,15 @@ const ServiceCard = ({ service, index }) => {
                         animate={{ scale: isHovered ? 1.05 : 1 }}
                         transition={{ duration: 0.6 }}
                     />
-                    
+
                     {/* Overlay gradient */}
-                    <motion.div 
+                    <motion.div
                         className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"
                         animate={{ opacity: isHovered ? 0.8 : 0.6 }}
                     />
 
                     {/* Icon badge */}
-                    <motion.div 
+                    <motion.div
                         className="absolute top-4 right-4 w-11 h-11 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg"
                         whileHover={{ scale: 1.1 }}
                         transition={{ duration: 0.3 }}
@@ -191,9 +191,9 @@ const ServiceCard = ({ service, index }) => {
                 </div>
 
                 {/* Content */}
-                <div className="p-8">
-                    <motion.h3 
-                        className="text-xl font-bold mb-3 group-hover:text-primary transition-colors"
+                <div className="p-5 md:p-8">
+                    <motion.h3
+                        className="text-lg md:text-xl font-bold mb-3 group-hover:text-primary transition-colors"
                     >
                         {service.title}
                     </motion.h3>
@@ -204,7 +204,7 @@ const ServiceCard = ({ service, index }) => {
                     {/* Features list */}
                     <ul className="space-y-2 mb-6">
                         {service.features.map((feature, idx) => (
-                            <li 
+                            <li
                                 key={idx}
                                 className="flex items-center text-sm text-muted-foreground"
                             >
@@ -216,14 +216,14 @@ const ServiceCard = ({ service, index }) => {
 
                     {/* Meer info button with spray trigger */}
                     <Link to={service.route}>
-                        <motion.div 
+                        <motion.div
                             className="text-primary font-semibold flex items-center relative overflow-hidden px-3 py-1.5 -ml-3 rounded-lg hover:bg-primary/5 transition-colors"
                             onMouseEnter={handleButtonHover}
                             onMouseLeave={() => setIsButtonHovered(false)}
                             whileHover={{ x: 3 }}
                         >
                             <PressureWashIcon size={16} className="mr-2 opacity-70" />
-                            Meer info 
+                            Meer info
                             <ArrowRight size={16} className="ml-1 group-hover/btn:translate-x-1 transition-transform" />
                         </motion.div>
                     </Link>
@@ -235,49 +235,49 @@ const ServiceCard = ({ service, index }) => {
 
 const Services = () => {
     const ref = useRef(null);
-    const isInView = useInView(ref, viewportSettings);
+    const isInView = useInView(ref, { once: true, amount: 0.1 });
 
     return (
-        <section id="diensten" className="py-24 bg-white text-foreground relative overflow-hidden">
+        <section id="diensten" className="py-12 md:py-24 bg-white text-foreground relative overflow-hidden">
             {/* Curved divider at top - from brown Stats section */}
             <CurvedDivider position="top" color="fill-secondary" height={60} />
 
             <div className="container mx-auto px-6 relative z-10" ref={ref}>
                 {/* Header */}
-                <motion.div 
-                    className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16"
+                <motion.div
+                    className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-16 mt-4 md:mt-0"
                     initial={{ opacity: 0, y: 20 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6 }}
                 >
-                    <motion.div 
+                    <motion.div
                         className="max-w-2xl"
                         variants={fadeInLeft}
                         initial="hidden"
                         animate={isInView ? "visible" : "hidden"}
                     >
-                        <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+                        <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-6">
                             Onze Expertise
                         </h2>
                         <p className="text-lg text-muted-foreground leading-relaxed">
-                            Wij combineren vakmanschap met de nieuwste technologieën voor een ongeëvenaard resultaat. 
+                            Wij combineren vakmanschap met de nieuwste technologieën voor een ongeëvenaard resultaat.
                             <span className="text-primary font-medium"> Bereschoon gegarandeerd.</span>
                         </p>
                     </motion.div>
 
                     <Link to="/contact">
-                        <motion.div 
+                        <motion.div
                             className="hidden md:flex items-center text-lg font-medium hover:text-primary transition-colors mt-6 md:mt-0 group"
                             whileHover={{ x: 5 }}
                         >
-                            Offerte aanvragen 
+                            Offerte aanvragen
                             <ArrowUpRight className="ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" size={20} />
                         </motion.div>
                     </Link>
                 </motion.div>
 
                 {/* Services Grid */}
-                <motion.div 
+                <motion.div
                     className="grid grid-cols-1 md:grid-cols-3 gap-8"
                     variants={staggerContainer}
                     initial="hidden"
@@ -289,7 +289,7 @@ const Services = () => {
                 </motion.div>
 
                 {/* Mobile CTA */}
-                <motion.div 
+                <motion.div
                     className="mt-12 text-center md:hidden"
                     initial={{ opacity: 0 }}
                     animate={isInView ? { opacity: 1 } : {}}

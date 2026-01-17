@@ -19,7 +19,7 @@ const OpritTerrasTerrein = () => {
         url: '/oprit-terras-terrein',
         image: '/images/images_optimized/IMG_3251.webp'
     });
-    
+
     // Combineer alle schemas
     const combinedSchema = [faqSchema, serviceSchema].filter(Boolean);
 
@@ -40,6 +40,7 @@ const OpritTerrasTerrein = () => {
                 title="Oprit, Terras & Terreinreiniging"
                 subtitle="Professionele Reiniging"
                 description="Verwijder hardnekkig vuil, groene aanslag en onkruid van uw oprit, terras of terrein. Met onze geavanceerde technieken herstellen wij de oorspronkelijke uitstraling."
+                mobileDescription="Professionele reiniging van uw oprit & terras. Direct resultaat."
                 image="/images/images_optimized/IMG_3251.webp"
                 features={[
                     'Hogedruk reiniging',

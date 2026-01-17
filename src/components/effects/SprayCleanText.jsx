@@ -6,9 +6,9 @@ import { motion, AnimatePresence } from 'framer-motion';
  * Een tekst component met een hogedruk spray schoonmaak effect bij hover
  * De tekst wordt letter voor letter "schoongespoten" met waterdruppels
  */
-const SprayCleanText = ({ 
-    children, 
-    className = '', 
+const SprayCleanText = ({
+    children,
+    className = '',
     dirtyColor = '#78716c', // stone-500
     cleanColor = '#ffffff',
 }) => {
@@ -22,6 +22,21 @@ const SprayCleanText = ({
     // Convert children to string and split into characters
     const text = typeof children === 'string' ? children : String(children);
     const characters = text.split('');
+
+    // Check for mobile on mount and auto-clean if needed
+    useEffect(() => {
+        const checkMobile = () => {
+            if (window.innerWidth < 768) {
+                setCleanedProgress(1);
+            }
+        };
+
+        checkMobile();
+
+        // Optional: listen for resize if we want it to be responsive
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     // Track mouse position for spray effect
     const handleMouseMove = useCallback((e) => {
@@ -76,14 +91,14 @@ const SprayCleanText = ({
         <motion.span
             ref={containerRef}
             className={`relative inline-block cursor-pointer select-none ${className}`}
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
+            onMouseEnter={() => window.innerWidth >= 768 && setIsHovering(true)}
+            onMouseLeave={() => window.innerWidth >= 768 && setIsHovering(false)}
             onMouseMove={handleMouseMove}
         >
             {/* Individual characters */}
             {characters.map((char, index) => {
                 const isCleaned = getCharacterCleanState(index);
-                
+
                 return (
                     <motion.span
                         key={index}
@@ -93,14 +108,14 @@ const SprayCleanText = ({
                             WebkitBackgroundClip: 'text',
                         }}
                         animate={{
-                            backgroundImage: isCleaned 
+                            backgroundImage: isCleaned
                                 ? `linear-gradient(to bottom, ${cleanColor}, ${cleanColor})`
                                 : `linear-gradient(to bottom, ${dirtyColor}, ${dirtyColor})`,
-                            filter: isCleaned 
-                                ? 'blur(0px) brightness(1.15) drop-shadow(0 0 8px rgba(255,255,255,0.3))' 
+                            filter: isCleaned
+                                ? 'blur(0px) brightness(1.15) drop-shadow(0 0 8px rgba(255,255,255,0.3))'
                                 : 'blur(0.4px) brightness(0.8)',
                         }}
-                        transition={{ 
+                        transition={{
                             duration: 0.25,
                             ease: "easeOut"
                         }}

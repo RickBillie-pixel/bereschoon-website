@@ -7,13 +7,13 @@ const FAQItem = ({ icon: Icon, question, answer, isOpen, toggle }) => {
         <div className={`border rounded-xl overflow-hidden shadow-sm transition-all duration-300 ${isOpen ? 'border-primary ring-1 ring-primary/20 shadow-md bg-white' : 'border-gray-200 hover:border-primary/50 bg-white'}`}>
             <button
                 onClick={toggle}
-                className="w-full flex items-center justify-between p-6 text-left focus:outline-none gap-4"
+                className="w-full flex items-center justify-between p-4 md:p-6 text-left focus:outline-none gap-3 md:gap-4"
             >
                 <div className="flex items-center gap-4">
                     <div className={`p-2 rounded-lg transition-colors ${isOpen ? 'bg-primary text-white' : 'bg-primary/5 text-primary'}`}>
-                        <Icon size={24} />
+                        <Icon size={20} className="md:w-6 md:h-6" />
                     </div>
-                    <span className={`font-bold text-lg ${isOpen ? 'text-primary' : 'text-foreground'}`}>{question}</span>
+                    <span className={`font-bold text-base md:text-lg ${isOpen ? 'text-primary' : 'text-foreground'}`}>{question}</span>
                 </div>
                 {isOpen ? (
                     <ChevronUp className="text-primary flex-shrink-0" size={24} />
@@ -29,7 +29,7 @@ const FAQItem = ({ icon: Icon, question, answer, isOpen, toggle }) => {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <div className="px-6 pb-6 pt-0 text-muted-foreground leading-relaxed">
+                        <div className="px-4 pb-4 pt-0 md:px-6 md:pb-6 text-muted-foreground leading-relaxed text-sm md:text-base">
                             {answer}
                         </div>
                     </motion.div>
@@ -70,6 +70,9 @@ const FAQSection = () => {
     };
 
     const handleMouseEnter = (index) => {
+        // Disable hover on mobile (screens < 768px) to prevent sticky states/glitches
+        if (window.innerWidth < 768) return;
+
         // Clear any existing timeout to prevent bouncing
         if (window.faqTimeout) clearTimeout(window.faqTimeout);
 
@@ -80,9 +83,9 @@ const FAQSection = () => {
     };
 
     return (
-        <section className="py-24 bg-gray-50">
+        <section className="py-12 md:py-24 bg-gray-50">
             <div className="container mx-auto px-6 max-w-5xl">
-                <div className="text-center mb-16">
+                <div className="text-center mb-10 md:mb-16">
                     <span className="text-primary font-bold tracking-wider text-sm uppercase mb-2 block">
                         Veelgestelde Vragen
                     </span>
@@ -91,7 +94,7 @@ const FAQSection = () => {
                     </h2>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid md:grid-cols-2 gap-3 md:gap-6">
                     {questions.map((item, index) => (
                         <div
                             key={index}
