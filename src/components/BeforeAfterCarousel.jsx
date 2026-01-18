@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider';
 import { Sparkles, ArrowRight } from 'lucide-react';
 
-const BeforeAfterCarousel = () => {
+const BeforeAfterCarousel = ({ basePath = "/images/configurator-slides" }) => {
     const scrollContainerRef = useRef(null);
     const [isPaused, setIsPaused] = useState(false);
 
@@ -19,10 +19,10 @@ const BeforeAfterCarousel = () => {
             });
         };
 
-        const findImageWithExtensions = async (basePath) => {
+        const findImageWithExtensions = async (pathWithoutExtension) => {
             const extensions = ['jpg', 'jpeg', 'png', 'webp'];
             for (const ext of extensions) {
-                const url = `${basePath}.${ext}`;
+                const url = `${pathWithoutExtension}.${ext}`;
                 const result = await checkImageExists(url);
                 if (result) return result;
             }
@@ -34,8 +34,10 @@ const BeforeAfterCarousel = () => {
             const maxSlides = 10;
 
             for (let i = 1; i <= maxSlides; i++) {
-                const beforeUrl = await findImageWithExtensions(`/images/slides/${i}-before`);
-                const afterUrl = await findImageWithExtensions(`/images/slides/${i}-after`);
+                // Ensure basePath doesn't end with a slash to avoid double slashes if user provided one
+                const cleanBasePath = basePath.replace(/\/$/, '');
+                const beforeUrl = await findImageWithExtensions(`${cleanBasePath}/${i}-before`);
+                const afterUrl = await findImageWithExtensions(`${cleanBasePath}/${i}-after`);
 
                 if (beforeUrl && afterUrl) {
                     newItems.push({
@@ -62,7 +64,7 @@ const BeforeAfterCarousel = () => {
         };
 
         loadImages();
-    }, []);
+    }, [basePath]);
 
     useEffect(() => {
         const scrollContainer = scrollContainerRef.current;

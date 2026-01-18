@@ -410,7 +410,7 @@ const ConfiguratorContact = () => {
             </section>
 
             {/* 3. Infinite Before/After Carousel */}
-            <BeforeAfterCarousel />
+            <BeforeAfterCarousel basePath="/images/configurator-slides" />
 
             {/* 4. CTA Section */}
             <div className="relative z-10 bg-white">

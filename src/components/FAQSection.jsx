@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { ChevronDown, ChevronUp, HelpCircle, Clock, ShieldCheck, Home, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -40,7 +40,8 @@ const FAQItem = ({ icon: Icon, question, answer, isOpen, toggle }) => {
 };
 
 const FAQSection = ({ questions, title, subtitle, className = "bg-gray-50" }) => {
-    const [openIndex, setOpenIndex] = useState(0);
+    const [openIndex, setOpenIndex] = useState(null);
+    const timeoutRef = useRef(null);
 
     const defaultQuestions = [
         {
@@ -76,10 +77,10 @@ const FAQSection = ({ questions, title, subtitle, className = "bg-gray-50" }) =>
         if (window.innerWidth < 768) return;
 
         // Clear any existing timeout to prevent bouncing
-        if (window.faqTimeout) clearTimeout(window.faqTimeout);
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
         // Add a small delay so scrolling doesn't trigger it immediately
-        window.faqTimeout = setTimeout(() => {
+        timeoutRef.current = setTimeout(() => {
             setOpenIndex(index);
         }, 150);
     };
@@ -103,7 +104,7 @@ const FAQSection = ({ questions, title, subtitle, className = "bg-gray-50" }) =>
                             className="h-full"
                             onMouseEnter={() => handleMouseEnter(index)}
                             onMouseLeave={() => {
-                                if (window.faqTimeout) clearTimeout(window.faqTimeout);
+                                if (timeoutRef.current) clearTimeout(timeoutRef.current);
                             }}
                         >
                             <FAQItem
