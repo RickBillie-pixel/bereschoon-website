@@ -6,14 +6,63 @@ const BeforeAfterCarousel = () => {
     const scrollContainerRef = useRef(null);
     const [isPaused, setIsPaused] = useState(false);
 
-    // Mock data for 10 carousel items
-    // In a real scenario, these could be props or fetched
-    const items = Array.from({ length: 10 }).map((_, i) => ({
-        id: i,
-        before: "https://images.unsplash.com/photo-1632759957731-50227bea70f2?q=80&w=600&auto=format&fit=crop", // Dirty pavement example
-        after: "https://images.unsplash.com/photo-1632759952046-654b0eb13303?q=80&w=600&auto=format&fit=crop",  // Clean pavement example
-        label: i % 2 === 0 ? "Terras Reiniging" : "Oprit Renovatie"
-    }));
+
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        const checkImageExists = (url) => {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(url);
+                img.onerror = () => resolve(null);
+                img.src = url;
+            });
+        };
+
+        const findImageWithExtensions = async (basePath) => {
+            const extensions = ['jpg', 'jpeg', 'png', 'webp'];
+            for (const ext of extensions) {
+                const url = `${basePath}.${ext}`;
+                const result = await checkImageExists(url);
+                if (result) return result;
+            }
+            return null;
+        };
+
+        const loadImages = async () => {
+            const newItems = [];
+            const maxSlides = 10;
+
+            for (let i = 1; i <= maxSlides; i++) {
+                const beforeUrl = await findImageWithExtensions(`/images/slides/${i}-before`);
+                const afterUrl = await findImageWithExtensions(`/images/slides/${i}-after`);
+
+                if (beforeUrl && afterUrl) {
+                    newItems.push({
+                        id: i,
+                        before: beforeUrl,
+                        after: afterUrl,
+                        // Label logic could be more sophisticated or just generic
+                        label: `Project ${i}`
+                    });
+                }
+            }
+
+            if (newItems.length > 0) {
+                setItems(newItems);
+            } else {
+                // Fallback mock data if no local images found
+                setItems(Array.from({ length: 10 }).map((_, i) => ({
+                    id: i,
+                    before: "https://images.unsplash.com/photo-1632759957731-50227bea70f2?q=80&w=600&auto=format&fit=crop",
+                    after: "https://images.unsplash.com/photo-1632759952046-654b0eb13303?q=80&w=600&auto=format&fit=crop",
+                    label: i % 2 === 0 ? "Terras Reiniging" : "Oprit Renovatie"
+                })));
+            }
+        };
+
+        loadImages();
+    }, []);
 
     useEffect(() => {
         const scrollContainer = scrollContainerRef.current;

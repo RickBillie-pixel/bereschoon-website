@@ -8,6 +8,48 @@ import { heroStagger, heroText } from '../utils/animations';
 import { formatReviewCount } from '../utils/formatters';
 import { GOOGLE_REVIEW_DATA } from '../data/reviews';
 
+const ReviewQuotes = ({ reviewData }) => {
+    const [index, setIndex] = useState(0);
+    const quotes = reviewData.quotes || (reviewData.quote ? [reviewData.quote] : []);
+    const mobileQuotes = reviewData.mobileQuotes || quotes;
+
+    useEffect(() => {
+        // Use the longer array length to determine interval, or just max?
+        // Actually, just standard single interval logic is fine if we cycle properly.
+        const maxLen = Math.max(quotes.length, mobileQuotes.length);
+        if (maxLen > 1) {
+            const interval = setInterval(() => {
+                setIndex((prev) => (prev + 1) % maxLen);
+            }, 7000);
+            return () => clearInterval(interval);
+        }
+    }, [quotes, mobileQuotes]);
+
+    if (quotes.length === 0) return null;
+
+    // Safe indexing
+    const quote = quotes[index % quotes.length];
+    const mobileQuote = mobileQuotes[index % mobileQuotes.length];
+
+    return (
+        <div className="h-6 flex items-center justify-center overflow-hidden relative w-[98vw] md:w-[40rem] lg:w-[50rem] px-1">
+            <AnimatePresence mode="wait">
+                <motion.p
+                    key={index}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.5 }}
+                    className="text-gray-200 italic text-center absolute w-full whitespace-nowrap truncate"
+                >
+                    <span className="md:hidden text-xs">"{mobileQuote}"</span>
+                    <span className="hidden md:block text-sm">"{quote}"</span>
+                </motion.p>
+            </AnimatePresence>
+        </div>
+    );
+};
+
 const ServiceHero = ({
     title,
     subtitle,
@@ -26,19 +68,58 @@ const ServiceHero = ({
 }) => {
     const { scrollY } = useScroll();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [validImages, setValidImages] = useState([]);
+
+    // Validate images on mount
+    useEffect(() => {
+        // If no images array, just use single image or nothing
+        if (!images || images.length === 0) {
+            setValidImages(image ? [image] : []);
+            return;
+        }
+
+        // Must always include the first image (assumed to be the main fallback)
+        // or we check all of them. Let's check all, but ensure at least 'image' is fallback.
+        const checkImages = async () => {
+            const candidates = images.length > 0 ? images : (image ? [image] : []);
+            const valid = [];
+
+            const promises = candidates.map(src => {
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.src = src;
+                    img.onload = () => resolve(src);
+                    img.onerror = () => resolve(null);
+                });
+            });
+
+            const results = await Promise.all(promises);
+            const verified = results.filter(src => src !== null);
+
+            // If nothing verified, but we had a fallback 'image' prop, maybe try that?
+            // But assume verified list is what we use.
+            setValidImages(verified.length > 0 ? verified : [image]);
+        };
+
+        checkImages();
+    }, [images, image]);
 
     // Slideshow timer
     useEffect(() => {
-        if (images && images.length > 1) {
+        if (validImages.length > 1) {
             const interval = setInterval(() => {
-                setCurrentImageIndex((prev) => (prev + 1) % images.length);
+                setCurrentImageIndex((prev) => (prev + 1) % validImages.length);
             }, 10000); // 10 seconds
             return () => clearInterval(interval);
+        } else {
+            // Reset to 0 if we went from many to 1 (unlikely but safe)
+            setCurrentImageIndex(0);
         }
-    }, [images]);
+    }, [validImages]);
 
     // Determine current image source
-    const currentSrc = (images && images.length > 0) ? images[currentImageIndex] : image;
+    // Use validImages if ready, otherwise fallback to prop 'image' (for initial render)
+    const currentSrc = validImages.length > 0 ? validImages[currentImageIndex] : image;
 
     // Parallax effect
     const backgroundY = useTransform(scrollY, [0, 500], [0, 150]);
@@ -156,9 +237,7 @@ const ServiceHero = ({
                                     <span className="text-white font-bold ml-2">{reviewData.score}/5</span>
                                     <span className="text-gray-300 ml-1 text-sm">({formatReviewCount(reviewData.count)} Google reviews)</span>
                                 </div>
-                                {reviewData.quote && (
-                                    <p className="text-gray-200 italic text-sm">"{reviewData.quote}"</p>
-                                )}
+                                <ReviewQuotes reviewData={reviewData} />
                             </a>
                         ) : (
                             <>
@@ -171,9 +250,7 @@ const ServiceHero = ({
                                     <span className="text-white font-bold ml-2">{reviewData.score}/5</span>
                                     <span className="text-gray-300 ml-1 text-sm">({formatReviewCount(reviewData.count)} Google reviews)</span>
                                 </div>
-                                {reviewData.quote && (
-                                    <p className="text-gray-200 italic text-sm">"{reviewData.quote}"</p>
-                                )}
+                                <ReviewQuotes reviewData={reviewData} />
                             </>
                         )}
                     </motion.div>

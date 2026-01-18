@@ -18,7 +18,7 @@ const Onkruidbeheersing = () => {
         description: 'Professionele onkruidbeheersing voor uw tuin en bestrating. Milieuvriendelijk en effectief onderhoud het hele jaar door.',
         type: 'Onkruidbeheersing',
         url: '/onkruidbeheersing',
-        image: '/images/images_optimized/onkruid tuin voor.webp'
+        image: '/images/hero/onkruid/hero-onkruid1.webp'
     });
 
     // Combineer alle schemas
@@ -54,7 +54,20 @@ const Onkruidbeheersing = () => {
                 ctaText="Direct Offerte Aanvragen"
                 reviewData={{
                     ...GOOGLE_REVIEW_DATA,
-                    quote: "Geen omkijken meer naar onkruid, heerlijk! – Familie de Vries"
+                    quotes: [
+                        "Eindelijk van dat onkruid af zonder gif te hoeven spuiten. Veilige oplossing voor onze hond! – Karin",
+                        "De tuin ziet er het hele jaar door verzorgd uit dankzij het onderhoudsplan. – Dennis",
+                        "Geen rugpijn meer van het onkruid wieden, Bereschoon regelt het perfect. – Henk",
+                        "Heel tevreden over de borstelmethode, werkt veel beter dan branden of schoffelen. – Tom",
+                        "Professioneel bedrijf, komen altijd netjes op tijd en werken hard. – Bart"
+                    ],
+                    mobileQuotes: [
+                        "Onkruidvrij zonder gif, veilig voor de hond! – Karin",
+                        "Tuin ziet er hele jaar verzorgd uit. – Dennis",
+                        "Geen rugpijn meer, Bereschoon regelt het. – Henk",
+                        "Borstelmethode werkt beter dan branden. – Tom",
+                        "Komen altijd netjes op tijd. – Bart"
+                    ]
                 }}
                 companyLogos={[
                     "/images/company-logos/logo1.webp",

@@ -38,7 +38,7 @@ const services = [
     {
         title: 'Oprit, Terras & Terrein',
         description: 'Verwijder hardnekkig vuil, groene aanslag en onkruid. Langdurig resultaat gegarandeerd.',
-        image: '/images/images_optimized/IMG_3251.webp',
+        image: '/images/hero/oprit/hero-oprit1.webp',
         icon: Grid3X3,
         features: ['Hogedruk reiniging', 'Voegen herstellen', 'Beschermlaag'],
         route: '/oprit-terras-terrein',
@@ -54,7 +54,7 @@ const services = [
     {
         title: 'Onkruidbeheersing',
         description: 'Houd uw tuin en terras onkruidvrij met onze flexibele onderhoudsplannen.',
-        image: '/images/images_optimized/onkruid tuin voor.webp',
+        image: '/images/hero/onkruid/hero-onkruid1.webp',
         icon: Home,
         features: ['Flexibele plannen', 'Preventief onderhoud', 'Milieuvriendelijk'],
         route: '/onkruidbeheersing',

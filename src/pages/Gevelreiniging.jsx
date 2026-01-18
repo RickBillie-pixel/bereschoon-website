@@ -54,7 +54,20 @@ const Gevelreiniging = () => {
                 ctaText="Direct Offerte Aanvragen"
                 reviewData={{
                     ...GOOGLE_REVIEW_DATA,
-                    quote: "Gevel ziet er weer als nieuw uit, heel blij mee! – Peter uit Helmond"
+                    quotes: [
+                        "Onze gevel ziet er weer als nieuw uit, geen spoor van mos meer te bekennen! – Jeroen",
+                        "Eerlijk advies en harde werkers. Het verschil voor en na is echt bizar groot. – Mark",
+                        "Alles netjes afgeplakt en schoon achtergelaten. Zeer tevreden over de service. – Sarah",
+                        "De voegen zijn ook meteen hersteld, ons huis heeft weer uitstraling. – Erik",
+                        "Snel geschakeld en komen de afspraken na. Zeker een aanrader! – Peter"
+                    ],
+                    mobileQuotes: [
+                        "Gevel ziet er weer als nieuw uit! – Jeroen",
+                        "Verschil voor en na is bizar groot. – Mark",
+                        "Schoon achtergelaten, zeer tevreden. – Sarah",
+                        "Huis heeft weer uitstraling. – Erik",
+                        "Snel geschakeld en afspraak nagekomen. – Peter"
+                    ]
                 }}
                 companyLogos={[
                     "/images/company-logos/logo1.webp",

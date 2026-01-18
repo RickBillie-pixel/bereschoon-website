@@ -126,7 +126,7 @@ const Navbar = () => {
                         to="/configurator"
                         className={`text-sm font-medium transition-colors relative group ${isScrolled ? 'text-muted-foreground hover:text-foreground' : hasHeroSection ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'}`}
                     >
-                        AI Oprit Scan
+                        Oprit Scan
                         <span className="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
                     </Link>
 
@@ -239,7 +239,7 @@ const Navbar = () => {
                             }
                         })}
                         <Link to="/configurator" className="text-base font-medium text-muted-foreground hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
-                            AI Oprit Scan
+                            Oprit Scan
                         </Link>
                         <Link to="/contact" className="bg-primary text-white px-5 py-3 rounded-full text-base font-medium w-full text-center" onClick={() => setIsMobileMenuOpen(false)}>
                             Offerte Aanvragen

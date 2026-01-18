@@ -81,7 +81,20 @@ const Projecten = () => {
                 ctaHref="/contact"
                 reviewData={{
                     ...GOOGLE_REVIEW_DATA,
-                    quote: "Afspraken nagekomen en top resultaat! – Familie de Vries"
+                    quotes: [
+                        "Duidelijke communicatie en strakke planning, erg fijn zakendoen. – Koen",
+                        "Ze hebben ons bedrijfspand volledig gereinigd, ziet er weer representatief uit. – Martijn",
+                        "Flexibel in de uitvoering en weinig overlast voor onze klanten. – Anouk",
+                        "Kwaliteit staat duidelijk voorop bij deze mannen. Zeker voor herhaling vatbaar. – Frank",
+                        "Eindelijk een partij die afspraken écht nakomt. Top resultaat. – Sandra"
+                    ],
+                    mobileQuotes: [
+                        "Duidelijke communicatie, fijn zakendoen. – Koen",
+                        "Bedrijfspand ziet er weer representatief uit. – Martijn",
+                        "Flexibel en weinig overlast. – Anouk",
+                        "Kwaliteit staat voorop. – Frank",
+                        "Eindelijk een partij die afspraken nakomt. – Sandra"
+                    ]
                 }}
                 companyLogos={[
                     "/images/company-logos/logo1.webp",

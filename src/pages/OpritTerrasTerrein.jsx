@@ -18,7 +18,7 @@ const OpritTerrasTerrein = () => {
         description: 'Professionele reiniging van uw oprit, terras en terrein. Verwijderen van onkruid, groene aanslag en vuil met hogedruk technieken.',
         type: 'Oprit en Terras Reiniging',
         url: '/oprit-terras-terrein',
-        image: '/images/images_optimized/IMG_3251.webp'
+        image: '/images/hero/oprit/hero-oprit1.webp'
     });
 
     // Combineer alle schemas
@@ -54,7 +54,20 @@ const OpritTerrasTerrein = () => {
                 ctaText="Direct Offerte Aanvragen"
                 reviewData={{
                     ...GOOGLE_REVIEW_DATA,
-                    quote: "Super strak resultaat, terras ziet er als nieuw uit! – Jan uit Breda"
+                    quotes: [
+                        "Onze oprit lag vol met onkruid en gladde groene aanslag, nu is alles weer veilig en schoon. – Bas",
+                        "Jarenlang zelf staan schrobben, maar dit resultaat haal ik nooit met mijn eigen hogedrukspuit. – Rob",
+                        "Keurig werk geleverd. Terras is opnieuw ingevoegd en ligt er superstrak bij. – Sanne",
+                        "Fijne communicatie en komen de afspraken na. De oprit lijkt wel opnieuw aangelegd! – Willem",
+                        "Geen gladde tegels meer in de tuin, een veilig idee met kleinkinderen over de vloer. – Ans"
+                    ],
+                    mobileQuotes: [
+                        "Oprit is weer veilig en schoon. – Bas",
+                        "Dit resultaat haal ik zelf nooit. – Rob",
+                        "Terras is opnieuw ingevoegd en strak. – Sanne",
+                        "Oprit lijkt wel opnieuw aangelegd! – Willem",
+                        "Geen gladde tegels meer, veilig idee. – Ans"
+                    ]
                 }}
                 companyLogos={[
                     "/images/company-logos/logo1.webp",

@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   ShoppingBag, Check, Minus, Plus,
   ChevronLeft, ChevronRight, Play, Truck, Shield, Clock,
-  Loader2, ArrowLeft, Star, FileText, AlertTriangle, Droplets, ShieldCheck, User, MessageSquare
+  Loader2, ArrowLeft, Star, FileText, AlertTriangle, Droplets, ShieldCheck, User, MessageSquare,
+  ClipboardList, FlaskConical, ShieldAlert
 } from 'lucide-react';
 import PageTransition from '../../components/PageTransition';
 import { useCartStore } from '../../stores/cartStore';
@@ -130,11 +131,19 @@ const ProductDetail = () => {
     ? Math.round(((product.compare_price - product.price) / product.compare_price) * 100)
     : null;
 
-  // Calculate average rating
+  // Calculate average rating and distribution
   const reviews = product?.reviews || [];
   const averageRating = reviews.length > 0
     ? reviews.reduce((acc, review) => acc + (review.rating || 0), 0) / reviews.length
     : 0;
+
+  const ratingDistribution = [5, 4, 3, 2, 1].map(stars => ({
+    stars,
+    count: reviews.filter(r => r.rating === stars).length,
+    percentage: reviews.length > 0
+      ? (reviews.filter(r => r.rating === stars).length / reviews.length) * 100
+      : 0
+  }));
 
   if (loading) {
     return (
@@ -460,12 +469,14 @@ const ProductDetail = () => {
 
           {/* Product Information Tabs */}
           <div className="mt-16 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="flex flex-wrap border-b border-gray-100">
+            {/* Tabs Navigation */}
+            <div className="flex overflow-x-auto scrollbar-hide border-b border-gray-100">
               <button
                 onClick={() => setActiveTab('description')}
-                className={`px-6 py-4 text-sm font-bold uppercase tracking-wide transition-colors relative ${activeTab === 'description' ? 'text-primary' : 'text-gray-500 hover:text-gray-700'
+                className={`flex items-center gap-2 px-6 py-5 text-sm font-bold uppercase tracking-wide transition-colors relative whitespace-nowrap ${activeTab === 'description' ? 'text-primary' : 'text-gray-500 hover:text-gray-700'
                   }`}
               >
+                <FileText className="w-5 h-5" />
                 Omschrijving
                 {activeTab === 'description' && (
                   <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
@@ -474,9 +485,10 @@ const ProductDetail = () => {
 
               <button
                 onClick={() => setActiveTab('usage')}
-                className={`px-6 py-4 text-sm font-bold uppercase tracking-wide transition-colors relative ${activeTab === 'usage' ? 'text-primary' : 'text-gray-500 hover:text-gray-700'
+                className={`flex items-center gap-2 px-6 py-5 text-sm font-bold uppercase tracking-wide transition-colors relative whitespace-nowrap ${activeTab === 'usage' ? 'text-primary' : 'text-gray-500 hover:text-gray-700'
                   }`}
               >
+                <ClipboardList className="w-5 h-5" />
                 Gebruik
                 {activeTab === 'usage' && (
                   <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
@@ -485,9 +497,10 @@ const ProductDetail = () => {
 
               <button
                 onClick={() => setActiveTab('dilution')}
-                className={`px-6 py-4 text-sm font-bold uppercase tracking-wide transition-colors relative ${activeTab === 'dilution' ? 'text-primary' : 'text-gray-500 hover:text-gray-700'
+                className={`flex items-center gap-2 px-6 py-5 text-sm font-bold uppercase tracking-wide transition-colors relative whitespace-nowrap ${activeTab === 'dilution' ? 'text-primary' : 'text-gray-500 hover:text-gray-700'
                   }`}
               >
+                <FlaskConical className="w-5 h-5" />
                 Verdunningen
                 {activeTab === 'dilution' && (
                   <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
@@ -496,9 +509,10 @@ const ProductDetail = () => {
 
               <button
                 onClick={() => setActiveTab('safety')}
-                className={`px-6 py-4 text-sm font-bold uppercase tracking-wide transition-colors relative ${activeTab === 'safety' ? 'text-primary' : 'text-gray-500 hover:text-gray-700'
+                className={`flex items-center gap-2 px-6 py-5 text-sm font-bold uppercase tracking-wide transition-colors relative whitespace-nowrap ${activeTab === 'safety' ? 'text-primary' : 'text-gray-500 hover:text-gray-700'
                   }`}
               >
+                <ShieldAlert className="w-5 h-5" />
                 Veiligheid
                 {activeTab === 'safety' && (
                   <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
@@ -506,7 +520,8 @@ const ProductDetail = () => {
               </button>
             </div>
 
-            <div className="p-8 min-h-[300px]">
+            {/* Tab Content */}
+            <div className="p-8 md:p-10 min-h-[300px]">
               <AnimatePresence mode="wait">
                 {activeTab === 'description' && (
                   <motion.div
@@ -514,9 +529,9 @@ const ProductDetail = () => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="prose prose-lg max-w-none text-gray-600"
+                    className="prose prose-lg max-w-none text-gray-700"
                   >
-                    <div className="whitespace-pre-line">{product.description || 'Geen beschrijving beschikbaar.'}</div>
+                    <div className="whitespace-pre-line leading-relaxed">{product.description || 'Geen beschrijving beschikbaar.'}</div>
                   </motion.div>
                 )}
 
@@ -526,15 +541,15 @@ const ProductDetail = () => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="prose prose-lg max-w-none text-gray-600"
+                    className="prose prose-lg max-w-none text-gray-700"
                   >
                     <div className="flex items-start gap-4 mb-6">
-                      <div className="p-3 bg-blue-50 rounded-lg text-blue-600">
-                        <FileText className="w-6 h-6" />
+                      <div className="p-3 bg-blue-50 rounded-xl text-blue-600 flex-shrink-0">
+                        <ClipboardList className="w-6 h-6" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Gebruiksaanwijzing</h3>
-                        <div className="whitespace-pre-line">{product.usage_instructions || 'Nog geen gebruiksaanwijzing beschikbaar.'}</div>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2 mt-0">Gebruiksaanwijzing</h3>
+                        <div className="whitespace-pre-line leading-relaxed">{product.usage_instructions || 'Nog geen gebruiksaanwijzing beschikbaar.'}</div>
                       </div>
                     </div>
                   </motion.div>
@@ -546,15 +561,15 @@ const ProductDetail = () => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="prose prose-lg max-w-none text-gray-600"
+                    className="prose prose-lg max-w-none text-gray-700"
                   >
                     <div className="flex items-start gap-4 mb-6">
-                      <div className="p-3 bg-cyan-50 rounded-lg text-cyan-600">
-                        <Droplets className="w-6 h-6" />
+                      <div className="p-3 bg-cyan-50 rounded-xl text-cyan-600 flex-shrink-0">
+                        <FlaskConical className="w-6 h-6" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Verdunningen</h3>
-                        <div className="whitespace-pre-line">{product.dilution_instructions || 'Nog geen verdunningsinformatie beschikbaar.'}</div>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2 mt-0">Verdunningen</h3>
+                        <div className="whitespace-pre-line leading-relaxed">{product.dilution_instructions || 'Nog geen verdunningsinformatie beschikbaar.'}</div>
                       </div>
                     </div>
                   </motion.div>
@@ -569,24 +584,24 @@ const ProductDetail = () => {
                     className="space-y-8"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="p-3 bg-yellow-50 rounded-lg text-yellow-600">
-                        <AlertTriangle className="w-6 h-6" />
+                      <div className="p-3 bg-yellow-50 rounded-xl text-yellow-600 flex-shrink-0">
+                        <ShieldAlert className="w-6 h-6" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Belangrijke Informatie</h3>
-                        <div className="whitespace-pre-line text-gray-600">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2 mt-0">Belangrijke Informatie</h3>
+                        <div className="whitespace-pre-line text-gray-700 leading-relaxed">
                           {product.warnings || 'Geen belangrijke waarschuwingen.'}
                         </div>
                       </div>
                     </div>
 
                     <div className="flex items-start gap-4">
-                      <div className="p-3 bg-red-50 rounded-lg text-red-600">
+                      <div className="p-3 bg-red-50 rounded-xl text-red-600 flex-shrink-0">
                         <ShieldCheck className="w-6 h-6" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Veiligheidsblad & Ingrediënten</h3>
-                        <div className="whitespace-pre-line text-gray-600">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2 mt-0">Veiligheidsblad & Ingrediënten</h3>
+                        <div className="whitespace-pre-line text-gray-700 leading-relaxed">
                           {product.safety_info || 'Geen veiligheidsinformatie beschikbaar.'}
                         </div>
                       </div>
@@ -598,129 +613,168 @@ const ProductDetail = () => {
           </div>
 
           {/* Reviews Section */}
-          <div className="mt-16 mb-12">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900">Reviews</h2>
-                <div className="flex items-center gap-2 mt-2">
-                  <div className="flex text-yellow-400">
-                    {[1, 2, 3, 4, 5].map(i => (
-                      <Star
-                        key={i}
-                        size={20}
-                        fill={i <= Math.round(averageRating) ? "currentColor" : "none"}
-                        className={i <= Math.round(averageRating) ? "text-yellow-400" : "text-gray-300"}
-                      />
-                    ))}
-                  </div>
-                  <span className="text-gray-500 font-medium">
-                    {averageRating.toFixed(1)} ({reviews.length} reviews)
-                  </span>
-                </div>
-              </div>
+          <div className="mt-20 mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8">Klantbeoordelingen</h2>
 
-              {user ? (
-                <button
-                  onClick={() => setShowReviewForm(!showReviewForm)}
-                  className="bg-primary text-white px-6 py-2 rounded-xl font-bold hover:bg-primary/90 transition-colors"
-                >
-                  {showReviewForm ? 'Annuleren' : 'Schrijf een review'}
-                </button>
-              ) : (
-                <Link
-                  to="/winkel/account"
-                  className="border-2 border-primary text-primary px-6 py-2 rounded-xl font-bold hover:bg-blue-50 transition-colors"
-                >
-                  Login om te reviewen
-                </Link>
-              )}
-            </div>
-
-            {/* Review Form */}
-            <AnimatePresence>
-              {showReviewForm && (
-                <motion.form
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  onSubmit={handleSubmitReview}
-                  className="bg-gray-50 p-6 rounded-2xl mb-8 overflow-hidden"
-                >
-                  <h3 className="text-lg font-bold mb-4">Deel jouw ervaring</h3>
-
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Beoordeling</label>
-                    <div className="flex gap-2">
-                      {[1, 2, 3, 4, 5].map(i => (
-                        <button
-                          key={i}
-                          type="button"
-                          onClick={() => setReviewRating(i)}
-                          className="focus:outline-none"
-                        >
+            <div className="grid lg:grid-cols-12 gap-12">
+              {/* Review Summary - Left Side / Top */}
+              <div className="lg:col-span-4 space-y-8">
+                <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="text-5xl font-bold text-gray-900">{averageRating.toFixed(1)}</div>
+                    <div className="flex flex-col">
+                      <div className="flex text-yellow-400 mb-1">
+                        {[1, 2, 3, 4, 5].map(i => (
                           <Star
-                            size={28}
-                            fill={i <= reviewRating ? "currentColor" : "none"}
-                            className={`transition-colors ${i <= reviewRating ? "text-yellow-400" : "text-gray-300"}`}
+                            key={i}
+                            size={20}
+                            fill={i <= Math.round(averageRating) ? "currentColor" : "none"}
+                            className={i <= Math.round(averageRating) ? "text-yellow-400" : "text-gray-200"}
                           />
-                        </button>
-                      ))}
+                        ))}
+                      </div>
+                      <span className="text-gray-500 text-sm">{reviews.length} reviews</span>
                     </div>
                   </div>
 
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Titel</label>
-                    <input
-                      type="text"
-                      required
-                      value={reviewTitle}
-                      onChange={(e) => setReviewTitle(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
-                      placeholder="Samenvatting van je ervaring"
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Review</label>
-                    <textarea
-                      required
-                      rows={4}
-                      value={reviewContent}
-                      onChange={(e) => setReviewContent(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-none"
-                      placeholder="Vertel ons wat je ervan vindt..."
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={submittingReview}
-                    className="bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-primary/90 transition-colors disabled:opacity-50"
-                  >
-                    {submittingReview ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Plaats Review'}
-                  </button>
-                </motion.form>
-              )}
-            </AnimatePresence>
-
-            {/* Reviews List */}
-            <div className="space-y-6">
-              {reviews.length === 0 ? (
-                <div className="text-center py-12 bg-gray-50 rounded-2xl">
-                  <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500 font-medium">Nog geen reviews. Wees de eerste!</p>
-                </div>
-              ) : (
-                reviews.map((review) => (
-                  <div key={review.id} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                          <User className="w-6 h-6 text-gray-400" />
+                  <div className="space-y-3">
+                    {ratingDistribution.map((item) => (
+                      <div key={item.stars} className="flex items-center gap-3">
+                        <span className="w-3 font-medium text-gray-600">{item.stars}</span>
+                        <Star size={14} className="text-gray-400" />
+                        <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-yellow-400 rounded-full"
+                            style={{ width: `${item.percentage}%` }}
+                          />
                         </div>
-                        <div>
-                          <p className="font-bold text-gray-900">{review.user_name}</p>
-                          <p className="text-xs text-gray-500">
+                        <span className="w-8 text-right text-xs text-gray-400">{Math.round(item.percentage)}%</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-8 pt-8 border-t border-gray-100">
+                    <h4 className="font-bold text-gray-900 mb-2">Deel uw mening</h4>
+                    <p className="text-gray-500 text-sm mb-4">Heeft u dit product gebruikt? Deel uw ervaring met anderen.</p>
+                    {user ? (
+                      <button
+                        onClick={() => setShowReviewForm(!showReviewForm)}
+                        className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary/90 transition-colors"
+                      >
+                        {showReviewForm ? 'Annuleren' : 'Schrijf een review'}
+                      </button>
+                    ) : (
+                      <Link
+                        to="/winkel/account"
+                        className="flex items-center justify-center w-full border-2 border-primary text-primary py-3 rounded-xl font-bold hover:bg-blue-50 transition-colors"
+                      >
+                        Login om te reviewen
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Reviews List & Form - Right Side */}
+              <div className="lg:col-span-8">
+                {/* Review Form */}
+                <AnimatePresence>
+                  {showReviewForm && (
+                    <motion.form
+                      initial={{ height: 0, opacity: 0, marginBottom: 0 }}
+                      animate={{ height: 'auto', opacity: 1, marginBottom: 32 }}
+                      exit={{ height: 0, opacity: 0, marginBottom: 0 }}
+                      onSubmit={handleSubmitReview}
+                      className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+                    >
+                      <h3 className="text-xl font-bold mb-6">Schrijf een review</h3>
+
+                      <div className="mb-6">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Uw beoordeling</label>
+                        <div className="flex gap-2">
+                          {[1, 2, 3, 4, 5].map(i => (
+                            <button
+                              key={i}
+                              type="button"
+                              onClick={() => setReviewRating(i)}
+                              className="focus:outline-none transition-transform hover:scale-110 active:scale-95"
+                            >
+                              <Star
+                                size={32}
+                                fill={i <= reviewRating ? "currentColor" : "none"}
+                                className={`transition-colors ${i <= reviewRating ? "text-yellow-400" : "text-gray-300"}`}
+                              />
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Titel van uw review</label>
+                        <input
+                          type="text"
+                          required
+                          value={reviewTitle}
+                          onChange={(e) => setReviewTitle(e.target.value)}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-shadow"
+                          placeholder="Bijv. Geweldig product!"
+                        />
+                      </div>
+
+                      <div className="mb-6">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Uw ervaring</label>
+                        <textarea
+                          required
+                          rows={4}
+                          value={reviewContent}
+                          onChange={(e) => setReviewContent(e.target.value)}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-none transition-shadow"
+                          placeholder="Vertel ons wat u van het product vindt en waarom..."
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={submittingReview}
+                        className="bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center gap-2"
+                      >
+                        {submittingReview ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Plaats Review'}
+                      </button>
+                    </motion.form>
+                  )}
+                </AnimatePresence>
+
+                {/* Reviews List */}
+                <div className="space-y-6">
+                  {reviews.length === 0 ? (
+                    <div className="text-center py-16 bg-white rounded-2xl border border-gray-100 border-dashed">
+                      <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                      <p className="text-gray-500 font-medium">Nog geen reviews voor dit product.</p>
+                      <p className="text-sm text-gray-400">Wees de eerste die een ervaring deelt!</p>
+                    </div>
+                  ) : (
+                    reviews.map((review) => (
+                      <div key={review.id} className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm transition-shadow hover:shadow-md">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                              <User className="w-6 h-6 text-primary" />
+                            </div>
+                            <div>
+                              <p className="font-bold text-gray-900">{review.user_name}</p>
+                              <div className="flex text-yellow-400 mt-1">
+                                {[1, 2, 3, 4, 5].map(i => (
+                                  <Star
+                                    key={i}
+                                    size={14}
+                                    fill={i <= review.rating ? "currentColor" : "none"}
+                                    className={i <= review.rating ? "text-yellow-400" : "text-gray-200"}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                          <p className="text-sm text-gray-400">
                             {new Date(review.date).toLocaleDateString('nl-NL', {
                               year: 'numeric',
                               month: 'long',
@@ -728,41 +782,33 @@ const ProductDetail = () => {
                             })}
                           </p>
                         </div>
-                      </div>
-                      <div className="flex text-yellow-400">
-                        {[1, 2, 3, 4, 5].map(i => (
-                          <Star
-                            key={i}
-                            size={16}
-                            fill={i <= review.rating ? "currentColor" : "none"}
-                            className={i <= review.rating ? "text-yellow-400" : "text-gray-200"}
-                          />
-                        ))}
-                      </div>
-                    </div>
 
-                    <h4 className="font-bold text-gray-900 mb-2">{review.title}</h4>
-                    <p className="text-gray-600 leading-relaxed mb-4">{review.content}</p>
+                        <h4 className="font-bold text-gray-900 mb-2 text-lg">{review.title}</h4>
+                        <p className="text-gray-600 leading-relaxed mb-6">{review.content}</p>
 
-                    {/* Replies */}
-                    {review.replies && review.replies.length > 0 && (
-                      <div className="ml-8 mt-4 pl-4 border-l-2 border-gray-100 space-y-4">
-                        {review.replies.map((reply, index) => (
-                          <div key={index} className="bg-gray-50 p-4 rounded-xl">
-                            <div className="flex items-center gap-2 mb-2">
-                              <span className="font-bold text-sm text-primary">Bereschoon</span>
-                              <span className="text-xs text-gray-400">
-                                {new Date(reply.date).toLocaleDateString('nl-NL')}
-                              </span>
-                            </div>
-                            <p className="text-sm text-gray-600">{reply.content}</p>
+                        {/* Replies */}
+                        {review.replies && review.replies.length > 0 && (
+                          <div className="ml-8 mt-6 pl-6 border-l-2 border-primary/20 space-y-4">
+                            {review.replies.map((reply, index) => (
+                              <div key={index} className="bg-gray-50 p-5 rounded-r-xl rounded-b-xl rounded-tl-none">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <span className="font-bold text-sm text-primary flex items-center gap-1">
+                                    <ShieldCheck size={14} /> Bereschoon
+                                  </span>
+                                  <span className="text-xs text-gray-400">
+                                    • {new Date(reply.date).toLocaleDateString('nl-NL')}
+                                  </span>
+                                </div>
+                                <p className="text-sm text-gray-600 italic">"{reply.content}"</p>
+                              </div>
+                            ))}
                           </div>
-                        ))}
+                        )}
                       </div>
-                    )}
-                  </div>
-                ))
-              )}
+                    ))
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -14,6 +14,7 @@ const heroImages = [
 
 const Hero = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [validImages, setValidImages] = useState([]);
     const { scrollY } = useScroll();
 
     // Parallax effect
@@ -21,16 +22,38 @@ const Hero = () => {
     const contentY = useTransform(scrollY, [0, 500], [0, 50]);
     const opacity = useTransform(scrollY, [0, 400], [1, 0]);
 
+    // Validate images on mount
     useEffect(() => {
-        if (heroImages.length > 1) {
-            const interval = setInterval(() => {
-                setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
-            }, 10000);
-            return () => clearInterval(interval);
-        }
+        const checkImages = async () => {
+            const promises = heroImages.map(src => {
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.src = src;
+                    img.onload = () => resolve(src);
+                    img.onerror = () => resolve(null);
+                });
+            });
+
+            const results = await Promise.all(promises);
+            const verified = results.filter(src => src !== null);
+            setValidImages(verified);
+        };
+
+        checkImages();
     }, []);
 
-    const currentSrc = heroImages[currentImageIndex];
+    useEffect(() => {
+        if (validImages.length > 1) {
+            const interval = setInterval(() => {
+                setCurrentImageIndex((prev) => (prev + 1) % validImages.length);
+            }, 10000);
+            return () => clearInterval(interval);
+        } else {
+            setCurrentImageIndex(0);
+        }
+    }, [validImages]);
+
+    const currentSrc = validImages.length > 0 ? validImages[currentImageIndex] : heroImages[0];
 
     return (
         <section className="relative h-screen flex items-center justify-center overflow-hidden bg-secondary">
@@ -123,9 +146,9 @@ const Hero = () => {
             </motion.div>
 
             {/* Image Dots */}
-            {heroImages.length > 1 && (
+            {validImages.length > 1 && (
                 <div className="absolute bottom-36 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-                    {heroImages.map((_, index) => (
+                    {validImages.map((_, index) => (
                         <button
                             key={index}
                             onClick={() => {
