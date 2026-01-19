@@ -171,7 +171,7 @@ const ServiceHero = ({
 
             {/* Main Content */}
             <motion.div
-                className={`relative z-20 text-center px-6 ${maxWidth} mx-auto flex-grow flex flex-col justify-center md:justify-start md:pt-48 pb-24 md:pb-0`}
+                className={`relative z-20 text-center px-4 md:px-6 ${maxWidth} w-full mx-auto flex-grow flex flex-col items-center justify-center md:justify-start md:pt-48 pb-24 md:pb-0`}
                 style={{ y: contentY, opacity }}
                 variants={heroStagger}
                 initial="hidden"
@@ -192,24 +192,24 @@ const ServiceHero = ({
                 {/* Main Title */}
                 <motion.h1
                     variants={heroText}
-                    className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 tracking-tighter text-white drop-shadow-lg"
+                    className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 tracking-tighter text-white drop-shadow-lg text-center w-full md:whitespace-nowrap"
                 >
                     {title}
                 </motion.h1>
 
                 {/* Description */}
-                <motion.div variants={heroText} className="mb-6 md:mb-8 min-h-[5.5rem] flex items-end justify-center">
+                <motion.div variants={heroText} className="mb-6 md:mb-8 min-h-[5.5rem] flex items-center justify-center w-full">
                     {mobileDescription ? (
                         <>
-                            <p className="md:hidden text-lg text-white max-w-xl mx-auto leading-relaxed drop-shadow-md font-medium">
+                            <p className="md:hidden text-lg text-white max-w-xl mx-auto leading-relaxed drop-shadow-md font-medium text-center">
                                 {mobileDescription}
                             </p>
-                            <p className="hidden md:block text-xl text-white max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium">
+                            <p className="hidden md:block text-xl text-white max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium text-center">
                                 {description}
                             </p>
                         </>
                     ) : (
-                        <p className="text-lg md:text-xl text-white max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium">
+                        <p className="text-lg md:text-xl text-white max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium text-center">
                             {description}
                         </p>
                     )}
@@ -219,7 +219,7 @@ const ServiceHero = ({
                 {reviewData && (
                     <motion.div
                         variants={heroText}
-                        className="flex flex-col items-center mb-8"
+                        className="flex flex-col items-center mb-8 w-full"
                     >
                         {reviewData.link ? (
                             <a
@@ -277,7 +277,7 @@ const ServiceHero = ({
                 {/* CTA Button */}
                 <motion.div
                     variants={heroText}
-                    className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
+                    className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 w-full"
                 >
                     <motion.button
                         onClick={handleCtaClick}

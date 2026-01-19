@@ -39,6 +39,16 @@ const STATIC_ROUTES = [
     { path: '/gevelreiniging', priority: '0.9', changefreq: 'monthly' },
     { path: '/onkruidbeheersing', priority: '0.9', changefreq: 'monthly' },
     { path: '/winkel', priority: '0.8', changefreq: 'daily' },
+    // Lokale reinigingsdiensten pagina's
+    { path: '/reinigingsdiensten-helmond', priority: '0.9', changefreq: 'monthly' },
+    { path: '/reinigingsdiensten-eindhoven', priority: '0.9', changefreq: 'monthly' },
+    { path: '/reinigingsdiensten-den-bosch', priority: '0.9', changefreq: 'monthly' },
+    { path: '/reinigingsdiensten-gemert', priority: '0.8', changefreq: 'monthly' },
+    { path: '/reinigingsdiensten-mierlo', priority: '0.8', changefreq: 'monthly' },
+    // Juridische pagina's
+    { path: '/algemene-voorwaarden', priority: '0.3', changefreq: 'yearly' },
+    { path: '/privacy', priority: '0.3', changefreq: 'yearly' },
+    { path: '/verzend-retourbeleid', priority: '0.3', changefreq: 'yearly' },
 ];
 
 // Routes die NIET in sitemap mogen (noindex)
@@ -75,8 +85,8 @@ function generateUrlEntry(loc, lastmod, changefreq, priority) {
  */
 function generatePagesSitemap() {
     const today = formatDate(new Date());
-    
-    const urls = STATIC_ROUTES.map(route => 
+
+    const urls = STATIC_ROUTES.map(route =>
         generateUrlEntry(
             `${BASE_URL}${route.path}`,
             today,
@@ -110,7 +120,7 @@ async function generateProductsSitemap() {
                 console.error('Supabase error:', error.message);
             } else if (products && products.length > 0) {
                 productUrls = products.map(product => {
-                    const lastmod = product.updated_at 
+                    const lastmod = product.updated_at
                         ? formatDate(new Date(product.updated_at))
                         : today;
                     return generateUrlEntry(
@@ -147,7 +157,7 @@ ${productUrls.join('\n')}
  */
 function generateSitemapIndex() {
     const today = formatDate(new Date());
-    
+
     return `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
@@ -188,15 +198,15 @@ async function main() {
 
     // Genereer sitemaps
     console.log('Genereren sitemaps...');
-    
+
     // Pages sitemap
     const pagesSitemap = generatePagesSitemap();
     writeSitemap('sitemap-pages.xml', pagesSitemap);
-    
+
     // Products sitemap
     const productsSitemap = await generateProductsSitemap();
     writeSitemap('sitemap-products.xml', productsSitemap);
-    
+
     // Index sitemap
     const indexSitemap = generateSitemapIndex();
     writeSitemap('sitemap.xml', indexSitemap);

@@ -73,7 +73,6 @@ const Navbar = () => {
     }, [location.pathname]);
 
     const navLinks = [
-        { label: 'Home', path: '/', isAnchor: false },
         { label: 'Over Ons', path: '/over-ons', isAnchor: false },
         { label: 'Projecten', path: '/projecten', isAnchor: false },
         { label: 'Winkel', path: '/winkel', isAnchor: false },

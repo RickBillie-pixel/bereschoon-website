@@ -13,7 +13,7 @@ import { GOOGLE_REVIEW_DATA } from '../../data/reviews';
 const ReinigingsdienstenEindhoven = () => {
     const location = 'Eindhoven';
     const locationSlug = 'eindhoven';
-    
+
     const faqSchema = generateFAQSchema(SERVICE_FAQ_DATA);
     const serviceSchema = generateServiceSchema({
         name: `Reinigingsdiensten ${location}`,
@@ -41,11 +41,12 @@ const ReinigingsdienstenEindhoven = () => {
                     { name: `Reinigingsdiensten ${location}`, url: `https://bereschoon.nl/reinigingsdiensten-${locationSlug}` }
                 ]}
             />
-            
+
             <ServiceHero
-                title={`Reinigingsdiensten in ${location}`}
+                title="Reinigingsdiensten Eindhoven"
                 subtitle="Professionele Buitenreiniging"
-                description={`Bereschoon is uw specialist voor professionele reinigingsdiensten in ${location} en omgeving. Wij reinigen uw oprit, terras, gevel en terrein met geavanceerde technieken. Vraag vandaag nog een vrijblijvende offerte aan.`}
+                description="Bereschoon is uw specialist voor professionele reinigingsdiensten in Eindhoven en omgeving. Wij reinigen uw oprit, terras, gevel en terrein met geavanceerde technieken. Vraag vandaag nog een vrijblijvende offerte aan."
+                mobileDescription="Professioneel reinigen van oprit, terras en gevel in Eindhoven. Vraag vandaag nog een vrijblijvende offerte aan."
                 images={[
                     '/images/hero/oprit/hero-oprit1.webp',
                     '/images/hero/gevel/hero-gevel1.webp',
@@ -60,8 +61,8 @@ const ReinigingsdienstenEindhoven = () => {
                 reviewData={{
                     ...GOOGLE_REVIEW_DATA,
                     quotes: [
-                        `Professionele service in ${location}, onze oprit ziet er weer als nieuw uit! – Jan`,
-                        `Snelle reactie en keurig werk geleverd. Aanrader voor iedereen in ${location}. – Maria`,
+                        `Professionele service in Eindhoven, onze oprit ziet er weer als nieuw uit! – Jan`,
+                        `Snelle reactie en keurig werk geleverd. Aanrader voor iedereen in Eindhoven. – Maria`,
                         `Gevelreiniging gedaan, verschil is enorm. Zeer tevreden! – Piet`,
                         `Onkruidbeheersing werkt perfect, tuin blijft netjes. – Lisa`,
                         `Betrouwbaar bedrijf, komen altijd op tijd. – Tom`
@@ -165,14 +166,14 @@ const ReinigingsdienstenEindhoven = () => {
             </div>
 
             {/* FAQ Section */}
-            <FAQSection 
+            <FAQSection
                 title={`Veelgestelde Vragen over Reinigingsdiensten in ${location}`}
                 subtitle="Klantenservice"
             />
 
             {/* Final CTA */}
             <div className="relative z-10 bg-white">
-                <CallToAction 
+                <CallToAction
                     title={`Ook uw buitenruimte in ${location} laten reinigen?`}
                     highlight="Vraag vandaag nog een offerte aan!"
                     description={`Bereschoon staat klaar om uw oprit, terras of gevel in ${location} weer te laten stralen.`}

@@ -142,7 +142,7 @@ const ConfiguratorContact = () => {
                     initial="hidden"
                     animate="visible"
                 >
-                    <motion.h1 variants={heroText} className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 md:mb-8 tracking-tighter text-white drop-shadow-lg max-w-5xl mx-auto leading-relaxed pb-3">
+                    <motion.h1 variants={heroText} className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 md:mb-8 tracking-tighter text-white drop-shadow-lg max-w-5xl mx-auto leading-tight md:leading-relaxed pb-3">
                         <span className="block md:whitespace-nowrap">Ontvang direct een indicatie</span>
                         <span className="block md:whitespace-nowrap text-transparent bg-clip-text bg-gradient-to-r from-primary to-white">van uw reiniging</span>
                     </motion.h1>
