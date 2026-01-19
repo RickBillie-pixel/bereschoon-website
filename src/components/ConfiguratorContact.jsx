@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Upload, Camera, Check, ArrowRight, Loader2, Mail, User, Phone, MapPin, Sparkles } from 'lucide-react';
-import BeforeAfterCarousel from './BeforeAfterCarousel';
 import CallToAction from './CallToAction';
 import { heroStagger, heroText } from '../utils/animations';
 
@@ -143,12 +142,7 @@ const ConfiguratorContact = () => {
                     initial="hidden"
                     animate="visible"
                 >
-                    <motion.div variants={heroText} className="inline-flex items-center space-x-2 border border-white/20 bg-white/5 backdrop-blur-sm px-4 py-1.5 md:px-5 md:py-2 rounded-full mb-6 md:mb-8 hover:border-primary/50 transition-colors">
-                        <Sparkles size={16} className="text-primary" />
-                        <span className="text-xs md:text-sm font-medium tracking-wide text-gray-200">Reinigingsscan & Advies</span>
-                    </motion.div>
-
-                    <motion.h1 variants={heroText} className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 md:mb-8 tracking-tighter text-white drop-shadow-lg max-w-5xl mx-auto leading-tight">
+                    <motion.h1 variants={heroText} className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 md:mb-8 tracking-tighter text-white drop-shadow-lg max-w-5xl mx-auto leading-relaxed pb-3">
                         <span className="block md:whitespace-nowrap">Ontvang direct een indicatie</span>
                         <span className="block md:whitespace-nowrap text-transparent bg-clip-text bg-gradient-to-r from-primary to-white">van uw reiniging</span>
                     </motion.h1>
@@ -198,14 +192,26 @@ const ConfiguratorContact = () => {
                                 </div>
                             </>
                         ) : (
-                            <div className="relative z-10 p-8">
-                                <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse ring-4 ring-white/5">
-                                    <Camera size={32} className="text-white/70" />
+                            <div className="relative w-full h-full">
+                                {/* Achtergrondfoto oprit */}
+                                <img
+                                    src="/images/hero/projecten/hero-projecten1.webp"
+                                    alt="Voorbeeld van gereinigde oprit"
+                                    className="absolute inset-0 w-full h-full object-cover opacity-90"
+                                />
+                                {/* Donkere overlay voor leesbaarheid */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/30" />
+
+                                {/* Content bovenop afbeelding */}
+                                <div className="relative z-10 p-8 flex flex-col items-center justify-center h-full text-center">
+                                    <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6 ring-4 ring-white/10">
+                                        <Camera size={32} className="text-white/80" />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-white mb-2">Upload een foto van uw oprit of terras</h3>
+                                    <p className="text-sm text-stone-200 max-w-xs mx-auto">
+                                        Wij analyseren het oppervlak en berekenen direct een indicatie en passend reinigingsadvies.
+                                    </p>
                                 </div>
-                                <h3 className="text-xl font-bold text-white mb-2">Upload uw foto</h3>
-                                <p className="text-sm text-stone-400 max-w-[200px] mx-auto">
-                                    Wij analyseren het oppervlak en berekenen de beste behandeling.
-                                </p>
                             </div>
                         )}
 
@@ -409,10 +415,7 @@ const ConfiguratorContact = () => {
                 </div>
             </section>
 
-            {/* 3. Infinite Before/After Carousel */}
-            <BeforeAfterCarousel basePath="/images/configurator-slides" />
-
-            {/* 4. CTA Section */}
+            {/* 3. CTA Section */}
             <div className="relative z-10 bg-white">
                 <CallToAction
                     title="Benieuwd naar"

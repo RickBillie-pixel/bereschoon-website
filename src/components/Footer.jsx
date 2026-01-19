@@ -289,9 +289,9 @@ const Footer = () => {
                             &copy; {new Date().getFullYear()} Bereschoon. Alle rechten voorbehouden.
                         </p>
                         <div className="flex flex-wrap justify-center gap-6 text-xs text-stone-300">
-                            <a href="#" className="hover:text-white transition-colors">Privacybeleid</a>
-                            <a href="#" className="hover:text-white transition-colors">Algemene Voorwaarden</a>
-                            <a href="#" className="hover:text-white transition-colors">Cookiebeleid</a>
+                            <Link to="/privacy" className="hover:text-white transition-colors">Privacy- en Cookiebeleid</Link>
+                            <Link to="/algemene-voorwaarden" className="hover:text-white transition-colors">Algemene Voorwaarden</Link>
+                            <Link to="/verzend-retourbeleid" className="hover:text-white transition-colors">Verzend- en Retourbeleid</Link>
                         </div>
                     </div>
                     <div className="text-center">

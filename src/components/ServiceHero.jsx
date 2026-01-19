@@ -201,15 +201,15 @@ const ServiceHero = ({
                 <motion.div variants={heroText} className="mb-6 md:mb-8 min-h-[5.5rem] flex items-end justify-center">
                     {mobileDescription ? (
                         <>
-                            <p className="md:hidden text-lg text-gray-100 max-w-xl mx-auto leading-relaxed drop-shadow-md font-medium">
+                            <p className="md:hidden text-lg text-white max-w-xl mx-auto leading-relaxed drop-shadow-md font-medium">
                                 {mobileDescription}
                             </p>
-                            <p className="hidden md:block text-xl text-gray-100 max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium">
+                            <p className="hidden md:block text-xl text-white max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium">
                                 {description}
                             </p>
                         </>
                     ) : (
-                        <p className="text-lg md:text-xl text-gray-100 max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium">
+                        <p className="text-lg md:text-xl text-white max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium">
                             {description}
                         </p>
                     )}

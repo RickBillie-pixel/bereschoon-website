@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Sparkles, Shield, Clock, Award, CheckCircle2 } from 'lucide-react';
+import { Shield, Clock, Award, CheckCircle2 } from 'lucide-react';
 import ContactForm from './ContactForm';
 
 const HomeQuoteSection = () => {
@@ -91,17 +91,6 @@ const HomeQuoteSection = () => {
                         transition={{ duration: 0.8, ease: "easeOut" }}
                         className="text-white"
                     >
-                        {/* Badge */}
-                        <motion.div
-                            className="inline-flex items-center gap-2 bg-primary/20 backdrop-blur-sm border border-primary/30 rounded-full px-4 py-2 mb-6"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={isInView ? { opacity: 1, y: 0 } : {}}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                        >
-                            <Sparkles className="text-primary" size={16} />
-                            <span className="text-sm font-medium text-primary">Offerte op maat</span>
-                        </motion.div>
-
                         {/* Heading */}
                         <motion.h2
                             className="text-3xl md:text-5xl font-bold mb-6 leading-tight"

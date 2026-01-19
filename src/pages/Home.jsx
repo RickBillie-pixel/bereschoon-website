@@ -6,7 +6,7 @@ import HomeQuoteSection from '../components/HomeQuoteSection';
 import PageTransition from '../components/PageTransition';
 import SEO from '../components/SEO';
 
-const Home = () => {
+const Home = ({ heroReady = true }) => {
     return (
         <PageTransition>
             <SEO
@@ -15,7 +15,7 @@ const Home = () => {
                 keywords="reiniging, oprit reiniging, gevelreiniging, terras reiniging, softwash, hoge druk reiniging"
                 canonicalUrl="https://bereschoon.nl"
             />
-            <Hero />
+            <Hero ready={heroReady} />
             <Stats />
             <Services />
             <HomeQuoteSection />

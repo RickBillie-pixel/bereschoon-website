@@ -1,13 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, HelpCircle, Clock, ShieldCheck, Home, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const FAQItem = ({ icon: Icon, question, answer, isOpen, toggle }) => {
     return (
-        <div className={`border rounded-xl overflow-hidden shadow-sm transition-all duration-300 ${isOpen ? 'border-primary ring-1 ring-primary/20 shadow-md bg-white' : 'border-gray-200 hover:border-primary/50 bg-white'}`}>
+        <div className={`h-full flex flex-col border rounded-xl overflow-hidden shadow-sm transition-all duration-300 ${isOpen ? 'border-primary ring-1 ring-primary/20 shadow-md bg-white' : 'border-gray-200 hover:border-primary/50 bg-white'}`}>
             <button
                 onClick={toggle}
-                className="w-full flex items-center justify-between p-4 md:p-6 text-left focus:outline-none gap-3 md:gap-4"
+                className="w-full flex items-center justify-between p-4 md:p-6 text-left focus:outline-none gap-3 md:gap-4 min-h-[80px] md:min-h-[96px]"
             >
                 <div className="flex items-center gap-4">
                     <div className={`p-2 rounded-lg transition-colors ${isOpen ? 'bg-primary text-white' : 'bg-primary/5 text-primary'}`}>
@@ -41,7 +41,6 @@ const FAQItem = ({ icon: Icon, question, answer, isOpen, toggle }) => {
 
 const FAQSection = ({ questions, title, subtitle, className = "bg-gray-50" }) => {
     const [openIndex, setOpenIndex] = useState(null);
-    const timeoutRef = useRef(null);
 
     const defaultQuestions = [
         {
@@ -72,19 +71,6 @@ const FAQSection = ({ questions, title, subtitle, className = "bg-gray-50" }) =>
         setOpenIndex(openIndex === index ? null : index);
     };
 
-    const handleMouseEnter = (index) => {
-        // Disable hover on mobile (screens < 768px) to prevent sticky states/glitches
-        if (window.innerWidth < 768) return;
-
-        // Clear any existing timeout to prevent bouncing
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
-
-        // Add a small delay so scrolling doesn't trigger it immediately
-        timeoutRef.current = setTimeout(() => {
-            setOpenIndex(index);
-        }, 150);
-    };
-
     return (
         <section className={`py-12 md:py-24 ${className}`}>
             <div className="container mx-auto px-6 max-w-5xl">
@@ -102,10 +88,6 @@ const FAQSection = ({ questions, title, subtitle, className = "bg-gray-50" }) =>
                         <div
                             key={index}
                             className="h-full"
-                            onMouseEnter={() => handleMouseEnter(index)}
-                            onMouseLeave={() => {
-                                if (timeoutRef.current) clearTimeout(timeoutRef.current);
-                            }}
                         >
                             <FAQItem
                                 icon={item.icon}

@@ -13,19 +13,41 @@ const CookieConsent = () => {
 
     useEffect(() => {
         // Check if user has already made a choice
-        const consent = localStorage.getItem('cookieConsent');
-        if (!consent) {
-            // Show consent after a short delay for better UX
-            setTimeout(() => {
+        let timeoutId;
+        
+        try {
+            const consent = localStorage.getItem('cookieConsent');
+            if (!consent) {
+                // Show consent after a short delay for better UX
+                timeoutId = setTimeout(() => {
+                    setShowConsent(true);
+                }, 1000);
+            } else {
+                // Load saved preferences
+                const savedPrefs = localStorage.getItem('cookiePreferences');
+                if (savedPrefs) {
+                    try {
+                        setPreferences(JSON.parse(savedPrefs));
+                    } catch (e) {
+                        console.error('Error parsing cookie preferences:', e);
+                    }
+                }
+            }
+        } catch (e) {
+            // localStorage might not be available (private browsing, disabled, etc.)
+            console.error('Error accessing localStorage:', e);
+            // Still show consent if we can't check
+            timeoutId = setTimeout(() => {
                 setShowConsent(true);
             }, 1000);
-        } else {
-            // Load saved preferences
-            const savedPrefs = localStorage.getItem('cookiePreferences');
-            if (savedPrefs) {
-                setPreferences(JSON.parse(savedPrefs));
-            }
         }
+        
+        // Cleanup timeout on unmount
+        return () => {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+        };
     }, []);
 
     const handleAcceptAll = () => {
@@ -35,8 +57,12 @@ const CookieConsent = () => {
             marketing: true,
         };
         setPreferences(allAccepted);
-        localStorage.setItem('cookieConsent', 'accepted');
-        localStorage.setItem('cookiePreferences', JSON.stringify(allAccepted));
+        try {
+            localStorage.setItem('cookieConsent', 'accepted');
+            localStorage.setItem('cookiePreferences', JSON.stringify(allAccepted));
+        } catch (e) {
+            console.error('Error saving cookie consent:', e);
+        }
         setShowConsent(false);
     };
 
@@ -47,14 +73,22 @@ const CookieConsent = () => {
             marketing: false,
         };
         setPreferences(onlyNecessary);
-        localStorage.setItem('cookieConsent', 'rejected');
-        localStorage.setItem('cookiePreferences', JSON.stringify(onlyNecessary));
+        try {
+            localStorage.setItem('cookieConsent', 'rejected');
+            localStorage.setItem('cookiePreferences', JSON.stringify(onlyNecessary));
+        } catch (e) {
+            console.error('Error saving cookie consent:', e);
+        }
         setShowConsent(false);
     };
 
     const handleSavePreferences = () => {
-        localStorage.setItem('cookieConsent', 'custom');
-        localStorage.setItem('cookiePreferences', JSON.stringify(preferences));
+        try {
+            localStorage.setItem('cookieConsent', 'custom');
+            localStorage.setItem('cookiePreferences', JSON.stringify(preferences));
+        } catch (e) {
+            console.error('Error saving cookie preferences:', e);
+        }
         setShowConsent(false);
         setShowPreferences(false);
     };

@@ -96,14 +96,6 @@ const Projecten = () => {
                         "Eindelijk een partij die afspraken nakomt. – Sandra"
                     ]
                 }}
-                companyLogos={[
-                    "/images/company-logos/logo1.webp",
-                    "/images/company-logos/logo2.webp",
-                    "/images/company-logos/logo3.webp",
-                    "/images/company-logos/logo4.webp",
-                    "/images/company-logos/logo5.webp",
-                    "/images/company-logos/logo6.webp"
-                ]}
             />
 
             <div className="container mx-auto px-6">

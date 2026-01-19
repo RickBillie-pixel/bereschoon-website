@@ -12,9 +12,11 @@ const heroImages = [
     '/images/hero/home/hero-home3.webp'
 ];
 
-const Hero = () => {
+const Hero = ({ ready = false }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [validImages, setValidImages] = useState([]);
+    const [startSecondClean, setStartSecondClean] = useState(false);
+    const [canStartClean, setCanStartClean] = useState(false);
     const { scrollY } = useScroll();
 
     // Parallax effect
@@ -54,6 +56,17 @@ const Hero = () => {
     }, [validImages]);
 
     const currentSrc = validImages.length > 0 ? validImages[currentImageIndex] : heroImages[0];
+
+    // Start auto-clean nadat splash en fade-in klaar zijn
+    useEffect(() => {
+        if (ready) {
+            const timer = setTimeout(() => setCanStartClean(true), 500); // kleine buffer na fade
+            return () => clearTimeout(timer);
+        } else {
+            setCanStartClean(false);
+            setStartSecondClean(false);
+        }
+    }, [ready]);
 
     return (
         <section className="relative h-screen flex items-center justify-center overflow-hidden bg-secondary">
@@ -96,6 +109,13 @@ const Hero = () => {
                     <SprayCleanText
                         dirtyColor="#3f2a1d" // Bereschoon bruin als "vieze" basis
                         cleanColor="#ffffff"
+                        autoClean={canStartClean}
+                        autoDelay={0}
+                        autoPath={[
+                            { x: 0.02, y: 0.5 },
+                            { x: 0.98, y: 0.5 },
+                        ]}
+                        onAutoComplete={() => setStartSecondClean(true)}
                     >
                         Uitzonderlijke
                     </SprayCleanText>
@@ -103,6 +123,12 @@ const Hero = () => {
                     <SprayCleanText
                         dirtyColor="#3f2a1d" // zelfde bruine startkleur
                         cleanColor="#84CC16"
+                        autoClean={startSecondClean}
+                        autoDelay={150}
+                        autoPath={[
+                            { x: 0.02, y: 0.5 },
+                            { x: 0.98, y: 0.5 },
+                        ]}
                     >
                         Schoonmaak.
                     </SprayCleanText>

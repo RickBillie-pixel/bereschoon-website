@@ -16,13 +16,27 @@ const Navbar = () => {
 
     const isHome = location.pathname === '/';
     const isOverOns = location.pathname === '/over-ons';
+    const isProjecten = location.pathname === '/projecten';
+    const isConfigurator = location.pathname === '/configurator';
     const isOpritTerrasTerrein = location.pathname === '/oprit-terras-terrein';
     const isGevelreiniging = location.pathname === '/gevelreiniging';
     const isOnkruidbeheersing = location.pathname === '/onkruidbeheersing';
     const isShopPage = location.pathname.startsWith('/winkel');
+    const isLegalPage =
+        location.pathname === '/privacy' ||
+        location.pathname === '/algemene-voorwaarden' ||
+        location.pathname === '/verzend-retourbeleid';
 
     // Pages that should have white text when navbar is transparent (pages with hero sections)
-    const hasHeroSection = isHome || isOverOns || isOpritTerrasTerrein || isGevelreiniging || isOnkruidbeheersing;
+    const hasHeroSection =
+        isHome ||
+        isOverOns ||
+        isProjecten ||
+        isConfigurator ||
+        isOpritTerrasTerrein ||
+        isGevelreiniging ||
+        isOnkruidbeheersing ||
+        isLegalPage;
 
     useEffect(() => {
         const handleScroll = () => {
@@ -56,6 +70,7 @@ const Navbar = () => {
     }, [location.pathname]);
 
     const navLinks = [
+        { label: 'Home', path: '/', isAnchor: false },
         { label: 'Over Ons', path: '/over-ons', isAnchor: false },
         { label: 'Projecten', path: '/projecten', isAnchor: false },
         { label: 'Winkel', path: '/winkel', isAnchor: false },
@@ -93,7 +108,7 @@ const Navbar = () => {
                                 <a
                                     key={item.label}
                                     href={item.path}
-                                    className={`text-sm font-medium transition-colors relative group ${isScrolled ? 'text-muted-foreground hover:text-foreground' : hasHeroSection ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'}`}
+                                    className={`text-sm font-semibold transition-colors relative group ${isScrolled ? 'text-muted-foreground hover:text-foreground' : hasHeroSection ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'}`}
                                 >
                                     {item.label}
                                     <span className="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
@@ -102,7 +117,7 @@ const Navbar = () => {
                                 <Link
                                     key={item.label}
                                     to={item.path}
-                                    className={`text-sm font-medium transition-colors relative group ${isScrolled ? 'text-muted-foreground hover:text-foreground' : hasHeroSection ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'}`}
+                                    className={`text-sm font-semibold transition-colors relative group ${isScrolled ? 'text-muted-foreground hover:text-foreground' : hasHeroSection ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'}`}
                                 >
                                     {item.label}
                                     <span className="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
@@ -113,7 +128,7 @@ const Navbar = () => {
                                 <Link
                                     key={item.label}
                                     to={item.path}
-                                    className={`text-sm font-medium transition-colors relative group ${isScrolled ? 'text-muted-foreground hover:text-foreground' : hasHeroSection ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'}`}
+                                    className={`text-sm font-semibold transition-colors relative group ${isScrolled ? 'text-muted-foreground hover:text-foreground' : hasHeroSection ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'}`}
                                 >
                                     {item.label}
                                     <span className="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
@@ -124,7 +139,7 @@ const Navbar = () => {
 
                     <Link
                         to="/configurator"
-                        className={`text-sm font-medium transition-colors relative group ${isScrolled ? 'text-muted-foreground hover:text-foreground' : hasHeroSection ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'}`}
+                        className={`text-sm font-semibold transition-colors relative group ${isScrolled ? 'text-muted-foreground hover:text-foreground' : hasHeroSection ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'}`}
                     >
                         Oprit Scan
                         <span className="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
@@ -222,23 +237,23 @@ const Navbar = () => {
                         {navLinks.map((item) => {
                             if (item.isAnchor) {
                                 return isHome ? (
-                                    <a key={item.label} href={item.path} className="text-base font-medium text-muted-foreground hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
+                                    <a key={item.label} href={item.path} className="text-base font-semibold text-muted-foreground hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
                                         {item.label}
                                     </a>
                                 ) : (
-                                    <Link key={item.label} to={item.path} className="text-base font-medium text-muted-foreground hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
+                                    <Link key={item.label} to={item.path} className="text-base font-semibold text-muted-foreground hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
                                         {item.label}
                                     </Link>
                                 );
                             } else {
                                 return (
-                                    <Link key={item.label} to={item.path} className="text-base font-medium text-muted-foreground hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
+                                    <Link key={item.label} to={item.path} className="text-base font-semibold text-muted-foreground hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
                                         {item.label}
                                     </Link>
                                 );
                             }
                         })}
-                        <Link to="/configurator" className="text-base font-medium text-muted-foreground hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Link to="/configurator" className="text-base font-semibold text-muted-foreground hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
                             Oprit Scan
                         </Link>
                         <Link to="/contact" className="bg-primary text-white px-5 py-3 rounded-full text-base font-medium w-full text-center" onClick={() => setIsMobileMenuOpen(false)}>

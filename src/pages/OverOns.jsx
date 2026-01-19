@@ -4,6 +4,7 @@ import { MapPin, ArrowRight, Instagram, Facebook, Youtube } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import { staggerContainer, fadeInUp, fadeInLeft, fadeInRight } from '../utils/animations';
 import SEO from '../components/SEO';
+import LogoMarquee from '../components/LogoMarquee';
 
 // Animated counter component
 const AnimatedCounter = ({ value, suffix = '', inView }) => {
@@ -33,6 +34,19 @@ const stats = [
     { value: 250, suffix: '+', label: 'Opritten & Terrassen', description: 'Bereschoon gemaakt' },
     { value: 2000, suffix: '+', label: 'Uren Gereinigd', description: 'Met passie en precisie' },
     { value: 50000, suffix: '+', label: 'Volgers', description: 'Op sociale media' },
+];
+
+const collaborationLogos = [
+    "/images/company-logos/logo1.webp",
+    "/images/company-logos/logo2.webp",
+    "/images/company-logos/logo3.webp",
+    "/images/company-logos/logo4.webp",
+    "/images/company-logos/logo5.webp",
+    "/images/company-logos/logo6.webp",
+    "/images/company-logos/logo7.webp",
+    "/images/company-logos/logo8.webp",
+    "/images/company-logos/logo9.webp",
+    "/images/company-logos/logo10.webp"
 ];
 
 // Mission & Vision Card Component
@@ -220,6 +234,35 @@ const OverOns = () => {
                 </div>
             </section>
 
+            {/* Collaborations Ribbon (subtle) */}
+            <section className="py-12 bg-white">
+                <div className="container mx-auto px-6">
+                    <motion.div
+                        className="max-w-6xl lg:max-w-7xl mx-auto text-center"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                    >
+                        <p className="text-sm font-semibold text-primary uppercase tracking-[0.2em] mb-3">
+                            Merken & Samenwerkingen
+                        </p>
+                        <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+                            Vertrouwd door partners en leveranciers
+                        </h3>
+                        <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
+                            Een greep uit de merken waar we mee samenwerken en waarvan we trots de producten inzetten voor onze projecten.
+                        </p>
+                        <div className="relative overflow-hidden rounded-2xl border border-gray-100 bg-gradient-to-r from-white via-gray-50 to-white shadow-sm">
+                            <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_30%_30%,rgba(132,204,22,0.08),transparent_45%),radial-gradient(circle_at_70%_70%,rgba(6,182,212,0.08),transparent_45%)]" />
+                            <div className="relative py-6 px-4">
+                                <LogoMarquee logos={collaborationLogos} />
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+
             {/* Social Media & Collaborations Section */}
             <section className="py-8 bg-white">
                 <div className="container mx-auto px-6">
@@ -239,49 +282,74 @@ const OverOns = () => {
                                 info@bereschoon.nl
                             </a>
                         </p>
-                        <div className="flex flex-wrap justify-center gap-3">
-                            <a
-                                href="https://www.instagram.com/bereschoon"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-foreground px-5 py-3 rounded-full font-medium transition-all border border-primary/20"
-                                aria-label="Instagram"
-                            >
-                                <Instagram size={20} className="text-primary" />
-                                <span>Instagram</span>
-                            </a>
-                            <a
-                                href="https://www.tiktok.com/@bereschoon"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-foreground px-5 py-3 rounded-full font-medium transition-all border border-primary/20"
-                                aria-label="TikTok"
-                            >
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-primary">
-                                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
-                                </svg>
-                                <span>TikTok</span>
-                            </a>
-                            <a
-                                href="https://www.youtube.com/@bereschoon"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-foreground px-5 py-3 rounded-full font-medium transition-all border border-primary/20"
-                                aria-label="YouTube"
-                            >
-                                <Youtube size={20} className="text-primary" />
-                                <span>YouTube</span>
-                            </a>
-                            <a
-                                href="https://www.facebook.com/p/Bereschoon-100094353067993/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-foreground px-5 py-3 rounded-full font-medium transition-all border border-primary/20"
-                                aria-label="Facebook"
-                            >
-                                <Facebook size={20} className="text-primary" />
-                                <span>Facebook</span>
-                            </a>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 text-left">
+                            {[
+                                {
+                                    label: 'Instagram',
+                                    href: 'https://www.instagram.com/bereschoon',
+                                    handle: '@bereschoon',
+                                    cta: 'Bekijk projecten & reels',
+                                    Icon: Instagram,
+                                    iconColor: '#E1306C',
+                                    accentClass: 'bg-[linear-gradient(135deg,rgba(245,133,41,0.10),rgba(221,42,123,0.10),rgba(129,52,175,0.08))]',
+                                },
+                                {
+                                    label: 'TikTok',
+                                    href: 'https://www.tiktok.com/@bereschoon',
+                                    handle: '@bereschoon',
+                                    cta: 'Korte video’s & resultaten',
+                                    customIcon: (
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="text-[#000000]">
+                                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                                        </svg>
+                                    ),
+                                    accentClass: 'bg-[radial-gradient(circle_at_30%_30%,rgba(0,0,0,0.10),transparent_55%),radial-gradient(circle_at_70%_70%,rgba(0,0,0,0.06),transparent_55%)]',
+                                },
+                                {
+                                    label: 'YouTube',
+                                    href: 'https://www.youtube.com/@bereschoon',
+                                    handle: '@bereschoon',
+                                    cta: 'Langere uitleg & tips',
+                                    Icon: Youtube,
+                                    iconColor: '#FF0000',
+                                    accentClass: 'bg-[radial-gradient(circle_at_30%_30%,rgba(239,68,68,0.10),transparent_55%),radial-gradient(circle_at_70%_70%,rgba(239,68,68,0.06),transparent_55%)]',
+                                },
+                                {
+                                    label: 'Facebook',
+                                    href: 'https://www.facebook.com/p/Bereschoon-100094353067993/',
+                                    handle: 'Bereschoon',
+                                    cta: 'Updates & contact',
+                                    Icon: Facebook,
+                                    iconColor: '#1877F2',
+                                    accentClass: 'bg-[radial-gradient(circle_at_30%_30%,rgba(59,130,246,0.10),transparent_55%),radial-gradient(circle_at_70%_70%,rgba(59,130,246,0.06),transparent_55%)]',
+                                },
+                            ].map((item) => (
+                                <a
+                                    key={item.label}
+                                    href={item.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label={item.label}
+                                    className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5"
+                                >
+                                    <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity ${item.accentClass}`} />
+                                    <div className="relative p-4 md:p-5 flex items-center gap-3">
+                                        <div className="flex items-center justify-center w-11 h-11 rounded-2xl bg-secondary/5 border border-secondary/10">
+                                            {item.Icon ? <item.Icon size={18} className={item.iconColor ? '' : 'text-foreground'} style={item.iconColor ? { color: item.iconColor } : {}} /> : item.customIcon}
+                                        </div>
+                                        <div className="min-w-0">
+                                            <div className="flex items-baseline gap-2">
+                                                <span className="text-base font-semibold text-foreground tracking-tight">{item.label}</span>
+                                                <span className="text-sm text-muted-foreground truncate">{item.handle}</span>
+                                            </div>
+                                            <div className="flex items-center justify-between gap-3 mt-0.5">
+                                                <span className="text-sm text-muted-foreground">{item.cta}</span>
+                                                <ArrowRight size={16} className="text-primary opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all flex-shrink-0" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            ))}
                         </div>
                     </motion.div>
                 </div>

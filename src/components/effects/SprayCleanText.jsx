@@ -11,13 +11,23 @@ const SprayCleanText = ({
     className = '',
     dirtyColor = '#78716c', // stone-500
     cleanColor = '#ffffff',
+    autoClean = false,
+    autoDelay = 0,
+    autoPath = [
+        { x: 0.08, y: 0.05 },
+        { x: 0.78, y: 0.48 },
+        { x: 0.12, y: 0.92 },
+    ],
+    onAutoComplete,
 }) => {
     const [isHovering, setIsHovering] = useState(false);
+    const [isAutoRunning, setIsAutoRunning] = useState(false);
     const [sprayPosition, setSprayPosition] = useState({ x: 0, y: 0 });
     const [cleanedProgress, setCleanedProgress] = useState(0); // 0 to 1 representing how much is cleaned
     const [droplets, setDroplets] = useState([]);
     const containerRef = useRef(null);
     const dropletIdRef = useRef(0);
+    const autoRunRef = useRef({ rafId: null, timeoutId: null, lastDroplet: 0, hasRun: false });
 
     // Convert children to string and split into characters
     const text = typeof children === 'string' ? children : String(children);
@@ -38,31 +48,40 @@ const SprayCleanText = ({
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
+    const updateSprayAt = useCallback((x, y, rect, spawnDroplets = true) => {
+        setSprayPosition({ x, y });
+
+        const progress = Math.max(0, Math.min(1, x / rect.width));
+        setCleanedProgress(prev => Math.max(prev, progress));
+
+        if (spawnDroplets) {
+            const now = performance.now();
+            if (now - autoRunRef.current.lastDroplet < 65) return;
+            autoRunRef.current.lastDroplet = now;
+
+            const newDroplets = Array.from({ length: 5 }, () => ({
+                id: dropletIdRef.current++,
+                x: x + (Math.random() - 0.5) * 25,
+                y: y + (Math.random() - 0.5) * 12,
+                size: Math.random() * 10 + 4,
+                angle: Math.random() * 360,
+                velocity: Math.random() * 100 + 50,
+                opacity: Math.random() * 0.4 + 0.6,
+            }));
+
+            setDroplets(prev => [...prev.slice(-70), ...newDroplets]);
+        }
+    }, []);
+
     // Track mouse position for spray effect
     const handleMouseMove = useCallback((e) => {
+        if (isAutoRunning) return;
         if (!containerRef.current) return;
         const rect = containerRef.current.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        setSprayPosition({ x, y });
-
-        // Calculate cleaning progress based on x position
-        const progress = Math.max(0, Math.min(1, x / rect.width));
-        setCleanedProgress(prev => Math.max(prev, progress)); // Only increase, never decrease
-
-        // Generate new droplets at mouse position
-        const newDroplets = Array.from({ length: 5 }, () => ({
-            id: dropletIdRef.current++,
-            x: x + (Math.random() - 0.5) * 25,
-            y: y + (Math.random() - 0.5) * 12,
-            size: Math.random() * 10 + 4,
-            angle: Math.random() * 360,
-            velocity: Math.random() * 100 + 50,
-            opacity: Math.random() * 0.4 + 0.6,
-        }));
-
-        setDroplets(prev => [...prev.slice(-70), ...newDroplets]);
-    }, []);
+        updateSprayAt(x, y, rect, true);
+    }, [isAutoRunning, updateSprayAt]);
 
     // Clean up old droplets when not hovering
     useEffect(() => {
@@ -71,6 +90,124 @@ const SprayCleanText = ({
             return () => clearTimeout(timer);
         }
     }, [isHovering]);
+
+    // Automated cleaning path
+    const startAutoClean = useCallback(() => {
+        if (autoRunRef.current.hasRun) return;
+        if (!containerRef.current) return;
+
+        if (window.innerWidth < 768) {
+            setCleanedProgress(1);
+            autoRunRef.current.hasRun = true;
+            onAutoComplete?.();
+            return;
+        }
+
+        autoRunRef.current.hasRun = true;
+        setIsAutoRunning(true);
+        setIsHovering(true);
+        setDroplets([]);
+        autoRunRef.current.lastDroplet = 0;
+
+        const rect = containerRef.current.getBoundingClientRect();
+        const points = (autoPath && autoPath.length >= 2 ? autoPath : [
+            { x: 0.08, y: 0.05 },
+            { x: 0.78, y: 0.48 },
+            { x: 0.12, y: 0.92 },
+        ]).map(p => ({
+            x: p.x * rect.width,
+            y: p.y * rect.height,
+        }));
+
+        // Variabele duur per segment voor natuurlijke snelheidsvariatie
+        const baseDuration = 1900;
+        const segmentDurations = points.slice(1).map(() => 
+            baseDuration * (0.7 + Math.random() * 0.6) // 70% tot 130% van basisduur
+        );
+
+        let segmentIndex = 0;
+        let segmentStart = performance.now();
+        let wobblePhase = Math.random() * Math.PI * 2; // Snelle wobble fase
+        let verticalDriftPhase = Math.random() * Math.PI * 2; // Langzamere verticale drift
+        const verticalDriftSpeed = 0.05 + Math.random() * 0.05; // 0.05 - 0.1 per frame
+        const verticalDriftAmplitude = rect.height * 0.02; // 2% van hoogte
+        let speedVariation = 1 + (Math.random() - 0.5) * 0.2; // Minder variatie voor rustiger gevoel
+
+        // Easing functie voor natuurlijke beweging
+        const easeInOutCubic = (t) => {
+            return t < 0.5 
+                ? 4 * t * t * t 
+                : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        };
+
+        const step = () => {
+            const now = performance.now();
+            const from = points[segmentIndex];
+            const to = points[segmentIndex + 1];
+            const segmentDuration = segmentDurations[segmentIndex];
+            const elapsed = (now - segmentStart) * speedVariation;
+            let t = Math.min(1, elapsed / segmentDuration);
+
+            // Easing toepassen voor natuurlijke beweging
+            const easedT = easeInOutCubic(t);
+
+            // Basis interpolatie
+            const baseX = from.x + (to.x - from.x) * easedT;
+            const baseY = from.y + (to.y - from.y) * easedT;
+
+            // Wobble effect - kleine variaties in y-positie
+            wobblePhase += 0.12; // Iets langzamer wobble
+            verticalDriftPhase += verticalDriftSpeed; // Langzame drift voor grotere slingers
+            const wobbleAmount = Math.sin(wobblePhase) * (rect.height * 0.03); // Max 3% van hoogte
+            const verticalDrift = Math.sin(verticalDriftPhase) * verticalDriftAmplitude; // Max 2% van hoogte
+            const randomWobble = (Math.random() - 0.5) * (rect.height * 0.015); // Extra kleine random variatie
+            
+            // Kleine variatie in x voor natuurlijkere beweging
+            const xVariation = (Math.random() - 0.5) * (rect.width * 0.01);
+
+            const x = baseX + xVariation;
+            const y = baseY + wobbleAmount + verticalDrift + randomWobble;
+
+            updateSprayAt(x, y, rect, true);
+
+            if (t >= 1) {
+                if (segmentIndex < points.length - 2) {
+                    segmentIndex += 1;
+                    segmentStart = now;
+                    // Nieuwe random variaties voor volgende segment
+                    speedVariation = 1 + (Math.random() - 0.5) * 0.3;
+                    wobblePhase = Math.random() * Math.PI * 2;
+                    autoRunRef.current.rafId = requestAnimationFrame(step);
+                } else {
+                    setCleanedProgress(1);
+                    setTimeout(() => setIsHovering(false), 400);
+                    setIsAutoRunning(false);
+                    onAutoComplete?.();
+                }
+            } else {
+                autoRunRef.current.rafId = requestAnimationFrame(step);
+            }
+        };
+
+        autoRunRef.current.rafId = requestAnimationFrame(step);
+    }, [autoPath, onAutoComplete, updateSprayAt]);
+
+    // Schedule automated run
+    useEffect(() => {
+        if (!autoClean) return;
+        autoRunRef.current.timeoutId = setTimeout(startAutoClean, autoDelay);
+        return () => {
+            if (autoRunRef.current.timeoutId) clearTimeout(autoRunRef.current.timeoutId);
+        };
+    }, [autoClean, autoDelay, startAutoClean]);
+
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            if (autoRunRef.current.rafId) cancelAnimationFrame(autoRunRef.current.rafId);
+            if (autoRunRef.current.timeoutId) clearTimeout(autoRunRef.current.timeoutId);
+        };
+    }, []);
 
     // Generate spray particles
     const sprayParticles = useMemo(() => Array.from({ length: 20 }, (_, i) => ({
@@ -91,8 +228,9 @@ const SprayCleanText = ({
         <motion.span
             ref={containerRef}
             className={`relative inline-block cursor-pointer select-none ${className}`}
-            onMouseEnter={() => window.innerWidth >= 768 && setIsHovering(true)}
-            onMouseLeave={() => window.innerWidth >= 768 && setIsHovering(false)}
+            style={{ pointerEvents: isAutoRunning ? 'none' : 'auto' }}
+            onMouseEnter={() => window.innerWidth >= 768 && !isAutoRunning && setIsHovering(true)}
+            onMouseLeave={() => window.innerWidth >= 768 && !isAutoRunning && setIsHovering(false)}
             onMouseMove={handleMouseMove}
         >
             {/* Individual characters */}

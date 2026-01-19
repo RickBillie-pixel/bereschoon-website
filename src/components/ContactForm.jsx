@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowLeft, Check, Loader2, Mail, Grid3X3, Home, Droplets, Leaf, Upload, X, Camera, User, Phone, MapPin, MessageSquare } from 'lucide-react';
 
 const ContactForm = ({ preselectedService = null }) => {
@@ -21,6 +22,7 @@ const ContactForm = ({ preselectedService = null }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [error, setError] = useState(null);
+    const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
     const fileInputRef = useRef(null);
 
     const services = [
@@ -188,6 +190,12 @@ const ContactForm = ({ preselectedService = null }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!hasAcceptedTerms) {
+            setError('U dient akkoord te gaan met de algemene voorwaarden en privacyvoorwaarden voordat u kunt verzenden.');
+            return;
+        }
+
         setIsSubmitting(true);
         setError(null);
 
@@ -298,6 +306,7 @@ const ContactForm = ({ preselectedService = null }) => {
                         setSelectedPlan('');
                         setPhotos([]);
                         setPhotoPreviews([]);
+                        setHasAcceptedTerms(false);
                         setFormData({
                             vierkanteMeters: '',
                             naam: '',
@@ -351,12 +360,6 @@ const ContactForm = ({ preselectedService = null }) => {
                             >
                                 {s < displayStep ? <Check size={18} /> : s}
                             </div>
-                            {/* Optional: Add label for current step if needed, or just numbers */}
-                            {s === displayStep && (
-                                <span className="absolute -bottom-8 text-xs font-bold text-primary whitespace-nowrap bg-primary/10 px-2 py-1 rounded-full">
-                                    Stap {s}
-                                </span>
-                            )}
                         </div>
                     ))}
                 </div>
@@ -710,6 +713,29 @@ const ContactForm = ({ preselectedService = null }) => {
                         </div>
                     </div>
 
+                    <div className="mt-6">
+                        <label className="flex items-start gap-3 text-sm text-muted-foreground">
+                            <input
+                                type="checkbox"
+                                required
+                                checked={hasAcceptedTerms}
+                                onChange={(e) => setHasAcceptedTerms(e.target.checked)}
+                                className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                            />
+                            <span>
+                                Ik ga akkoord met de{' '}
+                                <Link to="/algemene-voorwaarden" className="text-primary hover:underline font-medium">
+                                    algemene voorwaarden
+                                </Link>{' '}
+                                en de{' '}
+                                <Link to="/privacy" className="text-primary hover:underline font-medium">
+                                    privacyvoorwaarden
+                                </Link>
+                                .
+                            </span>
+                        </label>
+                    </div>
+
                     <div className="flex gap-4 mt-8">
                         <button
                             type="button"
@@ -721,7 +747,7 @@ const ContactForm = ({ preselectedService = null }) => {
                         </button>
                         <button
                             type="submit"
-                            disabled={isSubmitting}
+                            disabled={isSubmitting || !hasAcceptedTerms}
                             className="flex-1 flex items-center justify-center bg-primary text-white px-4 py-3 md:px-8 md:py-4 rounded-lg font-bold hover:bg-primary/90 transition-all shadow-lg hover:shadow-primary/40 disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
                         >
                             {isSubmitting ? (

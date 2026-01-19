@@ -20,6 +20,9 @@ import Gevelreiniging from './pages/Gevelreiniging';
 import Onkruidbeheersing from './pages/Onkruidbeheersing';
 import SplashScreen from './components/SplashScreen';
 import NotFound from './pages/NotFound';
+import AlgemeneVoorwaarden from './pages/AlgemeneVoorwaarden';
+import Privacy from './pages/Privacy';
+import VerzendRetourbeleid from './pages/VerzendRetourbeleid';
 
 // Shop pages
 import ProductDetail from './pages/shop/ProductDetail';
@@ -117,7 +120,7 @@ function App() {
 
               <main className="flex-grow">
                 <Routes>
-                  <Route path="/" element={<Home />} />
+                  <Route path="/" element={<Home heroReady={!loading} />} />
                   <Route path="/configurator" element={<Configurator />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/projecten" element={<Projecten />} />
@@ -125,6 +128,9 @@ function App() {
                   <Route path="/oprit-terras-terrein" element={<OpritTerrasTerrein />} />
                   <Route path="/gevelreiniging" element={<Gevelreiniging />} />
                   <Route path="/onkruidbeheersing" element={<Onkruidbeheersing />} />
+                  <Route path="/algemene-voorwaarden" element={<AlgemeneVoorwaarden />} />
+                  <Route path="/privacy" element={<Privacy />} />
+                  <Route path="/verzend-retourbeleid" element={<VerzendRetourbeleid />} />
 
                   {/* Webshop routes */}
                   <Route path="/winkel" element={<Winkel />} />

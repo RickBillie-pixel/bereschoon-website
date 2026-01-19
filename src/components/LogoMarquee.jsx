@@ -7,7 +7,7 @@ const LogoMarquee = ({ logos = [] }) => {
 
     return (
         <div className="relative z-30 bg-white/5 backdrop-blur-md border-t border-white/10 py-6 overflow-hidden">
-            <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-secondary/80 via-transparent to-secondary/80" />
+            <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-white/70 via-transparent to-white/70" />
 
             <div className="flex">
                 <motion.div
@@ -23,7 +23,7 @@ const LogoMarquee = ({ logos = [] }) => {
                     }}
                 >
                     {marqueeLogos.map((logo, index) => (
-                        <div key={index} className="flex-shrink-0 opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
+                        <div key={index} className="flex-shrink-0 transition-transform hover:scale-105">
                             {/* Placeholder if src fails or for dev */}
                             <img
                                 src={logo}

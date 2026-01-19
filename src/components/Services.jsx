@@ -38,7 +38,8 @@ const services = [
     {
         title: 'Oprit, Terras & Terrein',
         description: 'Verwijder hardnekkig vuil, groene aanslag en onkruid. Langdurig resultaat gegarandeerd.',
-        image: '/images/hero/oprit/hero-oprit1.webp',
+        image: '/images/images_optimized/hoek 1 voor.webp', // "voor" beeld
+        cleanImage: '/images/images_optimized/hoek 1 na.webp', // "na" beeld
         icon: Grid3X3,
         features: ['Hogedruk reiniging', 'Voegen herstellen', 'Beschermlaag'],
         route: '/oprit-terras-terrein',
@@ -46,7 +47,8 @@ const services = [
     {
         title: 'Gevelreiniging',
         description: 'Verwijder groene aanslag en vuil voor een frisse, nieuwe uitstraling van uw woning.',
-        image: '/images/images_optimized/IMG_2566.webp',
+        image: '/images/images_optimized/rood huis voor.webp', // tijdelijk "voor" beeld
+        cleanImage: '/images/images_optimized/rood huis na.webp', // tijdelijk "na" beeld
         icon: Droplets,
         features: ['Hogedruk reiniging', 'Stoomreiniging', 'Impregneren'],
         route: '/gevelreiniging',
@@ -54,7 +56,8 @@ const services = [
     {
         title: 'Onkruidbeheersing',
         description: 'Houd uw tuin en terras onkruidvrij met onze flexibele onderhoudsplannen.',
-        image: '/images/hero/onkruid/hero-onkruid1.webp',
+        image: '/images/images_optimized/onkruid tuin voor.webp', // "voor" = vuil
+        cleanImage: '/images/images_optimized/onkruid tuin na.webp', // "na" = schoon
         icon: Home,
         features: ['Flexibele plannen', 'Preventief onderhoud', 'Milieuvriendelijk'],
         route: '/onkruidbeheersing',
@@ -135,23 +138,56 @@ const ServiceCard = ({ service, index }) => {
     const [isHovered, setIsHovered] = useState(false);
     const [isButtonHovered, setIsButtonHovered] = useState(false);
     const [showSpray, setShowSpray] = useState(false);
+    const [isClean, setIsClean] = useState(false);
+    const cleanTimeoutRef = React.useRef(null);
+
+    const triggerSprayToClean = () => {
+        setShowSpray(true);
+
+        // Annuleer eventuele eerdere timers
+        if (cleanTimeoutRef.current) clearTimeout(cleanTimeoutRef.current);
+
+        // Start meteen met schoon beeld bij hover
+        if (service.cleanImage) {
+            setIsClean(true);
+        }
+
+        // Reset spray na animatie
+        cleanTimeoutRef.current = setTimeout(() => setShowSpray(false), 800);
+    };
+
+    const handleCardEnter = () => {
+        setIsHovered(true);
+        setIsClean(false);
+        if (service.cleanImage) {
+            triggerSprayToClean();
+        }
+    };
 
     const handleButtonHover = () => {
         setIsButtonHovered(true);
-        setShowSpray(true);
-        // Reset spray na animatie
-        setTimeout(() => setShowSpray(false), 800);
+        if (service.cleanImage) {
+            triggerSprayToClean();
+        } else {
+            setShowSpray(true);
+            setTimeout(() => setShowSpray(false), 800);
+        }
+    };
+
+    const handleMouseLeave = () => {
+        setIsHovered(false);
+        setIsButtonHovered(false);
+        setShowSpray(false);
+        if (cleanTimeoutRef.current) clearTimeout(cleanTimeoutRef.current);
+        setIsClean(false); // terug naar "voor" beeld
     };
 
     return (
         <motion.div
             variants={fadeInUp}
             className="relative group"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => {
-                setIsHovered(false);
-                setIsButtonHovered(false);
-            }}
+            onMouseEnter={handleCardEnter}
+            onMouseLeave={handleMouseLeave}
         >
             <motion.div
                 className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 h-full"
@@ -163,13 +199,28 @@ const ServiceCard = ({ service, index }) => {
             >
                 {/* Image Container */}
                 <div className="h-48 md:h-64 overflow-hidden relative">
+                    {/* Dirty image */}
                     <motion.img
+                        key="dirty"
                         src={service.image}
                         alt={service.title}
-                        className="w-full h-full object-cover"
-                        animate={{ scale: isHovered ? 1.05 : 1 }}
-                        transition={{ duration: 0.6 }}
+                        className="w-full h-full object-cover absolute inset-0"
+                        animate={{ opacity: isClean ? 0 : 1, scale: isHovered ? 1.05 : 1 }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}
                     />
+
+                    {/* Clean image overlay (only if provided) */}
+                    {service.cleanImage && (
+                        <motion.img
+                            key="clean"
+                            src={service.cleanImage}
+                            alt={`${service.title} schoon`}
+                            className="w-full h-full object-cover absolute inset-0"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: isClean ? 1 : 0, scale: isHovered ? 1.05 : 1 }}
+                            transition={{ duration: 0.6, ease: "easeOut" }}
+                        />
+                    )}
 
                     {/* Overlay gradient */}
                     <motion.div
