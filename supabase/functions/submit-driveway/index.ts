@@ -60,6 +60,71 @@ serve(async (req) => {
       }
     });
 
+    // ============================================
+    // EMAIL-BASED RATE LIMITING (1 per 24h)
+    // ============================================
+    const RATE_LIMIT_HOURS = 24;
+    const RATE_LIMIT_MS = RATE_LIMIT_HOURS * 60 * 60 * 1000;
+    
+    // Normalize email for case-insensitive comparison
+    const normalizedEmail = email.trim().toLowerCase();
+    console.log('Checking rate limit for email:', normalizedEmail);
+
+    // Check for existing submission within rate limit window
+    const { data: lastSubmission, error: rateLimitQueryError } = await supabase
+      .from('driveway_submissions')
+      .select('created_at')
+      .ilike('email', normalizedEmail)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (rateLimitQueryError) {
+      console.error('Rate limit query error:', rateLimitQueryError);
+      // Don't fail the request due to rate limit check error, continue
+    }
+
+    if (lastSubmission) {
+      const lastSubmissionTime = new Date(lastSubmission.created_at);
+      const now = new Date();
+      const timeSinceLastMs = now.getTime() - lastSubmissionTime.getTime();
+      
+      console.log('Last submission at:', lastSubmissionTime.toISOString());
+      console.log('Time since last submission (ms):', timeSinceLastMs);
+      console.log('Rate limit window (ms):', RATE_LIMIT_MS);
+
+      if (timeSinceLastMs < RATE_LIMIT_MS) {
+        // Calculate retry time
+        const retryAfterSeconds = Math.max(0, Math.ceil((RATE_LIMIT_MS - timeSinceLastMs) / 1000));
+        const nextAllowedAt = new Date(lastSubmissionTime.getTime() + RATE_LIMIT_MS);
+        
+        // Calculate hours and minutes for NL message (minutes rounded down)
+        const totalMinutes = Math.floor(retryAfterSeconds / 60);
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = Math.max(0, totalMinutes % 60);
+
+        console.log('Rate limit exceeded. Retry after:', retryAfterSeconds, 'seconds');
+        
+        return new Response(
+          JSON.stringify({
+            message: `U heeft in de afgelopen 24 uur al 1 aanvraag gedaan. Probeer opnieuw over ${hours} uur en ${minutes} minuten.`,
+            retry_after_seconds: retryAfterSeconds,
+            next_allowed_at: nextAllowedAt.toISOString(),
+          }),
+          {
+            status: 429,
+            headers: {
+              ...corsHeaders,
+              'Content-Type': 'application/json',
+              'Retry-After': String(retryAfterSeconds),
+            },
+          }
+        );
+      }
+    }
+    
+    console.log('Rate limit check passed, proceeding with submission');
+
     // Generate unique filename
     const fileExt = photo.name.split('.').pop() || 'jpg';
     const fileName = `${crypto.randomUUID()}.${fileExt}`;

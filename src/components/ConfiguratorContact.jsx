@@ -102,9 +102,20 @@ const ConfiguratorContact = () => {
                 hasPhoto: !!photoFile
             });
 
-            // Send to Supabase edge function
+            // Get anon key for authentication
+            const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+            if (!anonKey) {
+                throw new Error('Supabase anon key is not configured. Please set VITE_SUPABASE_ANON_KEY in your .env file.');
+            }
+
+            // Send to Supabase edge function with authentication
             const response = await fetch(edgeFunctionUrl, {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${anonKey}`,
+                    'apikey': anonKey,
+                },
                 body: formDataToSend,
             });
 
@@ -114,7 +125,9 @@ const ConfiguratorContact = () => {
             console.log('Response data:', result);
 
             if (!response.ok) {
-                throw new Error(result.error || 'Er is een fout opgetreden bij het verzenden van uw aanvraag.');
+                // Handle rate limit (429) or other errors
+                // Rate limit response uses 'message', other errors use 'error'
+                throw new Error(result.message || result.error || 'Er is een fout opgetreden bij het verzenden van uw aanvraag.');
             }
 
             // Success - move to step 4
