@@ -8,7 +8,7 @@
  * Uses stub context providers to avoid Supabase calls in SSR.
  */
 import React from 'react';
-import { StaticRouter } from 'react-router';
+import { StaticRouter } from 'react-router-dom/server';
 import { Routes, Route, Outlet } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
