@@ -180,7 +180,7 @@ const ProductGrid = () => {
                       loop
                       muted
                       playsInline
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain bg-white"
                     >
                       <source src={product.video_url} type="video/mp4" />
                     </video>
